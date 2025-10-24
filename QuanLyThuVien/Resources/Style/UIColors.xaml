@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--Background Colors-->
+    <Color x:Key="DeepBackground">#F8FAFC</Color>
+    <Color x:Key="White">#FFFFFF</Color>
+    <Color x:Key="ChanelBackground">#2563EB</Color>
+    <!--Font Colors-->
+    <SolidColorBrush x:Key="titleColor2" Color="#D5CFF5"/>
+    <SolidColorBrush x:Key="titleOfWindow" Color="#47556F"/>
+    <SolidColorBrush x:Key="Danger/Overdue" Color="#EF4444"/>
+    <SolidColorBrush x:Key="Success/Available" Color="#10B981"/>
+    <SolidColorBrush x:Key="Warning/Waiting" Color="#F59E0B"/>
+    <SolidColorBrush x:Key="InUse" Color="#0EA5E9"/>
+    <SolidColorBrush x:Key="Danger/Overdue_light" Color="#F7E8E9"/>
+    <SolidColorBrush x:Key="Success/Available_light" Color="#E1F4EF"/>
+    <SolidColorBrush x:Key="Warning/Waiting_light" Color="#FDF5E6"/>
+    <SolidColorBrush x:Key="InUse_light" Color="#E0F2F9"/>
+    
+</ResourceDictionary>
