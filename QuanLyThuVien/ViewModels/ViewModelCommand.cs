@@ -27,12 +27,12 @@ namespace QuanLyThuVien.ViewModels
         }
         public bool CanExecute(object parameter)
         {
-            throw new NotImplementedException();
+            return _canExecute == null || _canExecute(parameter);
         }
 
         public void Execute(object parameter)
         {
-            throw new NotImplementedException();
+            _execute?.Invoke(parameter);
         }
     }
 }
