@@ -1,1 +1,1 @@
-This github duty is our IT008-final_project reservoir 
+This github repo duty is our IT008-final_project reservoir 
