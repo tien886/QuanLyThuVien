@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using QuanLyThuVien.DI;
+using QuanLyThuVien.Views;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +16,16 @@ namespace QuanLyThuVien
     /// </summary>
     public partial class App : Application
     {
+        public IServiceProvider ServiceProvider { get; private set; }
+        protected override async void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var services = new ServiceCollection();
+            services.ConfigureServices();
+            ServiceProvider = services.BuildServiceProvider();
+            var main = ServiceProvider.GetRequiredService<MainView>();
+            main.Show();
+        }
     }
 }
