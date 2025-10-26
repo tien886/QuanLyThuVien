@@ -64,4 +64,7 @@ Hệ thống sử dụng một mô hình CSDL quan hệ được chuẩn hóa đ
     * Mở `Package Manager Console` trong Visual Studio.
     * Chạy lệnh `Update-Database` để EF Core tự động tạo CSDL dựa trên các Models.
 6.  **Chạy ứng dụng:**
-    Nhấn `F5` hoặc nút "Start" trong Visual Studio.
+    Nhấn `F5` hoặc nút "Start" trong Visual Studio. 
+
+## 7. Một số thông tin dự án
+* **Link:** [Quản lý thư viện](https://www.figma.com/design/8aUGJI97B1YlnRf7OT5kXM/Qu%E1%BA%A3n-l%C3%AD-th%C6%B0-vi%E1%BB%87n?node-id=0-1&p=f&t=wSnHupHh71alJpKX-0)
