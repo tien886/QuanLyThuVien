@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyThuVien.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,10 @@ namespace QuanLyThuVien.Views
     /// </summary>
     public partial class MuonTraSachView : UserControl
     {
-        public MuonTraSachView()
+        public MuonTraSachView(MuonTraSachViewModel vm)
         {
             InitializeComponent();
+            DataContext = vm;
         }
     }
 }
