@@ -8,30 +8,15 @@
         xmlns:local="clr-namespace:QuanLyThuVien.Views"
         Height="1080" Width="1920"
         >
-    <Window.DataContext>
-        <viewModel:MainViewModel />
-    </Window.DataContext>
+    
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-        <DataTemplate DataType="{x:Type viewModel:DashBoardViewModel}">
-            <local:DashBoardView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:QuanLySinhVienViewModel}">
-            <local:QuanLySinhVien/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:QuanLySachViewModel}">
-            <local:QuanLySachView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:MuonTraSachViewModel}">
-            <local:MuonTraSachView/>
-        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="320"/>
             <ColumnDefinition Width="1"/>
             <ColumnDefinition Width="*"/>
-
         </Grid.ColumnDefinitions>
         <Border Grid.Column="1" Background="{StaticResource Stroke}" />
         <Border
