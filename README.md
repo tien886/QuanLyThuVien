@@ -51,7 +51,7 @@ Hệ thống sử dụng một mô hình CSDL quan hệ được chuẩn hóa đ
 
 1.  **Clone repository:**
     ```bash
-    git clone git clone https://github.com/tien886/QuanLyThuVien.git
+    git clone https://github.com/tien886/QuanLyThuVien.git
     ```
 2.  **Mở dự án:**
     Mở file `.sln` bằng Visual Studio 2022.
