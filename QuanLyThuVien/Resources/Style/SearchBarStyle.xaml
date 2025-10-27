@@ -70,15 +70,12 @@
                         <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
                             <Setter TargetName="Hint" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <!-- When text not empty -->
                         <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
                             <Setter TargetName="Hint" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <!-- Fallback: collapse hint if not matched above -->
                         <Trigger Property="Text" Value="{x:Null}">
                             <Setter TargetName="Hint" Property="Visibility" Value="Visible"/>
                         </Trigger>
-                        <!-- default: hide hint when there is text -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsKeyboardFocused" Value="True"/>
