@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using QuanLyThuVien.Config;
 using QuanLyThuVien.ViewModels;
 using QuanLyThuVien.Views;
 using System;
@@ -11,7 +10,6 @@ namespace QuanLyThuVien.DI
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             // Register Database
-            services.AddSingleton<DatabaseConfig>();
             // Register Views
             services.AddTransient<MainView>();
             services.AddTransient<DashBoardView>();

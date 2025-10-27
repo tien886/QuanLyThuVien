@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:QuanLyThuVien.Views"
         Height="1080" Width="1920"
         >
-    
+
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
@@ -115,11 +115,12 @@
 
                             </StackPanel>
                         </RadioButton>
+                        
                     </StackPanel>
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Column ="2" Margin="50,10">
+        <Grid Grid.Column ="2" Margin="50,10,50,10">
             <StackPanel Orientation="Vertical" >
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -153,7 +154,7 @@
                         Grid.Column="2"
                         />
             </StackPanel>
-            
+
         </Grid>
     </Grid>
 </Window>
