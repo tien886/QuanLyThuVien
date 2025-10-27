@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyThuVien.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,13 +19,13 @@ namespace QuanLyThuVien.Views
     /// <summary>
     /// Interaction logic for QuanLySinhVien.xaml
     /// </summary>
-    public partial class QuanLySinhVien : UserControl
+    public partial class QuanLySinhVienView : UserControl
     {
-        public QuanLySinhVien()
+        public QuanLySinhVienView(QuanLySinhVienViewModel vm)
         {
             InitializeComponent();
+            DataContext = vm;
         }
 
-        
     }
 }

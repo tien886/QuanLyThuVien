@@ -20,10 +20,10 @@ namespace QuanLyThuVien.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView()  
+        public MainView(MainViewModel vm)  
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            DataContext = vm;
         }
 
     }
