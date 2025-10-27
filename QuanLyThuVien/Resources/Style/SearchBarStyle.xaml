@@ -6,7 +6,7 @@
         <Setter Property="Height" Value="40"/>
         <Setter Property="Width" Value="450"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Foreground" Value="{StaticResource titleColor2}"/>
+        <Setter Property="Foreground" Value="{StaticResource Black}"/>
         <Setter Property="Background" Value="{StaticResource White}"/>
         <Setter Property="BorderBrush" Value="{StaticResource Stroke}"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
