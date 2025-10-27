@@ -26,5 +26,6 @@ namespace QuanLyThuVien.Views
             InitializeComponent();
             DataContext = vm;
         }
+
     }
 }
