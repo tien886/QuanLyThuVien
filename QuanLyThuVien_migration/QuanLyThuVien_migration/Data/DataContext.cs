@@ -4,18 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
-using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace QuanLyThuVien.Data
 {
-    public class DataContext : DbContext
+    public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
     {
-        public DataContext(DbContextOptions<DataContext> options)
-        : base(options)
-        {
-        }
         public DbSet<Books> Books { get; set; }
         public DbSet<BookCategories> BookCategories { get; set; }
         public DbSet<BookCopies> BookCopies { get; set; }

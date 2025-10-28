@@ -77,7 +77,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Config\DatabaseConfig.cs" />
+    <Compile Include="Data\DataContext.cs" />
     <Compile Include="DI\AppService.cs" />
+    <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\BookCategories.cs" />
+    <Compile Include="Models\BookCopies.cs" />
     <Compile Include="ViewModels\DashBoardViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\MuonTraSachViewModel.cs" />
