@@ -68,3 +68,6 @@ Hệ thống sử dụng một mô hình CSDL quan hệ được chuẩn hóa đ
 
 ## 7. Một số thông tin dự án
 * **Link:** [Quản lý thư viện](https://www.figma.com/design/8aUGJI97B1YlnRf7OT5kXM/Qu%E1%BA%A3n-l%C3%AD-th%C6%B0-vi%E1%BB%87n?node-id=0-1&p=f&t=wSnHupHh71alJpKX-0)
+
+## Conflict đã gặp khi push và merge:
+- Upload thêm 1 file sln vì đổi tên nên github đã không chấp nhận. Check lại folder cũ nếu có hai file sln thì xóa file bị lỗi kia để resolve 
