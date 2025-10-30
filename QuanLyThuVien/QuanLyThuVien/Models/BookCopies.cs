@@ -15,5 +15,6 @@ namespace QuanLyThuVien.Models
 
         // Navigation property
         public Books Book { get; set; }
+        public ICollection<Loans> Loans { get; set; }
     }
 }

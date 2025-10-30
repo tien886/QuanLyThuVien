@@ -33,6 +33,19 @@ namespace QuanLyThuVien.Data
                 .WithMany(b => b.BookCopies)
                 .HasForeignKey(bc => bc.BookID)
                 .OnDelete(DeleteBehavior.Cascade);
+            // one book copy to many loans
+            modelBuilder.Entity<Loans>()
+                .HasOne(l => l.BookCopy)
+                .WithMany(l => l.Loans)
+                .HasForeignKey(l => l.CopyID)
+                .OnDelete(DeleteBehavior.Cascade);
+            // one student to many loans
+            modelBuilder.Entity<Loans>()
+                .HasOne(l => l.Student)
+                .WithMany(l => l.Loans)
+                .HasForeignKey(l => l.StudentID)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Seed data
             DataSeeder.SeedData(modelBuilder);
         }
