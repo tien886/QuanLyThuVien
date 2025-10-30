@@ -25,5 +25,6 @@ namespace QuanLyThuVien.Models
         // break db rule 
         public int TotalCopies => BookCopies?.Count ?? 0;
         public int AvailableCount => BookCopies?.Count(c => c.Status == "Available") ?? 0;
+        
     }
 }
