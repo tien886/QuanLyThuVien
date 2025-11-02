@@ -18,6 +18,8 @@ namespace QuanLyThuVien.Data
         public DbSet<Books> Books { get; set; }
         public DbSet<BookCategories> BookCategories { get; set; }
         public DbSet<BookCopies> BookCopies { get; set; }
+        public DbSet<Students> Students { get; set; }   
+        public DbSet<Loans> Loans { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -36,13 +38,13 @@ namespace QuanLyThuVien.Data
             // one book copy to many loans
             modelBuilder.Entity<Loans>()
                 .HasOne(l => l.BookCopy)
-                .WithMany(l => l.Loans)
+                .WithMany(bc => bc.Loans)
                 .HasForeignKey(l => l.CopyID)
                 .OnDelete(DeleteBehavior.Cascade);
             // one student to many loans
             modelBuilder.Entity<Loans>()
                 .HasOne(l => l.Student)
-                .WithMany(l => l.Loans)
+                .WithMany(s => s.Loans)
                 .HasForeignKey(l => l.StudentID)
                 .OnDelete(DeleteBehavior.Cascade);
 
