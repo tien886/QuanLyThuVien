@@ -1,7 +1,7 @@
-﻿﻿
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36414.22 d17.14
+VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuanLyThuVien_migration", "QuanLyThuVien_migration\QuanLyThuVien_migration.csproj", "{6F182DA7-1CB1-405A-9F81-0243B41729D8}"
 EndProject
