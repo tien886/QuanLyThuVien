@@ -2,13 +2,17 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
+using QuanLyThuVien.ViewModels.QuanLySach;
+using QuanLyThuVien.ViewModels.QuanLySachPopup;
+using QuanLyThuVien.Views;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Forms;
-
+using System.Windows.Input;
 namespace QuanLyThuVien.ViewModels
 {
     public partial class QuanLySachViewModel : ObservableObject
@@ -85,6 +89,18 @@ namespace QuanLyThuVien.ViewModels
 
             await _bookService.DeleteBookAsync(book);
             BookList.Remove(book);
+        }
+        [RelayCommand]
+        public async Task OpenBookDetailAndCopyPopup(Books book)
+        {
+            Debug.WriteLine($"HI OPEN {book.Title}");
+
+            var bookDetailAndCopyWindow = _serviceProvider.GetRequiredService<BookDetailAndCopyPopup>();
+            if (bookDetailAndCopyWindow.DataContext is BookDetailAndCopyViewModel vm)
+            {
+                await vm.LoadPage(book);   
+            }
+            bookDetailAndCopyWindow.ShowDialog();
         }
     }
 }
