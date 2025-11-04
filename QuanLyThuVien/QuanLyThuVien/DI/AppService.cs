@@ -6,6 +6,8 @@ using QuanLyThuVien.Repositories;
 using QuanLyThuVien.Repositories;
 using QuanLyThuVien.Services;
 using QuanLyThuVien.ViewModels;
+using QuanLyThuVien.ViewModels.QuanLySach;
+using QuanLyThuVien.ViewModels.QuanLySachPopup;
 using QuanLyThuVien.Views;
 using System;
 
@@ -28,12 +30,14 @@ namespace QuanLyThuVien.DI
             services.AddTransient<MuonTraSachView>();
             services.AddTransient<QuanLySachView>();
             services.AddTransient<QuanLySinhVienView>();
+            services.AddTransient<BookDetailAndCopyPopup>();
             //Register ViewModels
             services.AddTransient<MainViewModel>();
             services.AddTransient<DashBoardViewModel>();
             services.AddTransient<MuonTraSachViewModel>();
             services.AddTransient<QuanLySachViewModel>();
             services.AddTransient<QuanLySinhVienViewModel>();
+            services.AddTransient<BookDetailAndCopyViewModel>();
             // Register Services
             services.AddTransient<IBookService, BookRepository>();
             services.AddTransient<IBookCopyService, BookCopyRepository>();
