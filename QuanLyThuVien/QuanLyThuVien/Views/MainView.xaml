@@ -53,7 +53,7 @@
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Source="/Resources/Images/A.png" Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Image Grid.Column="0"  Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" >
                     <TextBlock Text="Admin" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial"/>
                     <TextBlock  Text="Quản trị viên" FontSize="22" FontFamily="Arial" Foreground="{StaticResource TitleOfWindow}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
