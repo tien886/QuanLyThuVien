@@ -17,5 +17,6 @@
     <SolidColorBrush x:Key="Warning/Waiting_light" Color="#FDF5E6"/>
     <SolidColorBrush x:Key="InUse_light" Color="#E0F2F9"/>
     <SolidColorBrush x:Key="Stroke" Color="#E2E8F0"/>
-    
+    <SolidColorBrush x:Key="DeepBackgroundSolid" Color="#F8FAFC"/>
+
 </ResourceDictionary>
