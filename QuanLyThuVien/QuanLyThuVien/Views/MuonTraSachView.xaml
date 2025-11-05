@@ -117,11 +117,11 @@
                         <Border
                       Grid.Column="1"
                       Width="40" Height="40"
-                      Background="{StaticResource Success/Available_light}"
+                      Background="{StaticResource Success/1_light}"
                       CornerRadius="12"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Center">
-                            <fa:IconImage Icon="ArrowRightToFile" Foreground="{StaticResource Success/Available}" Width="20" Height="20" 
+                            <fa:IconImage Icon="ArrowRightToFile" Foreground="{StaticResource Success/1}" Width="20" Height="20" 
                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
