@@ -148,11 +148,18 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="2">
-                <TextBlock Text="Mô tả: Đây là cuốn sách nâng cao về lập trình Python, bao gồm các chủ đề như lập trình hướng đối tượng, xử lý ngoại lệ, và làm việc với cơ sở dữ liệu." 
-                           FontSize="14" 
-                           FontWeight="Normal" 
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Mô tả:" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>                  
+                    <TextBlock Text="{Binding MoTa}" 
+                               FontSize="14" 
+                               FontWeight="Normal" 
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+                </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Row="3">
@@ -173,6 +180,7 @@
                      Height="25"
                      HorizontalAlignment="Right"
                      BorderBrush="{StaticResource ChanelBackground}" 
+                     Command="{Binding AddCopiesCommand}"
                      BorderThickness="2">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
@@ -182,90 +190,102 @@
             </Grid>
             <Grid Grid.Row="1">
                 <DataGrid Style="{StaticResource RoundedDataGrid}"
-                      ItemsSource="{Binding BookCopies}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      HeadersVisibility="Column"
-                    RowHeight="25"
-                      Margin="0,8,0,0">
+              ItemsSource="{Binding BookCopiesList}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              HeadersVisibility="Column"
+              RowHeight="25"
+              Margin="0,8,0,0" >
 
-                    <!-- Mã bản sao -->
-                    <DataGridTextColumn Header="Mã bản sao"
-                        Binding="{Binding CopyCode}"
-                        Width="*" />
+                    <DataGrid.Columns>
 
-                    <!-- Vị trí -->
-                    <DataGridTextColumn Header="Vị trí"
-                        Binding="{Binding Location}"
-                        Width="*" />
+                        <!-- Mã bản sao -->
+                        <DataGridTextColumn Header="Mã bản sao" Binding="{Binding CopyID}" Width="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="TextAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                    <!-- Trạng thái -->
-                    <DataGridTemplateColumn Header="Trạng thái" Width="1.2*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Border x:Name="StatusBorder"
-                        CornerRadius="12"
-                        Padding="10,3"
-                        HorizontalAlignment="Left"
-                        BorderThickness="1">
-                                    <TextBlock x:Name="StatusText"
-                               Text="{Binding StatusDisplay}"
-                               FontSize="12"
-                               FontWeight="SemiBold"
-                               HorizontalAlignment="Center" />
-                                </Border>
+                        <!-- Vị trí -->
+                        <DataGridTextColumn Header="Vị trí" Binding="{Binding Location}" Width="50" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="TextAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
 
-                                <DataTemplate.Triggers>
-                                    <!-- Có sẵn -->
-                                    <DataTrigger Binding="{Binding IsAvailable}" Value="True">
-                                        <Setter TargetName="StatusBorder" Property="Background" Value="#E6F4EA"/>
-                                        <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#34A853"/>
-                                        <Setter TargetName="StatusText"   Property="Foreground"   Value="#188038"/>
-                                    </DataTrigger>
+                        <!-- Trạng thái -->
+                        <DataGridTemplateColumn Header="Trạng thái" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="StatusBorder"
+                                CornerRadius="12"
+                                Padding="10,3"
+                                BorderThickness="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                        <TextBlock x:Name="StatusText"
+                                       Text="{Binding StatusDescription}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center"
+                                                   
+                                        />
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding StatusDescription}" Value="Có sẵn">
+                                            <Setter TargetName="StatusBorder" Property="Background" Value="#E6F4EA"/>
+                                            <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#34A853"/>
+                                            <Setter TargetName="StatusText" Property="Foreground" Value="#188038"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusDescription}" Value="Đang mượn">
+                                            <Setter TargetName="StatusBorder" Property="Background" Value="#E8F0FE"/>
+                                            <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#1A73E8"/>
+                                            <Setter TargetName="StatusText" Property="Foreground" Value="#1A73E8"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-                                    <!-- Đang mượn -->
-                                    <DataTrigger Binding="{Binding IsAvailable}" Value="False">
-                                        <Setter TargetName="StatusBorder" Property="Background" Value="#E8F0FE"/>
-                                        <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#1A73E8"/>
-                                        <Setter TargetName="StatusText"   Property="Foreground"   Value="#1A73E8"/>
-                                    </DataTrigger>
-                                </DataTemplate.Triggers>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Thao tác" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                        <Button Style="{StaticResource IconButton}"
+                                    Command="{Binding DataContext.EditCopyCommand,
+                                                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
+                                            <fa:IconBlock Icon="PenToSquare" Width="14" Height="14"/>
+                                        </Button>
 
-                    <!-- Thao tác -->
-                    <DataGridTemplateColumn Header="Thao tác" Width="100">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            Margin="0"
-                            >
-                                    <!-- Edit -->
-                                    <Button Style="{StaticResource IconButton}"
-                            Command="{Binding DataContext.EditCopyCommand,
-                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            CommandParameter="{Binding}">
-                                        <fa:IconBlock Icon="PenToSquare"
-                                      Width="14" Height="14"/>
-                                    </Button>
+                                        <Button Style="{StaticResource IconButton}"
+                                    Command="{Binding DataContext.DeleteCopyCommand,
+                                                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
+                                            <fa:IconBlock Icon="TrashAlt" Width="14" Height="14" Foreground="Red"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-                                    <!-- Delete -->
-                                    <Button Style="{StaticResource IconButton}"
-                            Command="{Binding DataContext.DeleteCopyCommand,
-                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            CommandParameter="{Binding}">
-                                        <fa:IconBlock Icon="TrashAlt"
-                                      Width="14" Height="14"
-                                      Foreground="Red"/>
-                                    </Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGrid.Columns>
                 </DataGrid>
             </Grid>
+
+
         </Grid>
         <Grid Grid.Row="4" >
             <StackPanel Orientation="Horizontal"
@@ -288,11 +308,12 @@
                        Foreground="{StaticResource TitleOfWindow}"
                        FontSize="12"
                        TextAlignment="Center"/>
-                        <TextBlock Text="{Binding TotalCopies}"
+                        <TextBlock Text="{Binding TongSoBan}"
                        FontWeight="Bold"
                        FontSize="14"
                        Foreground="#000000"
-                       TextAlignment="Center"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
                        Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
@@ -308,12 +329,14 @@
                         <TextBlock Text="Có sẵn"
                        Foreground="{StaticResource TitleOfWindow}"
                        FontSize="12"
-                       TextAlignment="Center"/>
-                        <TextBlock Text="{Binding AvailableCopies}"
+                       TextAlignment="Center"
+                       Margin="0,0,0,12"/>
+                        <TextBlock Text="{Binding CoSan}"
                        FontWeight="Bold"
                        FontSize="14"
-                       Foreground="{StaticResource Success/Available}"
-                       TextAlignment="Center"
+                       Foreground="{StaticResource Success/1}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
                        Margin="0,8,0,0"/>
                     </StackPanel>
                 </Border>
@@ -335,11 +358,12 @@
                        Foreground="{StaticResource TitleOfWindow}"
                        FontSize="12"
                        TextAlignment="Center"/>
-                        <TextBlock Text="{Binding BorrowedCopies}"
+                        <TextBlock Text="{Binding DangMuon}"
                        FontWeight="Bold"
                        FontSize="14"
                        Foreground="{StaticResource InUse}"
-                       TextAlignment="Center"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
                        Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
@@ -361,11 +385,12 @@
                        Foreground="{StaticResource TitleOfWindow}"
                        FontSize="12"
                        TextAlignment="Center"/>
-                        <TextBlock Text="{Binding LostOrDamagedCopies}"
+                        <TextBlock Text="{Binding HongMat}"
                        FontWeight="Bold"
                        FontSize="14"
                        Foreground="{StaticResource Danger/Overdue}"
-                       TextAlignment="Center"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
                        Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border>
@@ -378,7 +403,7 @@
             Width="100"
             Height="25"
             HorizontalAlignment="Right"
-                    
+            Command="{Binding ClosePopupCommand}"
                     >
                 <Button.Triggers>
                     <EventTrigger RoutedEvent="MouseEnter">

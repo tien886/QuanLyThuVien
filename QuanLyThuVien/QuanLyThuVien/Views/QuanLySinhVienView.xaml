@@ -53,7 +53,7 @@
                             </Button>
                             <!-- Approve -->
                             <Button Style="{StaticResource IconButton}" Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}">
-                                <fa:IconImage Icon="CircleCheck" Width="18" Height="18" Foreground="{StaticResource Success/Available}"/>
+                                <fa:IconImage Icon="CircleCheck" Width="18" Height="18" Foreground="{StaticResource Success/1}"/>
                             </Button>
                         </StackPanel>
                     </DataTemplate>
