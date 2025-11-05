@@ -18,13 +18,12 @@ namespace QuanLyThuVien.Models
         public int PublicationYear { get; set; }
         public string Genre { get; set; }
         public int CategoryID { get; set; }
-
+        public string Description { get; set; } 
         // Navigation property
         public BookCategories BookCategory { get; set; }
         public ICollection<BookCopies> BookCopies { get; set; }
         // break db rule 
         public int TotalCopies => BookCopies?.Count ?? 0;
-        public int AvailableCount => BookCopies?.Count(c => c.Status == "Available") ?? 0;
-        
+        public int AvailableCount => BookCopies?.Count(c => c.Status == "1") ?? 0;
     }
 }
