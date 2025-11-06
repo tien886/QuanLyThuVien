@@ -155,7 +155,7 @@
                                     EditingElementStyle="{StaticResource CellEditTextCenter}"/>
                 <!-- Column - Date -->
                 <DataGridTextColumn Header="Ngày tạo"
-                 Binding="{Binding RegistRegistrationDate, StringFormat=\{0:dd/MM/yyyy\}}" Width="160"
+                 Binding="{Binding RegistrationDate, StringFormat=\{0:dd/MM/yyyy\}}" Width="160"
                                     ElementStyle="{StaticResource CellTextCenter}"
                                     EditingElementStyle="{StaticResource CellEditTextCenter}"/>
 
@@ -203,35 +203,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-            <DataGridTextColumn Header="Mã SV" Binding="{Binding StudentId}" Width="150"/>
-            <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="220"/>
-            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
-            <DataGridTextColumn Header="Khoa" Binding="{Binding Faculty}" Width="200"/>
-            <DataGridTextColumn Header="Ngày tạo"
-                             Binding="{Binding CreatedAt, StringFormat=\{0:dd/MM/yyyy\}}"
-                             Width="160"/>
-
-            <!-- Actions -->
-            <DataGridTemplateColumn Header="Thao tác" Width="140" >
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                            <!-- View -->
-                            <Button Style="{StaticResource IconButton}" Command="{Binding DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}">
-                                <fa:IconImage Icon="Eye" Width="18" Height="18" Foreground="{StaticResource Black}"/>
-                            </Button>
-                            <!-- Ban -->
-                            <Button Style="{StaticResource IconButton}" Command="{Binding DataContext.BanCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}">
-                                <fa:IconImage Icon="CircleXmark" Width="18" Height="18" Foreground="{StaticResource Danger/Overdue}"/>
-                            </Button>
-                            <!-- Approve -->
-                            <Button Style="{StaticResource IconButton}" Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}">
-                                <fa:IconImage Icon="CircleCheck" Width="18" Height="18" Foreground="{StaticResource Success/1}"/>
-                            </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
+            
 
             </DataGrid.Columns>
         </DataGrid>
