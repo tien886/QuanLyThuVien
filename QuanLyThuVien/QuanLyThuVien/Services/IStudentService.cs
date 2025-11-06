@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Services
 {
-    public class IStudentService
+    public interface IStudentService
     {
+        Task<IEnumerable<Students>> GetAllStudentsAsync(string? keyword = null);
+        Task AddAsync(Students s);
+        Task UpdateAsync(Students s);
+        Task DeleteAsync(int id);
+
+        Task BlockAsync(int id);  
+        Task UnblockAsync(int id);
+        Task ChangeStatus(Students students);
     }
 }

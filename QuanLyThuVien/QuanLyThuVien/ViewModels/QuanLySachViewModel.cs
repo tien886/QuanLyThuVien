@@ -45,12 +45,15 @@ namespace QuanLyThuVien.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<Books> bookList = new();
+
         [ObservableProperty]
         private bool available = false;
+
         public async Task LoadPage()
         {
             BookList = new ObservableCollection<Books>(await _bookService.GetAllBooksAsync());
         }
+
         public async Task SearchBookAsync(string hint)
         {
             try
@@ -73,6 +76,7 @@ namespace QuanLyThuVien.ViewModels
                 Debug.WriteLine($"Lỗi khi tìm kiếm: {ex.Message}");
             }
         }
+
         [RelayCommand]
         private async Task DeleteBook(Books book)
         {

@@ -54,7 +54,7 @@
                         </Border>
                     </Grid>
                 </Border>
-                <Border
+            <Border
                     Background="White"
                     CornerRadius="15"
                     Padding="20"

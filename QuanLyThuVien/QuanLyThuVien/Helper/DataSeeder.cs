@@ -20,6 +20,8 @@ namespace QuanLyThuVien.Helper
             Debug.WriteLine("Seed bookcategory succesfullly");
             BookCopySeeder.SeedBookCopy(modelBuilder);
             Debug.WriteLine("Seed bookcopies succesfullly");
+            StudentSeeder.SeedStudent(modelBuilder);
+            Debug.WriteLine("Seed students succesfullly");
         }
     }
 }
