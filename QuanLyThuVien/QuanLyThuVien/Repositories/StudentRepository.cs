@@ -81,10 +81,10 @@ namespace QuanLyThuVien.Repositories
         }
         public async Task ChangeStatus(Students students)
         {
-            var s = await _dataContext.Students.FindAsync(students.StudentId);
-            if (s is null)
+            var foundedStudents = await _dataContext.Students.FindAsync(students.StudentId);
+            if (foundedStudents is null)
                 return;
-            students.AccountStatus = students.AccountStatus == "Active" ? "Disabled" : "Active";
+            foundedStudents.AccountStatus = students.AccountStatus == "Active" ? "Disabled" : "Active";
             Debug.WriteLine($"Sinh viên {students.StudentName} hiện có trạng thái: {students.AccountStatus} trong repo");
 
             await _dataContext.SaveChangesAsync();
