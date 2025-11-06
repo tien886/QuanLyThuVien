@@ -1,4 +1,5 @@
-﻿using QuanLyThuVien.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using QuanLyThuVien.Data;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using System;
@@ -16,9 +17,10 @@ namespace QuanLyThuVien.Repositories
         {
             _dataContext = dataContext;
         }
-        public async Task<IEnumerable<BookCopies>> GetAllBookCopiesAsync()
+        public async Task<IEnumerable<BookCopies>> GetAllBookCopiesAsync(Books book)
         {
-            return _dataContext.BookCopies.ToList();
+            return await _dataContext.BookCopies.
+                Where(bc => bc.BookID == book.BookID && (bc.Status == "1" || bc.Status == "0")).ToListAsync();
         }
         public async Task<int> GetTotalBookCopiesAsync()
         {

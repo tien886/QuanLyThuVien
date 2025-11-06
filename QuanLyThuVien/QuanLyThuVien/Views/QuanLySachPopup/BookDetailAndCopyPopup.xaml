@@ -1,0 +1,433 @@
+﻿<Window x:Class="QuanLyThuVien.ViewModels.QuanLySachPopup.BookDetailAndCopyPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuanLyThuVien.ViewModels.QuanLySachPopup"
+        mc:Ignorable="d"
+        Title="BookDetailAndCopyPopup" Height="800" Width="400"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Background="{StaticResource DeepBackgroundSolid}"
+        >
+    <Grid Margin="20,20,20,40" >
+        <Grid.RowDefinitions >
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="300"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="205"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="25"/>
+        
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Chi tiết đầu sách và bản sao " 
+                           FontSize="16" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource TitleOfWindow}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Text="Thông tin đầu sách và bản sao vật lí" 
+                           FontSize="12" 
+                           FontWeight="SemiBold" 
+                           Foreground="{StaticResource TitleOfWindow}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                            />
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <TextBlock Text="Thông tin đầu sách" 
+                           FontSize="16" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource TitleOfWindow}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="180"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <StackPanel Orientation="Vertical" >
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <TextBlock Text="Mã đầu sách" 
+                                       FontSize="14" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="{StaticResource TitleOfWindow}" 
+                                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding MaDauSach}" 
+                                       FontSize="14" 
+                                       FontWeight="Normal" 
+                                       Foreground="{StaticResource Black}" 
+                                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <TextBlock Text="Tên sách" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding TenSach}" 
+                               FontSize="14" 
+                               FontWeight="Normal" 
+                               Foreground="{StaticResource Black}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <TextBlock Text="Tác giả" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding TacGia}" 
+                                FontSize="14" 
+                                FontWeight="Normal" 
+                                Foreground="{StaticResource Black}" 
+                                HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <TextBlock Text="ISBN" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ISBN}" 
+                                FontSize="14" 
+                                FontWeight="Normal" 
+                                Foreground="{StaticResource Black}" 
+                                HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Column="1">
+                    <StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <TextBlock Text="Thể loại" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding TheLoai}" 
+                               FontSize="14" 
+                               FontWeight="Normal" 
+                               Foreground="{StaticResource Black}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <TextBlock Text="Nhà xuất bản" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding NXB}" 
+                               FontSize="14" 
+                               FontWeight="Normal" 
+                               Foreground="{StaticResource Black}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,10">
+                            <TextBlock Text="Năm xuất bản" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding NamXB}" 
+                                FontSize="14" 
+                                FontWeight="Normal" 
+                                Foreground="{StaticResource Black}" 
+                                HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Mô tả:" 
+                               FontSize="14" 
+                               FontWeight="SemiBold" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>                  
+                    <TextBlock Text="{Binding MoTa}" 
+                               FontSize="14" 
+                               FontWeight="Normal" 
+                               TextWrapping="Wrap"
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="160"/>
+                <RowDefinition Height="15"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <TextBlock Text="Danh sách bản sao" 
+                           FontSize="16" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource TitleOfWindow}" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Button 
+                     Style="{StaticResource RoundedButton}"
+                     Width="120"
+                     Height="25"
+                     HorizontalAlignment="Right"
+                     BorderBrush="{StaticResource ChanelBackground}" 
+                     Command="{Binding AddCopiesCommand}"
+                     BorderThickness="2">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
+                        <TextBlock FontSize="12" Text="Thêm bản sao"  HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+            <Grid Grid.Row="1">
+                <DataGrid Style="{StaticResource RoundedDataGrid}"
+              ItemsSource="{Binding BookCopiesList}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="False"
+              HeadersVisibility="Column"
+              RowHeight="25"
+              Margin="0,8,0,0" >
+
+                    <DataGrid.Columns>
+
+                        <!-- Mã bản sao -->
+                        <DataGridTextColumn Header="Mã bản sao" Binding="{Binding CopyID}" Width="100">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="TextAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Vị trí -->
+                        <DataGridTextColumn Header="Vị trí" Binding="{Binding Location}" Width="50" >
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="TextAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+
+                        <!-- Trạng thái -->
+                        <DataGridTemplateColumn Header="Trạng thái" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="StatusBorder"
+                                CornerRadius="12"
+                                Padding="10,3"
+                                BorderThickness="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                        <TextBlock x:Name="StatusText"
+                                       Text="{Binding StatusDescription}"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       TextAlignment="Center"
+                                                   
+                                        />
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding StatusDescription}" Value="Có sẵn">
+                                            <Setter TargetName="StatusBorder" Property="Background" Value="#E6F4EA"/>
+                                            <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#34A853"/>
+                                            <Setter TargetName="StatusText" Property="Foreground" Value="#188038"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusDescription}" Value="Đang mượn">
+                                            <Setter TargetName="StatusBorder" Property="Background" Value="#E8F0FE"/>
+                                            <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#1A73E8"/>
+                                            <Setter TargetName="StatusText" Property="Foreground" Value="#1A73E8"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Thao tác" Width="80">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                        <Button Style="{StaticResource IconButton}"
+                                    Command="{Binding DataContext.EditCopyCommand,
+                                                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
+                                            <fa:IconBlock Icon="PenToSquare" Width="14" Height="14"/>
+                                        </Button>
+
+                                        <Button Style="{StaticResource IconButton}"
+                                    Command="{Binding DataContext.DeleteCopyCommand,
+                                                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}">
+                                            <fa:IconBlock Icon="TrashAlt" Width="14" Height="14" Foreground="Red"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+
+        </Grid>
+        <Grid Grid.Row="4" >
+            <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            Margin="0,10,0,10"
+            >
+                <Border Background="#F6F8FB"
+            CornerRadius="12"
+            Padding="8,6"
+            Width="70"
+            Height="74"
+            Margin="0,0,20,0"
+            SnapsToDevicePixels="True">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Tổng số"
+                       Foreground="{StaticResource TitleOfWindow}"
+                       FontSize="12"
+                       TextAlignment="Center"/>
+                        <TextBlock Text="bản"
+                       Foreground="{StaticResource TitleOfWindow}"
+                       FontSize="12"
+                       TextAlignment="Center"/>
+                        <TextBlock Text="{Binding TongSoBan}"
+                       FontWeight="Bold"
+                       FontSize="14"
+                       Foreground="#000000"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#E9F8F0"
+            CornerRadius="12"
+            Padding="8,6"
+            Width="70"
+            Height="74"
+            Margin="0,0,20,0"
+            SnapsToDevicePixels="True">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Có sẵn"
+                       Foreground="{StaticResource TitleOfWindow}"
+                       FontSize="12"
+                       TextAlignment="Center"
+                       Margin="0,0,0,12"/>
+                        <TextBlock Text="{Binding CoSan}"
+                       FontWeight="Bold"
+                       FontSize="14"
+                       Foreground="{StaticResource Success/1}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Đang mượn -->
+                <Border Background="#E6F2FF"
+            CornerRadius="12"
+            Padding="8,6"
+            Width="70"
+            Height="74"
+            Margin="0,0,20,0"
+            SnapsToDevicePixels="True">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Đang"
+                       Foreground="{StaticResource TitleOfWindow}"
+                       FontSize="12"
+                       TextAlignment="Center"/>
+                        <TextBlock Text="mượn"
+                       Foreground="{StaticResource TitleOfWindow}"
+                       FontSize="12"
+                       TextAlignment="Center"/>
+                        <TextBlock Text="{Binding DangMuon}"
+                       FontWeight="Bold"
+                       FontSize="14"
+                       Foreground="{StaticResource InUse}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Hỏng / mất -->
+                <Border Background="#FDE8E8"
+            CornerRadius="12"
+            Padding="8,6"
+            Width="70"
+            Height="74"
+            Margin="0,0,8,0"
+            SnapsToDevicePixels="True">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Hỏng /"
+                       Foreground="{StaticResource TitleOfWindow}"
+                       FontSize="12"
+                       TextAlignment="Center"/>
+                        <TextBlock Text="mất"
+                       Foreground="{StaticResource TitleOfWindow}"
+                       FontSize="12"
+                       TextAlignment="Center"/>
+                        <TextBlock Text="{Binding HongMat}"
+                       FontWeight="Bold"
+                       FontSize="14"
+                       Foreground="{StaticResource Danger/Overdue}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Bottom"
+                       Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="5">
+            <Button Style="{StaticResource RoundedButton}"
+            Background="#F87171"
+            Foreground="White"
+            Width="100"
+            Height="25"
+            HorizontalAlignment="Right"
+            Command="{Binding ClosePopupCommand}"
+                    >
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        To="#E53935"
+                                        Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                        To="#F87171"
+                                        Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+
+                <TextBlock Text="Hủy"/>
+            </Button>
+        </Grid>
+    </Grid> 
+</Window>
