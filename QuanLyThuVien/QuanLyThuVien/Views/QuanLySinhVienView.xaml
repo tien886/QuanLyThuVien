@@ -10,15 +10,20 @@
              d:DesignHeight="1080" d:DesignWidth="1660">
     
     <Grid>
+        <!-- Column RowDefinitions -->
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <!-- Row 1 - SearchBar -->
         <TextBox 
             Grid.Row="0"
             Style="{StaticResource SearchTextBox}"
             Text="{Binding SearchBarText, UpdateSourceTrigger = PropertyChanged}" 
             />
+        
+        <!-- Row 2 - Data Table -->
         <DataGrid ItemsSource="{Binding Students}"
               Grid.Row="1"
               AutoGenerateColumns="False"
@@ -29,37 +34,177 @@
               Margin="0,32,0,0"
               Style="{StaticResource RoundedDataGrid}" >
 
+            <!-- Resources -->
+            <DataGrid.Resources>
+                <!-- ===== Palette ===== -->
+                <SolidColorBrush x:Key="Neutral/Line"     Color="#E5E7EB"/>
+                <!-- đường kẻ hàng -->
+                <SolidColorBrush x:Key="Row/Hover"        Color="#F6FAFE"/>
+                <SolidColorBrush x:Key="Icon/Default"     Color="#111827"/>
+                <SolidColorBrush x:Key="Icon/View"        Color="#10B981"/>
+                <!-- Eye -->
+                <SolidColorBrush x:Key="Icon/Edit"        Color="#111827"/>
+                <!-- Pen -->
+                <!-- Toggle màu đã được trả về bởi StatusToIconColorConverter -->
+
+                <!-- Text màu cho chip -->
+                <SolidColorBrush x:Key="Status/ActiveFg"   Color="#0F766E"/>
+                <SolidColorBrush x:Key="Status/DisabledFg" Color="#6B7280"/>
+
+                <!-- ===== Chip Trạng thái ===== -->
+                <Style x:Key="StatusPillBorder" TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                    <Setter Property="Padding" Value="6,2"/>
+                    <Setter Property="Background"
+                            Value="{Binding AccountStatus, Converter={StaticResource StatusToColorConverter}}"/>
+                </Style>
+
+                <Style x:Key="StatusPillText" TargetType="TextBlock">
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Foreground" Value="{StaticResource Status/DisabledFg}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AccountStatus}" Value="Active">
+                            <Setter Property="Foreground" Value="{StaticResource Status/ActiveFg}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+
+                <!-- ===== Icon Button (nút tròn, trong suốt) ===== -->
+                <Style x:Key="IconButton" TargetType="Button">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="{x:Null}"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="4"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Width" Value="28"/>
+                    <Setter Property="Height" Value="28"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="root" Background="{TemplateBinding Background}"
+                        CornerRadius="14">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="root" Property="Background" Value="#F3F4F6"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter TargetName="root" Property="Background" Value="#E5E7EB"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <!-- ===== DataGrid – hàng kẻ & hover dịu ===== -->
+                <Style TargetType="DataGrid">
+                    <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+                    <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Neutral/Line}"/>
+                    <Setter Property="RowBackground" Value="White"/>
+                    <Setter Property="AlternatingRowBackground" Value="White"/>
+                </Style>
+
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+                
+                <Style TargetType="DataGridRow">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource Row/Hover}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="CellTextCenter" TargetType="TextBlock">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="TextAlignment" Value="Center"/>
+                </Style>
+                <Style x:Key="CellEditTextCenter" TargetType="TextBox">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="TextAlignment" Value="Center"/>
+                </Style>
+
+            </DataGrid.Resources>
+
             <!-- Columns -->
-            <DataGridTextColumn Header="Mã SV" Binding="{Binding StudentId}" Width="150"/>
-            <DataGridTextColumn Header="Họ và tên" Binding="{Binding FullName}" Width="220"/>
-            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
-            <DataGridTextColumn Header="Khoa" Binding="{Binding Faculty}" Width="200"/>
-            <DataGridTextColumn Header="Ngày tạo"
-                             Binding="{Binding CreatedAt, StringFormat=\{0:dd/MM/yyyy\}}"
-                             Width="160"/>
+            <DataGrid.Columns>
+                <!-- Column - MaSV -->
+                <DataGridTextColumn Header="Mã SV" Binding="{Binding StudentId}" Width="150"
+                                    ElementStyle="{StaticResource CellTextCenter}"
+                                    EditingElementStyle="{StaticResource CellEditTextCenter}"/>
+                <!-- Column - Name -->
+                <DataGridTextColumn Header="Họ và tên" Binding="{Binding StudentName}" Width="180"
+                                    ElementStyle="{StaticResource CellTextCenter}"
+                                    EditingElementStyle="{StaticResource CellEditTextCenter}"/>
+                <!-- Column - Email -->
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"
+                                    ElementStyle="{StaticResource CellTextCenter}"
+                                    EditingElementStyle="{StaticResource CellEditTextCenter}"/>
+                <!-- Column - PhoneNumber -->
+                <DataGridTextColumn Header="Số điện thoại" Binding="{Binding PhoneNumber}" Width="120"
+                                    ElementStyle="{StaticResource CellTextCenter}"
+                                    EditingElementStyle="{StaticResource CellEditTextCenter}"/>
+                <!-- Column - Date -->
+                <DataGridTextColumn Header="Ngày tạo"
+                 Binding="{Binding RegistRegistrationDate, StringFormat=\{0:dd/MM/yyyy\}}" Width="160"
+                                    ElementStyle="{StaticResource CellTextCenter}"
+                                    EditingElementStyle="{StaticResource CellEditTextCenter}"/>
 
-            <!-- Actions -->
-            <DataGridTemplateColumn Header="Thao tác" Width="140" >
-                <DataGridTemplateColumn.CellTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
-                            <!-- View -->
-                            <Button Style="{StaticResource IconButton}" Command="{Binding DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}">
-                                <fa:IconImage Icon="Eye" Width="18" Height="18" Foreground="{StaticResource Black}"/>
-                            </Button>
-                            <!-- Ban -->
-                            <Button Style="{StaticResource IconButton}" Command="{Binding DataContext.BanCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}">
-                                <fa:IconImage Icon="CircleXmark" Width="18" Height="18" Foreground="{StaticResource Danger/Overdue}"/>
-                            </Button>
-                            <!-- Approve -->
-                            <Button Style="{StaticResource IconButton}" Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}">
-                                <fa:IconImage Icon="CircleCheck" Width="18" Height="18" Foreground="{StaticResource Success/Available}"/>
-                            </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
 
+                <!-- Column - Status -->
+                <DataGridTemplateColumn Header="Trạng thái" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource StatusPillBorder}">
+                                <TextBlock Style="{StaticResource StatusPillText}"
+                                            Text="{Binding AccountStatus, Converter={StaticResource StatusToTextConverter}}"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Column - Actions -->
+                <DataGridTemplateColumn Header="Thao tác" Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
+                                <!-- Xem -->
+                                <Button Style="{StaticResource IconButton}"
+                                        Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}">
+                                    <fa:IconImage Icon="Eye" Width="18" Height="18"
+                                                  Foreground="{StaticResource Icon/View}"/>
+                                </Button>
+
+                                <!-- Sửa -->
+                                <Button Style="{StaticResource IconButton}">
+                                    <fa:IconImage Icon="PenToSquare" Width="18" Height="18"
+                                                Foreground="{StaticResource Icon/Edit}"/>
+                                </Button>
+
+                                <!-- BAN / UNBAN -->
+                                <Button Style="{StaticResource IconButton}"
+                                        Command="{Binding DataContext.ToggleStatusCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}">
+                                    <fa:IconBlock Width="20" Height="20"
+                                        Icon="{Binding AccountStatus, Converter={StaticResource StatusToIconConverter}}"
+                                        Foreground="{Binding AccountStatus, Converter={StaticResource StatusToIconColorConverter}}"/>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>
