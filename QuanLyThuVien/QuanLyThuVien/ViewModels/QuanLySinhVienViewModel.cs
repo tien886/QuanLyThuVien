@@ -17,6 +17,8 @@ namespace QuanLyThuVien.ViewModels
 
         [ObservableProperty]
         private string searchText = string.Empty;
+        [ObservableProperty]
+        private string accountStatus = "1";
 
         private CancellationTokenSource? _searchCts;
 
@@ -75,6 +77,7 @@ namespace QuanLyThuVien.ViewModels
         private void ToggleStatus(Students student)
         {
             if (student == null) return;
+            Debug.WriteLine($"Sinh viên truowsc khi doi {student.StudentName} hiện có trạng thái: {student.AccountStatus}");
 
             _studentService.ChangeStatus(student);
 
