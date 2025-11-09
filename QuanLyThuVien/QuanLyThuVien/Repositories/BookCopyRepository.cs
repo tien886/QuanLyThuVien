@@ -24,7 +24,13 @@ namespace QuanLyThuVien.Repositories
         }
         public async Task<int> GetTotalBookCopiesAsync()
         {
-            return _dataContext.BookCopies.Count();
+            return await _dataContext.BookCopies.CountAsync();
+        }
+        public async Task<string> GetNextAvailableBookCopyID()
+        { 
+            var maxID = await _dataContext.BookCopies.MaxAsync(bc => bc.CopyID);
+            string AvailableID = "C"+(int.Parse(maxID) + 1).ToString("D4");
+            return AvailableID;
         }
     }
 }

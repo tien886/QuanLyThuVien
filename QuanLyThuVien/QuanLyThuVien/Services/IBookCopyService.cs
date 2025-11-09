@@ -6,5 +6,6 @@ namespace QuanLyThuVien.Services
     {
         Task<IEnumerable<BookCopies>> GetAllBookCopiesAsync(Books book);
         Task<int> GetTotalBookCopiesAsync();
+        Task<string> GetNextAvailableBookCopyID();
     }
 }
