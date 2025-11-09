@@ -8,6 +8,7 @@ using QuanLyThuVien.Services;
 using QuanLyThuVien.ViewModels.QuanLySach;
 using QuanLyThuVien.ViewModels.QuanLySachPopup;
 using QuanLyThuVien.Views;
+using QuanLyThuVien.Views.QuanLySachPopup;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -102,9 +103,21 @@ namespace QuanLyThuVien.ViewModels
             var bookDetailAndCopyWindow = _serviceProvider.GetRequiredService<BookDetailAndCopyPopup>();
             if (bookDetailAndCopyWindow.DataContext is BookDetailAndCopyViewModel vm)
             {
-                await vm.LoadPage(book);   
+                await vm.LoadPage(book);
             }
             bookDetailAndCopyWindow.ShowDialog();
         }
-    }
+        [RelayCommand]
+        public async Task OpenThemBookHeadPopup()
+        {
+            var themBookHeadPopup = _serviceProvider.GetRequiredService<ThemBooKHeadPopup>();
+            themBookHeadPopup.ShowDialog();
+        }
+        [RelayCommand]
+        public async Task OpenSuaBookHeadPopup(Books book)
+        {
+            var suaBookHeadPopup = _serviceProvider.GetRequiredService<SuaBookHeadPopup>();
+            suaBookHeadPopup.ShowDialog();
+        }
+    } 
 }
