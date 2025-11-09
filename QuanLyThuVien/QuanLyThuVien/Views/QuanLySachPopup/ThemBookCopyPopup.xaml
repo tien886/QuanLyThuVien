@@ -147,7 +147,8 @@
                 </TextBlock>
 
                 <TextBox Style="{StaticResource RoundedInputTextBox}"
-                         Text="{Binding CopyCode, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding CopyID, UpdateSourceTrigger=PropertyChanged}" 
+                         IsEnabled="False"
                          />
             </StackPanel>
 
@@ -168,13 +169,35 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         Margin="0,8,0,0">
+                    
                 <Button Style="{StaticResource GhostPillButton}"
                         Content="Hủy"
                         Margin="0,0,8,0"
-                        Command="{Binding CancelCommand}"/>
+                        Command="{Binding ClosePopupCommand}">
+                    <Button.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                         To="#E53935"
+                         Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                         To="#F87171"
+                         Duration="0:0:0.1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Button.Triggers>
+                </Button>   
                 <Button Style="{StaticResource PrimaryPillButton}"
                         Content="Thêm bản sao"
-                        Command="{Binding AddCopyCommand}"/>
+                        Command="{Binding AddBookCopiesCommand}"/>
             </StackPanel>
         </Grid>
     </Border>
