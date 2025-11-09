@@ -33,6 +33,7 @@ namespace QuanLyThuVien.DI
             services.AddTransient<QuanLySinhVienView>();
             services.AddTransient<BookDetailAndCopyPopup>();
             services.AddTransient<ThemBookCopyPopup>();
+            services.AddTransient<ThemBooKHeadPopup>();
             //Register ViewModels
             services.AddTransient<MainViewModel>();
             services.AddTransient<DashBoardViewModel>();
@@ -41,6 +42,7 @@ namespace QuanLyThuVien.DI
             services.AddTransient<QuanLySinhVienViewModel>();
             services.AddTransient<BookDetailAndCopyViewModel>();
             services.AddTransient<ThemBookCopyViewModel>();
+            services.AddTransient<ThemBookHeadViewModel>();
             // Register Services
             services.AddTransient<IBookService, BookRepository>();
             services.AddTransient<IBookCopyService, BookCopyRepository>();
