@@ -103,6 +103,8 @@
                                     <fa:IconImage Icon="Eye" Width="18" Height="18" Foreground="{StaticResource Success/1}"/>
                                 </Button>
                                 <Button Style="{StaticResource IconButton}" Margin="0,0,10,0"
+                                        Command="{Binding DataContext.OpenSuaBookHeadPopupCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        CommandParameter="{Binding}"
                                     >
                                     <fa:IconImage Icon="PenToSquare" Width="18" Height="18" Foreground="{StaticResource Black}"/>
                                 </Button>

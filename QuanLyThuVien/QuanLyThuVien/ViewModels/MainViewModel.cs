@@ -1,8 +1,11 @@
 ﻿
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.ViewModels;
+using QuanLyThuVien.ViewModels.QuanLySachPopup;
 using QuanLyThuVien.Views;
+using QuanLyThuVien.Views.QuanLySachPopup;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -17,7 +20,10 @@ namespace QuanLyThuVien.ViewModels
             ShowDashBoardView = new ViewModelCommand(ExecuteShowDashBoardView);
             ShowQuanLySinhVienView = new ViewModelCommand(ExecuteShowQuanLySinhVienView);
             ShowQuanLySachView = new ViewModelCommand(ExecuteShowQuanLySachView);
-            ShowMuonTraSachView = new ViewModelCommand(ExecuteShowMuonTraSachView); 
+            ShowMuonTraSachView = new ViewModelCommand(ExecuteShowMuonTraSachView);
+            ShowAddBookHeadView = new ViewModelCommand(ExecuteShowAddBookHeadView);
+            //ShowAddStudentView = new ViewModelCommand();
+            //ShowAddPhieuMuonView = new ViewModelCommand();
             ExecuteShowDashBoardView(null);
         }
 
@@ -25,15 +31,41 @@ namespace QuanLyThuVien.ViewModels
         private string _Title;
         private string _caption;
         private string _buttonName = "";
-        private bool _isAddButtonVisible = true;
-        public bool IsAddButtonVisible
+        private bool _isAddBookHeadViewVisible = true;
+        public bool IsAddBookHeadViewVisible
         {
-            get => _isAddButtonVisible;
+            get => _isAddBookHeadViewVisible;
             set
             {
-                if (_isAddButtonVisible != value)
+                if (_isAddBookHeadViewVisible != value)
                 {
-                    _isAddButtonVisible = value;
+                    _isAddBookHeadViewVisible = value;
+                    OnPropertyChanged(); // notifies XAML bindings
+                }
+            }
+        }
+        private bool _isAddStudentViewVisible = true;
+        public bool IsAddStudentViewVisible
+        {
+            get => _isAddStudentViewVisible;
+            set
+            {
+                if (_isAddStudentViewVisible != value)
+                {
+                    _isAddStudentViewVisible = value;
+                    OnPropertyChanged(); // notifies XAML bindings
+                }
+            }
+        }
+        private bool _isAddPhieuMuonViewVisible = true;
+        public bool IsAddPhieuMuonViewVisible
+        {
+            get => _isAddPhieuMuonViewVisible;
+            set
+            {
+                if (_isAddPhieuMuonViewVisible != value)
+                {
+                    _isAddPhieuMuonViewVisible = value;
                     OnPropertyChanged(); // notifies XAML bindings
                 }
             }
@@ -49,9 +81,14 @@ namespace QuanLyThuVien.ViewModels
         public ICommand ShowQuanLySinhVienView { get; }
         public ICommand ShowQuanLySachView { get; }
         public ICommand ShowMuonTraSachView { get; }
+        public ICommand ShowAddStudentView { get; }
+        public ICommand ShowAddBookHeadView { get; }
+        public ICommand ShowAddPhieuMuonView { get; }
         private void ExecuteShowMuonTraSachView(object obj)
         {
-            IsAddButtonVisible = true;
+            IsAddStudentViewVisible = false;
+            IsAddPhieuMuonViewVisible = true;
+            IsAddBookHeadViewVisible = false;
             CurrentChildView = _serviceProvider.GetRequiredService<MuonTraSachView>();
             Title = "Mượn trả sách";
             Caption = "Quản lý các giao dịch mượn và trả sách";
@@ -60,7 +97,9 @@ namespace QuanLyThuVien.ViewModels
 
         private void ExecuteShowQuanLySachView(object obj)
         {
-            IsAddButtonVisible = true;
+            IsAddStudentViewVisible = false;
+            IsAddPhieuMuonViewVisible = false;
+            IsAddBookHeadViewVisible = true;
             CurrentChildView = _serviceProvider.GetRequiredService<QuanLySachView>();
             Title = "Quản Lý Sách";
             Caption = "Quản lý thông tin đầu sách và bản sao trong thư viện";
@@ -69,7 +108,9 @@ namespace QuanLyThuVien.ViewModels
 
         private void ExecuteShowQuanLySinhVienView(object obj)
         {
-            IsAddButtonVisible = true;
+            IsAddStudentViewVisible = true;
+            IsAddPhieuMuonViewVisible = false;
+            IsAddBookHeadViewVisible = false;
             CurrentChildView = _serviceProvider.GetRequiredService<QuanLySinhVienView>();
             Title = "Quản Lý Sinh Viên";
             Caption = "Quản lý thông tin và tài khoản sinh viên";
@@ -78,10 +119,26 @@ namespace QuanLyThuVien.ViewModels
 
         private void ExecuteShowDashBoardView(object obj)
         {
-            IsAddButtonVisible = false;
+            IsAddStudentViewVisible = false;
+            IsAddPhieuMuonViewVisible = false;
+            IsAddBookHeadViewVisible = false;
             CurrentChildView = _serviceProvider.GetRequiredService<DashBoardView>();
             Title = "Dashboard";
             Caption = "Tổng quan hệ thống quản lý thư viện";
         }
+        private void ExecuteShowAddBookHeadView(object obj)
+        {
+            Debug.WriteLine("Show add bookhead");
+            var bookDetailAndCopyWindow = _serviceProvider.GetRequiredService<ThemBooKHeadPopup>();
+            bookDetailAndCopyWindow.ShowDialog();
+        }
+        //private void ShowAddStudentView(object obj)
+        //{
+
+        //}
+        //private void ShowAddPhieuMuonView(object obj)
+        //{
+
+        //}
     }
 }

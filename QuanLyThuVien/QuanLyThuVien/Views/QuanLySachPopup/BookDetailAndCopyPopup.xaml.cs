@@ -12,7 +12,5 @@ namespace QuanLyThuVien.ViewModels.QuanLySachPopup
             InitializeComponent();
             DataContext = vm;
         }
-
-        
     }
 }
