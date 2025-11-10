@@ -17,6 +17,8 @@ namespace QuanLyThuVien.ViewModels
 
         [ObservableProperty]
         private string searchText = string.Empty;
+        [ObservableProperty]
+        private string accountStatus = "1";
 
         private CancellationTokenSource? _searchCts;
 

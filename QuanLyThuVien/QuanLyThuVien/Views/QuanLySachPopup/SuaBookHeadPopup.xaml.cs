@@ -1,5 +1,4 @@
-﻿using QuanLyThuVien.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,23 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace QuanLyThuVien.Views
+namespace QuanLyThuVien.Views.QuanLySachPopup
 {
     /// <summary>
-    /// Interaction logic for QuanLySinhVien.xaml
+    /// Interaction logic for SuaBookHeadPopup.xaml
     /// </summary>
-    public partial class QuanLySinhVienView : UserControl
+    public partial class SuaBookHeadPopup : Window
     {
-        public QuanLySinhVienView(QuanLySinhVienViewModel vm)
+        public SuaBookHeadPopup()
         {
             InitializeComponent();
-            DataContext = vm;
-            Loaded += async (_, __) => await vm.InitializeAsync();
         }
-
-        
     }
 }

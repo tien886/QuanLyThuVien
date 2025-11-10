@@ -45,9 +45,6 @@
                 <!-- Eye -->
                 <SolidColorBrush x:Key="Icon/Edit"        Color="#111827"/>
                 <!-- Pen -->
-                <!-- Toggle màu đã được trả về bởi StatusToIconColorConverter -->
-
-                <!-- Text màu cho chip -->
                 <SolidColorBrush x:Key="Status/ActiveFg"   Color="#0F766E"/>
                 <SolidColorBrush x:Key="Status/DisabledFg" Color="#6B7280"/>
 

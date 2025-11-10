@@ -101,6 +101,11 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
         public async Task AddCopies()
         {
             var themBookCopyPopup = _serviceProvider.GetRequiredService<ThemBookCopyPopup>();
+            if(themBookCopyPopup.DataContext is ThemBookCopyViewModel vm)
+            {
+                await vm.SetCurrentBook(currentBook);
+            }
+            await LoadPage(currentBook);
             themBookCopyPopup.ShowDialog();
         }
     }

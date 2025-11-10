@@ -132,13 +132,42 @@
                         <TextBlock Text="{Binding Caption}" FontSize="25" FontWeight="Normal"
                    Foreground="{StaticResource TitleOfWindow}"/>
                     </StackPanel>
-
+                    
                     <Button 
                         Style="{StaticResource RoundedButton}"
                         Width="200"
                         Height="40"
                         HorizontalAlignment="Right"
-                        Visibility="{Binding IsAddButtonVisible, Converter={StaticResource BoolToVis}}"
+                        Visibility="{Binding IsAddBookHeadViewVisible, Converter={StaticResource BoolToVis}}"
+                        BorderBrush="{StaticResource ChanelBackground}" 
+                        Command="{Binding ShowAddBookHeadView}"
+                        BorderThickness="2">
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
+                            <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                        Style="{StaticResource RoundedButton}"
+                        Width="200"
+                        Height="40"
+                        HorizontalAlignment="Right"
+                        Visibility="{Binding IsAddStudentViewVisible, Converter={StaticResource BoolToVis}}"
+                        BorderBrush="{StaticResource ChanelBackground}" 
+                        BorderThickness="2">
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
+                            <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button 
+                        Style="{StaticResource RoundedButton}"
+                        Width="200"
+                        Height="40"
+                        HorizontalAlignment="Right"
+                        Visibility="{Binding IsAddPhieuMuonViewVisible, Converter={StaticResource BoolToVis}}"
                         BorderBrush="{StaticResource ChanelBackground}" 
                         BorderThickness="2">
 
