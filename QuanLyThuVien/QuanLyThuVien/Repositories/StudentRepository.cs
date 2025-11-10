@@ -41,19 +41,19 @@ namespace QuanLyThuVien.Repositories
             return await q.OrderBy(s => s.StudentName).ToListAsync();
         }
 
-        public async Task AddAsync(Students s)
+        public async Task AddStudentAsync(Students s)
         {
             _dataContext.Students.Add(s);
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Students s)
+        public async Task UpdateStudentAsync(Students s)
         {
             _dataContext.Students.Update(s);
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
@@ -62,7 +62,7 @@ namespace QuanLyThuVien.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task BlockAsync(int id)
+        public async Task BlockStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
@@ -71,7 +71,7 @@ namespace QuanLyThuVien.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task UnblockAsync(int id)
+        public async Task UnblockStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
@@ -79,15 +79,15 @@ namespace QuanLyThuVien.Repositories
             s.AccountStatus = "Hoạt động";
             await _dataContext.SaveChangesAsync();
         }
-        public async Task ChangeStatus(Students students)
-        {
-            var s = await _dataContext.Students.FindAsync(students.StudentId);
-            if (s is null)
-                return;
-            students.AccountStatus = students.AccountStatus == "Active" ? "Disabled" : "Active";
-            Debug.WriteLine($"Sinh viên {students.StudentName} hiện có trạng thái: {students.AccountStatus} trong repo");
+        //public async Task ChangeStatus(Students students)
+        //{
+        //    var s = await _dataContext.Students.FindAsync(students.StudentId);
+        //    if (s is null)
+        //        return;
+        //    students.AccountStatus = students.AccountStatus == "Active" ? "Disabled" : "Active";
+        //    Debug.WriteLine($"Sinh viên {students.StudentName} hiện có trạng thái: {students.AccountStatus} trong repo");
 
-            await _dataContext.SaveChangesAsync();
-        }
+        //    await _dataContext.SaveChangesAsync();
+        //}
     }
 }
