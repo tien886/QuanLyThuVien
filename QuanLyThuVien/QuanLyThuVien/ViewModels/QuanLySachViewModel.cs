@@ -29,6 +29,7 @@ namespace QuanLyThuVien.ViewModels
             _bookService = bookService;
             _ = LoadPage();
         }
+
         private string _searhBarText = "";
         public string SearchBarText
         {
