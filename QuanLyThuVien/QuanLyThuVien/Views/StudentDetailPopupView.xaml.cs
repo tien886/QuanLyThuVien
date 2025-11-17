@@ -1,5 +1,4 @@
-﻿using QuanLyThuVien.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,15 +16,13 @@ using System.Windows.Shapes;
 namespace QuanLyThuVien.Views
 {
     /// <summary>
-    /// Interaction logic for QuanLySinhVien.xaml
+    /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class QuanLySinhVienView : UserControl
+    public partial class StudentDetailPopupView : UserControl
     {
-        public QuanLySinhVienView(QuanLySinhVienViewModel vm)
+        public StudentDetailPopupView()
         {
             InitializeComponent();
-            DataContext = vm;
-            Loaded += async (_, __) => await vm.InitializeAsync();
         }
     }
 }

@@ -1,188 +1,311 @@
 ﻿<Window x:Class="QuanLyThuVien.Views.MainView"
-        xmlns:viewModel="clr-namespace:QuanLyThuVien.ViewModels"
-        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:viewModel="clr-namespace:QuanLyThuVien.ViewModels"
         xmlns:local="clr-namespace:QuanLyThuVien.Views"
         Height="1080" Width="1920"
-        >
-    
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="ThreeDBorderWindow"
+        Title="Quản lý thư viện">
+
     <Window.Resources>
+        <!-- -->
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <!-- Các nút điều hướng -->
+        <Style x:Key="menuButton" TargetType="RadioButton">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Margin" Value="12,0,12,5"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource Black}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <!-- Khi rê chuột vào -->
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource InUse_light}"/>
+                    <Setter Property="Foreground" Value="{StaticResource InUse}"/>
+                </Trigger>
+                <!-- Khi đang được chọn -->
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ChanelBackground}"/>
+                    <Setter Property="Foreground" Value="{StaticResource White}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Icon các nút điều hướng -->
+        <Style x:Key="menuButtonIcon" TargetType="fa:IconImage">
+            <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="15,0,15,0"/>
+        </Style>
+        <!-- Text của các nút điều hướng -->
+        <Style x:Key="menuButtonText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <!-- Nút đăng xuất --> 
+        <Style x:Key="LogoutButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Margin" Value="12,0,12,5"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TitleOfWindow}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
+                    <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
+
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="320"/>
-            <ColumnDefinition Width="1"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Border Grid.Column="1" Background="{StaticResource Stroke}" />
-        <Border
-            CornerRadius="10,0,0,10"
-            Grid.Column="2"
-            
-            >
-            <Border.Background>
-                <LinearGradientBrush>
-                    <GradientStop Color="{StaticResource DeepBackground}" ></GradientStop>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="109"/>
-                <RowDefinition Height="1"/>
-                <RowDefinition Height="109"/>
-                <RowDefinition Height="1"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Border Grid.Row="1" Background="{StaticResource Stroke}" />
-            <Border Grid.Row="3" Background="{StaticResource Stroke}" />
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <fa:IconImage Icon="BookOpen" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource ChanelBackground}" Width="40" />
-                <TextBlock FontFamily="Arial" Grid.Column="1" Text="Quản lý thư viện" FontSize="30" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            </Grid>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0"  Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" >
-                    <TextBlock Text="Admin" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Arial"/>
-                    <TextBlock  Text="Quản trị viên" FontSize="22" FontFamily="Arial" Foreground="{StaticResource TitleOfWindow}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="4">
+        <Grid Background="{StaticResource White}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Thanh menu bên trái -->
+            <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="256"/>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="1"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Margin="15">
-                    <StackPanel Orientation="Vertical">
+
+                <!-- Icon quản lí thư viện -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <fa:IconImage Icon="Book" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource ChanelBackground}" Width="32" Height="32" />
+                    <TextBlock FontFamily="Montserrat" Grid.Column="1" Text="Quản lý thư viện" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Grid>
+                <!-- Thanh ngang phân cách -->
+                <Border Grid.Row="1" Background="{StaticResource Stroke}" />
+                <!-- Thông tin admin -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Background="{StaticResource ChanelBackground}">
+                        <TextBlock Text="A" Foreground="{StaticResource White}" FontSize="22"
+                                   FontWeight="SemiBold" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" FontFamily="Montserrat"/>
+                    </Border>
+
+                    <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" >
+                        <TextBlock Text="Admin" FontSize="16" FontWeight="Bold" FontFamily="Montserrat"/>
+                        <TextBlock Text="Quản trị viên" FontSize="14" FontFamily="Montserrat" Foreground="{StaticResource TitleOfWindow}"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Thanh ngang phân cách -->
+                <Border Grid.Row="3" Background="{StaticResource Stroke}" />
+
+                <!-- Menu điều hướng -->
+                <Grid Grid.Row="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!-- Các nút menu -->
+                    <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,20,0,0">
+                        <!-- Dashboard -->
                         <RadioButton
                             Style="{StaticResource menuButton}"
-                            Tag ="{StaticResource Black}"
                             Command="{Binding ShowDashBoardView}"
-                            VerticalAlignment="Top"
-                            IsChecked="True"
-                            >
+                            IsChecked="True">
                             <StackPanel Orientation="Horizontal" >
                                 <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="GripVertical"/>
                                 <TextBlock Style="{StaticResource menuButtonText}" Text="DashBoard"/>
-
                             </StackPanel>
                         </RadioButton>
+                        <!-- QuanLySinhVien -->
                         <RadioButton
                             Style="{StaticResource menuButton}"
-                            Tag ="{StaticResource Black}"
-                            Command="{Binding ShowQuanLySinhVienView}"
-                            VerticalAlignment="Top"
-                            >
+                            Command="{Binding ShowQuanLySinhVienView}">
                             <StackPanel Orientation="Horizontal" >
                                 <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="PeopleGroup"/>
                                 <TextBlock Style="{StaticResource menuButtonText}" Text="Quản lý sinh viên"/>
-
                             </StackPanel>
                         </RadioButton>
+                        <!-- QuanLySach -->
                         <RadioButton
                             Style="{StaticResource menuButton}"
-                            Tag ="{StaticResource Black}"
-                            Command="{Binding ShowQuanLySachView}"
-                            VerticalAlignment="Top"
-                            >
+                            Command="{Binding ShowQuanLySachView}">
                             <StackPanel Orientation="Horizontal" >
                                 <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="Book"/>
                                 <TextBlock Style="{StaticResource menuButtonText}" Text="Quản lý sách"/>
-
                             </StackPanel>
                         </RadioButton>
+                        <!-- MuonTraSach -->
                         <RadioButton
                             Style="{StaticResource menuButton}"
-                            Tag ="{StaticResource Black}"
-                            Command="{Binding ShowMuonTraSachView}"
-                            VerticalAlignment="Top"
-                            >
+                            Command="{Binding ShowMuonTraSachView}">
                             <StackPanel Orientation="Horizontal" >
                                 <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="ArrowRightToFile"/>
                                 <TextBlock Style="{StaticResource menuButtonText}" Text="Mượn/Trả sách"/>
-
+                            </StackPanel>
+                        </RadioButton>
+                        <!-- QuanLyDanhMuc (Bổ sung code sau nha)  -->
+                        <RadioButton Style="{StaticResource menuButton}">
+                            <StackPanel Orientation="Horizontal" >
+                                <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="ClipboardList"/>
+                                <TextBlock Style="{StaticResource menuButtonText}" Text="Quản lý danh mục"/>
                             </StackPanel>
                         </RadioButton>
                     </StackPanel>
+                    <!-- Nút đăng xuất -->
+                    <Button Grid.Row="1"
+                            Style="{StaticResource LogoutButtonStyle}"
+                            Margin="12,0,12,20">
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="SignOutAlt" Foreground="Red"/>
+                            <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" Foreground="Red"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <!-- Các trang bên phải -->
+            <Grid Grid.Column="1" 
+                  Background="{StaticResource DeepBackgroundSolid}"
+                  >
+                <Grid Margin="40">
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <StackPanel Orientation="Vertical" Grid.Column="0">
+                                <TextBlock Text="{Binding Title}" FontSize="32" FontWeight="SemiBold" FontFamily="Montserrat"/>
+                                <TextBlock Text="{Binding Caption}" FontSize="18" FontWeight="Normal"
+                                     FontFamily="Montserrat" Foreground="{StaticResource TitleOfWindow}"/>
+                            </StackPanel>
+
+                            <Button 
+                            Style="{StaticResource RoundedButton}"
+                            Width="200"
+                            Height="40"
+                            HorizontalAlignment="Right"
+                            Visibility="{Binding IsAddBookHeadViewVisible, Converter={StaticResource BoolToVis}}"
+                            Command="{Binding ShowAddBookHeadView}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
+                                    <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
+                                </StackPanel>
+                            </Button>
+
+
+                            <Button 
+                            Style="{StaticResource RoundedButton}"
+                            Width="200"
+                            Height="40"
+                            HorizontalAlignment="Right"
+                            Visibility="{Binding IsAddStudentViewVisible, Converter={StaticResource BoolToVis}}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
+                                    <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
+                                </StackPanel>
+                            </Button>
+
+                            <!-- Thêm mới -->
+                            <Button 
+                            Style="{StaticResource RoundedButton}"
+                            Width="200"
+                            Height="40"
+                            HorizontalAlignment="Right"
+                            Visibility="{Binding IsAddPhieuMuonViewVisible, Converter={StaticResource BoolToVis}}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
+                                    <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                        <ContentControl x:Name="ChildViewHost"
+                            Grid.Row="1" 
+                            Content="{Binding CurrentChildView}"
+                            Margin="0,20,0,0"/>
+                    </Grid>
+
+
                 </Grid>
             </Grid>
         </Grid>
-        <Grid Grid.Column ="2" Margin="50,10">
-            <StackPanel Orientation="Vertical" >
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Vertical" Grid.Column="0">
-                        <TextBlock Text="{Binding Title}" FontSize="35" FontWeight="SemiBold"/>
-                        <TextBlock Text="{Binding Caption}" FontSize="25" FontWeight="Normal"
-                   Foreground="{StaticResource TitleOfWindow}"/>
-                    </StackPanel>
-                    
-                    <Button 
-                        Style="{StaticResource RoundedButton}"
-                        Width="200"
-                        Height="40"
-                        HorizontalAlignment="Right"
-                        Visibility="{Binding IsAddBookHeadViewVisible, Converter={StaticResource BoolToVis}}"
-                        BorderBrush="{StaticResource ChanelBackground}" 
-                        Command="{Binding ShowAddBookHeadView}"
-                        BorderThickness="2">
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
-                            <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button 
-                        Style="{StaticResource RoundedButton}"
-                        Width="200"
-                        Height="40"
-                        HorizontalAlignment="Right"
-                        Visibility="{Binding IsAddStudentViewVisible, Converter={StaticResource BoolToVis}}"
-                        BorderBrush="{StaticResource ChanelBackground}" 
-                        BorderThickness="2">
+        <Border Background="#80000000" 
+                Visibility="{Binding ElementName=ChildViewHost, 
+                                    Path=DataContext.IsDetailPopupVisible, 
+                                    Converter={StaticResource BooleanToVisibilityConverter}, 
+                                    FallbackValue=Collapsed}"/>
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
-                            <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
-                        </StackPanel>
-                    </Button>
-                    <Button 
-                        Style="{StaticResource RoundedButton}"
-                        Width="200"
-                        Height="40"
-                        HorizontalAlignment="Right"
-                        Visibility="{Binding IsAddPhieuMuonViewVisible, Converter={StaticResource BoolToVis}}"
-                        BorderBrush="{StaticResource ChanelBackground}" 
-                        BorderThickness="2">
+        <Border 
+            Background="{StaticResource White}"
+            CornerRadius="10" VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Width="400"
+            Height="550"
+            Visibility="{Binding ElementName=ChildViewHost, 
+                            Path=DataContext.IsDetailPopupVisible, 
+                            Converter={StaticResource BooleanToVisibilityConverter}, 
+                            FallbackValue=Collapsed}">
 
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
-                            <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
-                        </StackPanel>
-                    </Button>
-                </Grid>
+            <Border.Effect>
+                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
+            </Border.Effect>
 
-                <ContentControl Content="{Binding CurrentChildView}"
-                        Grid.Column="2"
-                        />
-            </StackPanel>
-            
-        </Grid>
+            <local:StudentDetailPopupView DataContext="{Binding ElementName=ChildViewHost, Path=DataContext.SelectedStudent}"/>
+
+        </Border>
+
     </Grid>
+    
 </Window>

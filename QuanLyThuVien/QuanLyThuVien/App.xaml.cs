@@ -19,7 +19,7 @@ namespace QuanLyThuVien
             base.OnStartup(e);
             SQLitePCL.Batteries.Init();
             var services = new ServiceCollection();
-            services.ConfigureServices();   
+            services.ConfigureServices();
             ServiceProvider = services.BuildServiceProvider();
             var dbservice = ServiceProvider.GetRequiredService<DatabaseConfig>();
             await dbservice.Initialize();

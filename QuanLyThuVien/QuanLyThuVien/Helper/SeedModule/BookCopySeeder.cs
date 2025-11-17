@@ -12,7 +12,7 @@ namespace QuanLyThuVien.Helper.SeedModule
     public class BookCopySeeder
     {
         private static int startIndex = 1;
-        private static int TotalCopies = 90000;
+        private static int TotalCopies = 1000;
         private static int TotalBooks = 60;
         private static string MaximumDigitsOfCopyID = "D5";
         public static void EnsureAtleastOneCopiesPerBook(ModelBuilder modelBuilder)

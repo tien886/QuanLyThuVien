@@ -19,6 +19,7 @@
             <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
             <converters:StatusToIconConverter x:Key="StatusToIconConverter"/>
             <converters:StatusToIconColorConverter x:Key="StatusToIconColorConverter"/>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

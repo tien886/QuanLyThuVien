@@ -6,194 +6,295 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QuanLyThuVien.Views"
              mc:Ignorable="d" 
-             Padding="0,32"
              d:DesignHeight="1080" d:DesignWidth="1660">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <StackPanel Orientation="Horizontal">
-                <Border
-                  Background="White"
-                  CornerRadius="15"
-                  Padding="20"
-                  Width="355"
-                  Height="130"
-                  Margin="0,10,24,10"
-                  SnapsToDevicePixels="True">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                    </Border.Effect>
 
+    <UserControl.Resources>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource White}"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="25"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CardHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Foreground" Value="{StaticResource Black}"/>
+        </Style>
+        
+        <Style x:Key="StatCardStyle" TargetType="Border" BasedOn="{StaticResource CardStyle}">
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,20,20"/>
+            <Setter Property="Height" Value="120"/>
+        </Style>
+
+        <Style x:Key="ReturnButton" TargetType="Button">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Background" Value="{StaticResource Success/1}"/>
+            <Setter Property="Foreground" Value="{StaticResource White}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Success/1}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="8"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Success/1_light}"/>
+                    <Setter Property="Foreground" Value="{StaticResource Success/1}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StatusPillBorder" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{StaticResource InUse_light}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Overdue">
+                    <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StatusPillText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{StaticResource InUse}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Status}" Value="Overdue">
+                    <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+
+        <StackPanel Orientation="Vertical" Margin="0,0,10,0">
+
+            <!-- Thông tin tổng quan -->
+            <UniformGrid Columns="3" Margin="0,0,-20,0">
+
+                <!-- Badge số lượng đang mượn -->
+                <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
-                        <!-- Left: text -->
                         <StackPanel>
-                            <TextBlock Text="Đang được mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                            <TextBlock Text="700" FontWeight="Bold" FontSize="18" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
+                            <TextBlock Text="Đang mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                        <!-- Right: icon container -->
-                        <Border
-                      Grid.Column="1"
-                      Width="40" Height="40"
-                      Background="#EEF3FF"
-                      CornerRadius="12"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Center">
-                            <fa:IconImage Icon="Book" Foreground="#2563EB" Width="20" Height="20" 
-                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- (Sau này bổ sung) -->
+                            <TextBlock Text="{Binding DangMuonCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource InUse_light}" CornerRadius="12"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <fa:IconImage Icon="BookOpen" Foreground="{StaticResource InUse}" Width="24" Height="24" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
                 </Border>
-                <Border
-                      Background="White"
-                      CornerRadius="15"
-                      Padding="20"
-                      Width="355"
-                      Height="130"
-                      Margin="0,10,24,10"
-                      SnapsToDevicePixels="True">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                    </Border.Effect>
 
+                <!-- Badge số lượng quá hạn -->
+                <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
-                        <!-- Left: text -->
                         <StackPanel>
-                            <TextBlock Text="Quá hạn" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                            <TextBlock Text="6" FontWeight="Bold" FontSize="18" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
+                            <TextBlock Text="Quá hạn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                        <!-- Right: icon container -->
-                        <Border
-                      Grid.Column="1"
-                      Width="40" Height="40"
-                      Background="{StaticResource Danger/Overdue_light}"
-                      CornerRadius="12"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Center">
-                            <fa:IconImage Icon="BookDead"    Foreground="{StaticResource Danger/Overdue}" Width="20" Height="20" 
-                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- (Sau này bổ sung) -->
+                            <TextBlock Text="{Binding QuaHanCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Danger/Overdue_light}" CornerRadius="12"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <fa:IconImage Icon="TriangleExclamation" Foreground="{StaticResource Danger/Overdue}" Width="24" Height="24" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
                 </Border>
-                <Border
-                      Background="White"
-                      CornerRadius="15"
-                      Padding="20"
-                      Width="355"
-                      Height="130"
-                      Margin="0,10,34,10"
-                      SnapsToDevicePixels="True">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                    </Border.Effect>
 
+                <!-- Badge số lượng đã trả tháng này -->
+                <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
-                        <!-- Left: text -->
                         <StackPanel>
-                            <TextBlock Text="Đã trả (tháng này)" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                            <TextBlock Text="100" FontWeight="Bold" FontSize="18" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
+                            <TextBlock Text="Đã trả (tháng này)" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                        <!-- Right: icon container -->
-                        <Border
-                      Grid.Column="1"
-                      Width="40" Height="40"
-                      Background="{StaticResource Success/1_light}"
-                      CornerRadius="12"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Center">
-                            <fa:IconImage Icon="ArrowRightToFile" Foreground="{StaticResource Success/1}" Width="20" Height="20" 
-                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- (Sau này bổ sung) -->
+                            <TextBlock Text="{Binding DaTraCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Success/1_light}" CornerRadius="12"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <fa:IconImage Icon="Check" Foreground="{StaticResource Success/1}" Width="24" Height="24" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
                 </Border>
-            </StackPanel>
-        </Grid>
-        <DataGrid 
-            Grid.Row="1"
-           ItemsSource="{Binding BorrowSlips}"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          IsReadOnly="True"
-          Style="{StaticResource RoundedDataGrid}"
-          Margin="0,8,0,0">
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Mã phiếu"   Binding="{Binding MaPhieu}"   Width="110"/>
-                <DataGridTextColumn Header="Sinh viên"  Binding="{Binding SinhVien}"  Width="160"/>
-                <DataGridTextColumn Header="Sách"       Binding="{Binding TenSach}"   Width="*"/>
-                <DataGridTextColumn Header="Mã bản sao" Binding="{Binding MaBanSao}"  Width="110"/>
-                <DataGridTextColumn Header="Ngày mượn"
-                             Binding="{Binding NgayMuon, StringFormat=\{0:dd/MM/yyyy\}}"
-                             Width="140"/>
-                <DataGridTextColumn Header="Hạn trả"    Binding="{Binding HanTra}"    Width="80"/>
+            </UniformGrid>
+            
+            
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Orientation="Vertical">
 
-                <!-- Trạng thái: pill màu -->
-                <DataGridTemplateColumn Header="Trạng thái" Width="120">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Border x:Name="Badge" CornerRadius="12" Padding="10,4"
-                            Background="{StaticResource InUse_light}"
-                            HorizontalAlignment="Center">
-                                <TextBlock x:Name="BadgeText"
-                                   Text="{Binding TrangThai}"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource InUse}"/>
-                            </Border>
-                            <DataTemplate.Triggers>
-                                <!-- Quá hạn -->
-                                <DataTrigger Binding="{Binding TrangThai}" Value="Quá hạn">
-                                    <Setter TargetName="Badge" Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
-                                    <Setter TargetName="BadgeText" Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
-                                </DataTrigger>
-                                <!-- Đang mượn -->
-                                <DataTrigger Binding="{Binding TrangThai}" Value="Đang mượn">
-                                    <Setter TargetName="Badge" Property="Background" Value="{StaticResource InUse_light}"/>
-                                    <Setter TargetName="BadgeText" Property="Foreground" Value="{StaticResource InUse}"/>
-                                </DataTrigger>
-                                <!-- Có thể thêm “Chờ duyệt” … -->
-                                <DataTrigger Binding="{Binding TrangThai}" Value="Chờ duyệt">
-                                    <Setter TargetName="Badge" Property="Background" Value="{StaticResource Warning/Waiting_light}"/>
-                                    <Setter TargetName="BadgeText" Property="Foreground" Value="{StaticResource Warning/Waiting}"/>
-                                </DataTrigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                    <!-- Tiêu đề bảng và SearchBar -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                <!-- Thao tác: nút pill “Nhận trả” -->
-                <DataGridTemplateColumn Header="Thao tác" Width="120">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Nhận trả"
-                            Style="{StaticResource RoundedButton}"
-                            Command="{Binding DataContext.CheckinCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                            CommandParameter="{Binding}"
-                            HorizontalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                        <!-- Tiêu đề -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" 
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,-20,0">
+                            
+                            <TextBlock Style="{StaticResource CardHeader}" 
+                                       Margin="0" 
+                                       Text="Danh sách đang mượn ("/>
 
-    </Grid>
+                            <!-- (Sau này bổ sung) -->
+                            <TextBlock Style="{StaticResource CardHeader}" 
+                                       Margin="0" Text="{Binding PhieuMuonCount}"/>
+                            
+                            <TextBlock Style="{StaticResource CardHeader}" 
+                                       Margin="0" Text=" cuốn)"/>
+                        </StackPanel>
+
+                        <!-- SearchBar -->
+                        <TextBox Grid.Column="1"
+                                 Style="{StaticResource SearchTextBox}"
+                                 HorizontalAlignment="Right"
+                                 Tag="Tìm theo mã phiếu, sinh viên, sách, mã vạch...">
+                            <TextBox.Text>
+                                <Binding Path="SearchText" UpdateSourceTrigger="PropertyChanged"/>
+                            </TextBox.Text>
+                        </TextBox>
+                    </Grid>
+
+                    <!-- Bảng thông mượn trả sách -->
+                    <DataGrid AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              IsReadOnly="True"
+                              Style="{StaticResource RoundedDataGrid}">
+
+                        <DataGrid.ItemsSource>
+                            <Binding Path="PhieuMuonList"/>
+                        </DataGrid.ItemsSource>
+
+                        <DataGrid.Columns>
+
+                            <!-- Cột mã phiếu --> 
+                            <DataGridTextColumn Header="Mã phiếu" Width="0.8*">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="PhieuMuonID"/>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <!-- Cột sinh viên -->
+                            <DataGridTemplateColumn Header="Sinh viên" Width="1.5*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding StudentName}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding StudentID}" FontSize="12" Foreground="{StaticResource TitleOfWindow}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Cột sách -->
+                            <DataGridTextColumn Header="Sách" Width="2*">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="BookTitle"/>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <!-- Cột ngày mượn -->
+                            <DataGridTextColumn Header="Ngày mượn" Width="1*">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="NgayMuon" StringFormat="{}{0:dd/MM/yyyy}"/>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <!-- Cột hạn trả -->
+                            <DataGridTextColumn Header="Hạn trả" Width="1*">
+                                <DataGridTextColumn.Binding>
+                                    <Binding Path="HanTra" StringFormat="{}{0:dd/MM/yyyy}"/>
+                                </DataGridTextColumn.Binding>
+                            </DataGridTextColumn>
+
+                            <!-- Cột trạng thái -->
+                            <DataGridTemplateColumn Header="Trạng thái" Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource StatusPillBorder}">
+                                            <TextBlock Style="{StaticResource StatusPillText}"
+                                                       Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                            <!-- Cột Thao tác -->
+                            <DataGridTemplateColumn Header="Thao tác" Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Nhận trả" 
+                                                Style="{StaticResource ReturnButton}">
+                                            <Button.Command>
+                                                <Binding Path="DataContext.ReturnBookCommand" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
+                                            </Button.Command>
+                                            <Button.CommandParameter>
+                                                <Binding Path="."/>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
 </UserControl>

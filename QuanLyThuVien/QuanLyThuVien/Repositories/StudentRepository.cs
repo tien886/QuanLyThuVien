@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Data;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SkiaSharp;
+using System.Globalization;
+
 
 namespace QuanLyThuVien.Repositories
 {
@@ -41,19 +41,19 @@ namespace QuanLyThuVien.Repositories
             return await q.OrderBy(s => s.StudentName).ToListAsync();
         }
 
-        public async Task AddAsync(Students s)
+        public async Task AddStudentAsync(Students s)
         {
             _dataContext.Students.Add(s);
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Students s)
+        public async Task UpdateStudentAsync(Students s)
         {
             _dataContext.Students.Update(s);
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
@@ -62,7 +62,7 @@ namespace QuanLyThuVien.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task BlockAsync(int id)
+        public async Task BlockStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
@@ -71,7 +71,7 @@ namespace QuanLyThuVien.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task UnblockAsync(int id)
+        public async Task UnblockStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
@@ -79,15 +79,87 @@ namespace QuanLyThuVien.Repositories
             s.AccountStatus = "Hoạt động";
             await _dataContext.SaveChangesAsync();
         }
-        public async Task ChangeStatus(Students students)
-        {
-            var foundedStudents = await _dataContext.Students.FindAsync(students.StudentId);
-            if (foundedStudents is null)
-                return;
-            foundedStudents.AccountStatus = students.AccountStatus == "Active" ? "Disabled" : "Active";
-            Debug.WriteLine($"Sinh viên {students.StudentName} hiện có trạng thái: {students.AccountStatus} trong repo");
+        //public async Task ChangeStatus(Students students)
+        //{
+        //    var s = await _dataContext.Students.FindAsync(students.StudentId);
+        //    if (s is null)
+        //        return;
+        //    students.AccountStatus = students.AccountStatus == "Active" ? "Disabled" : "Active";
+        //    Debug.WriteLine($"Sinh viên {students.StudentName} hiện có trạng thái: {students.AccountStatus} trong repo");
 
-            await _dataContext.SaveChangesAsync();
+        //    await _dataContext.SaveChangesAsync();
+        //}
+
+        public async Task<(ISeries[] Series, Axis[] XAxes)> GetNewReadersData()
+        {
+            var numOfMonths = 10;
+
+            var numOfMonthsAgo = DateTime.Now.AddMonths(-numOfMonths).Date;
+            var startDate = new DateTime(numOfMonthsAgo.Year, numOfMonthsAgo.Month, 1);
+
+            var monthlyCounts = await _dataContext.Students
+                .Where(s => s.RegistrationDate >= startDate) 
+                .GroupBy(s => new { s.RegistrationDate.Year, s.RegistrationDate.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Count = g.Count() 
+                })
+                .ToListAsync(); 
+
+            var labels = new List<string>();
+            var counts = new List<int>();
+
+            var culture = new CultureInfo("vi-VN");
+
+            for (int i = numOfMonths - 1; i >= 0; i--)
+            {
+                var date = DateTime.Now.AddMonths(-i);
+                var year = date.Year;
+                var month = date.Month;
+
+                labels.Add($"T{month}/{year.ToString().Substring(2)}");
+
+                var dataForMonth = monthlyCounts.FirstOrDefault(m => m.Year == year && m.Month == month);
+
+                if (dataForMonth != null)
+                {
+                    counts.Add(dataForMonth.Count);
+                }
+                else
+                {
+                    counts.Add(0);
+                }
+            }
+            var areaSeries = new ISeries[]
+            {
+                new LineSeries<int>
+                {
+                    Values = counts.ToArray(),
+                    Name = "Bạn đọc mới",
+                    Stroke = new SolidColorPaint(SKColor.Parse("#10B981")) { StrokeThickness = 3 },
+                    Fill = new SolidColorPaint(SKColor.Parse("#10B981").WithAlpha(50)),
+                    GeometryFill = new SolidColorPaint(SKColor.Parse("#10B981")),
+                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#FFFFFF")) { StrokeThickness = 3 },
+                    GeometrySize = 10
+                }
+                };
+
+            var xAxes = new Axis[]
+            {
+                new Axis
+                {
+                    Labels = labels.ToArray(),
+                    LabelsRotation = 0,
+                    SeparatorsPaint = new SolidColorPaint(SKColor.Parse("#E2E8F0")),
+                    SeparatorsAtCenter = false,
+                    TicksPaint = new SolidColorPaint(SKColor.Parse("#E2E8F0")),
+                    TicksAtCenter = true
+                }
+            };
+
+            return (areaSeries, xAxes);
         }
     }
 }

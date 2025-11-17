@@ -13,12 +13,17 @@ namespace QuanLyThuVien.ViewModels
     {
         private readonly IStudentService _studentService;
 
-        public ObservableCollection<Students> Students { get; } = new();
+        public ObservableCollection<StudentItemViewModel> Students { get;  } = new();
 
         [ObservableProperty]
         private string searchText = string.Empty;
+
         [ObservableProperty]
-        private string accountStatus = "1";
+        private bool _isDetailPopupVisible = false; 
+
+        [ObservableProperty]
+        private StudentItemViewModel? _selectedStudent;
+
 
         private CancellationTokenSource? _searchCts;
 
@@ -27,7 +32,6 @@ namespace QuanLyThuVien.ViewModels
             _studentService = service;
         }
 
-        // Gọi từ View.Loaded
         public async Task InitializeAsync()
         {
             await LoadAsync();
@@ -38,7 +42,10 @@ namespace QuanLyThuVien.ViewModels
         {
             var list = await _studentService.GetAllStudentsAsync(searchText);
             Students.Clear();
-            foreach (var s in list) Students.Add(s);
+            foreach (var s in list.Take(60)) // LẤY ÍT THÔI KẺO LAG
+            {
+                Students.Add(new StudentItemViewModel(s)); // Chuyển model thành ViewModel item
+            }
         }
 
         // Debounce: gọi từ setter SearchTextChangedCommand
@@ -57,13 +64,19 @@ namespace QuanLyThuVien.ViewModels
         }
 
         [RelayCommand]
-        private void ViewDetail(Students? s)
+        private void ViewDetail(StudentItemViewModel? sVM)
         {
-            if (s is null) 
+            if (sVM is null)
                 return;
-            System.Windows.MessageBox.Show(
-                $"MSSV: {s.StudentId}\nHọ tên: {s.StudentName}\nEmail: {s.Email}\nTrạng thái: {s.AccountStatus}",
-                "Thông tin sinh viên");
+            SelectedStudent = sVM;
+            IsDetailPopupVisible = true;
+        }
+
+        [RelayCommand]
+        private void CloseDetailPopup()
+        {
+            IsDetailPopupVisible = false;
+            SelectedStudent = null; 
         }
 
         [RelayCommand]
@@ -74,16 +87,26 @@ namespace QuanLyThuVien.ViewModels
         }
 
         [RelayCommand]
-        private void ToggleStatus(Students student)
+        private async Task ToggleStatus(StudentItemViewModel studentVM)
         {
-            if (student == null) return;
-            Debug.WriteLine($"Sinh viên truowsc khi doi {student.StudentName} hiện có trạng thái: {student.AccountStatus}");
+            if (studentVM == null) return;
 
-            _studentService.ChangeStatus(student);
+            // Lấy trạng thái cũ, phòng khi cần rollback
+            string originalStatus = studentVM.AccountStatus;
+            string newStatus = originalStatus == "Active" ? "Disabled" : "Active"; 
 
-            _ = LoadAsync();
+            studentVM.AccountStatus = newStatus;
 
-            Debug.WriteLine($"Sinh viên {student.StudentName} hiện có trạng thái: {student.AccountStatus}");
+            try
+            {
+                await _studentService.UpdateStudentAsync(studentVM.Student);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Lỗi khi cập nhật trạng thái: {ex.Message}", "Lỗi Database", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                // Rollback
+                studentVM.AccountStatus = originalStatus;
+            }
         }
     }
 }

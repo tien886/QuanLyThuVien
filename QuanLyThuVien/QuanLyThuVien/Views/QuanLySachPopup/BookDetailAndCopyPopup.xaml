@@ -252,6 +252,16 @@
                                             <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#1A73E8"/>
                                             <Setter TargetName="StatusText" Property="Foreground" Value="#1A73E8"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusDescription}" Value="Mất">
+                                            <Setter TargetName="StatusBorder" Property="Background" Value="#F7E8E9"/>
+                                            <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#EF4444"/>
+                                            <Setter TargetName="StatusText" Property="Foreground" Value="#EF4444"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding StatusDescription}" Value="Hỏng">
+                                            <Setter TargetName="StatusBorder" Property="Background" Value="#FDF5E6"/>
+                                            <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#F59E0B"/>
+                                            <Setter TargetName="StatusText" Property="Foreground" Value="#F59E0B"/>
+                                        </DataTrigger>
                                     </DataTemplate.Triggers>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
