@@ -1,4 +1,6 @@
-﻿using QuanLyThuVien.Models;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Services
 {
@@ -12,5 +14,6 @@ namespace QuanLyThuVien.Services
         Task BlockStudentAsync(int id);  
         Task UnblockStudentAsync(int id);
         //Task ChangeStatus(Students students);
+        Task<(ISeries[] Series, Axis[] XAxes)> GetNewReadersData();
     }
 }
