@@ -25,7 +25,8 @@ namespace QuanLyThuVien.Models
                 {
                     "1" => "Có sẵn",
                     "0" => "Đang mượn",
-                    _ => "Unknown"
+                    "-1" => "Mất",
+                    "-2" => "Hỏng"
                 };
             }
         }

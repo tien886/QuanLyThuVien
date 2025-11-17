@@ -1,189 +1,278 @@
 ﻿<UserControl x:Class="QuanLyThuVien.Views.DashBoardView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QuanLyThuVien.Views"
              mc:Ignorable="d" 
-             Padding="0,32"
              d:DesignHeight="1080" d:DesignWidth="1660">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <StackPanel
-            Orientation="Horizontal"
-            Grid.Row="0"
-            >
-            <Border
-            Background="White"
-            CornerRadius="15"
-            Padding="20"
-            Width="250"
-            Height="130"
-            Margin="0,10,34,10"
-            SnapsToDevicePixels="True">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                    </Border.Effect>
 
+    <UserControl.Resources>
+
+        <Style x:Key="DashboardCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource White}"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="25"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="StatCardStyle" TargetType="Border" BasedOn="{StaticResource DashboardCardStyle}">
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,20,20"/>
+            <Setter Property="Height" Value="120"/>
+        </Style>
+
+        <Style x:Key="CardHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="Foreground" Value="{StaticResource Black}"/>
+        </Style>
+
+        <Style x:Key="CardCaption" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="Foreground" Value="{StaticResource TitleOfWindow}"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+
+        <StackPanel Orientation="Vertical" Margin="0,0,10,0">
+            <!-- Thống kê nhanh -->
+            <UniformGrid Columns="4" Margin="0,0,-20,0">
+
+                <!-- Tổng bản sao -->
+                <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
-                        <!-- Left: text -->
                         <StackPanel>
-                            <TextBlock Text="Tổng bản sao" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                            <TextBlock Text="{Binding TotalCopies}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
+                            <TextBlock Text="Tổng bản sao" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                        <!-- Right: icon container -->
-                        <Border
-                    Grid.Column="1"
-                    Width="40" Height="40"
-                    Background="#EEF3FF"
-                    CornerRadius="12"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center">
-                            <fa:IconImage Icon="Book" Foreground="#2563EB" Width="20" Height="20" 
-              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding TotalCopies}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="48" Height="48" Background="#EEF3FF" CornerRadius="12"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <fa:IconImage Icon="LayerGroup" Foreground="#2563EB" Width="24" Height="24" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
                 </Border>
-            <Border
-                    Background="White"
-                    CornerRadius="15"
-                    Padding="20"
-                    Width="250"
-                    Height="130"
-                    Margin="0,10,34,10"
-                    SnapsToDevicePixels="True">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                    </Border.Effect>
 
+                <!-- Đang mượn -->
+                <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
-                        <!-- Left: text -->
                         <StackPanel>
-                            <TextBlock Text="Bạn đọc đang" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                            <TextBlock Text="mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                            <TextBlock Text="6" FontWeight="Bold" FontSize="18" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
+                            <TextBlock Text="Đang mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                        <!-- Right: icon container -->
-                        <Border
-                    Grid.Column="1"
-                    Width="40" Height="40"
-                    Background="{StaticResource Success/1_light}"
-                    CornerRadius="12"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center">
-                            <fa:IconImage Icon="PeopleGroup" Foreground="{StaticResource Success/1}" Width="20" Height="20" 
-              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding CurrentlyBorrowed}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource InUse_light}" CornerRadius="12"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <fa:IconImage Icon="BookOpen" Foreground="{StaticResource InUse}" Width="24" Height="24" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </Grid>
                 </Border>
-            <Border
-                    Background="White"
-                    CornerRadius="15"
-                    Padding="20"
-                    Width="250"
-                    Height="130"
-                    Margin="0,10,34,10"
-                    SnapsToDevicePixels="True">
-                <Border.Effect>
-                    <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                </Border.Effect>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <!-- Quá hạn -->
+                <Border Style="{StaticResource StatCardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Quá hạn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                    <!-- Left: text -->
-                    <StackPanel>
-                        <TextBlock Text="Số lượng đầu sách" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                        <TextBlock Text="{Binding TotalBooks}" FontWeight="Bold" FontSize="18" Foreground="{StaticResource Black}"/>
-                    </StackPanel>
+                            <TextBlock Text="{Binding OverdueCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Danger/Overdue_light}" CornerRadius="12"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <fa:IconImage Icon="Bell" Foreground="{StaticResource Danger/Overdue}" Width="24" Height="24" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
 
-                    <!-- Right: icon container -->
-                    <Border
-                Grid.Column="1"
-                Width="40" Height="40"
-                Background="#EEF3FF"
-                CornerRadius="12"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center">
-                        <fa:IconImage Icon="BookBookmark" Foreground="#2563EB" Width="20" Height="20" 
-          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <!-- Bạn đọc hoạt động -->
+                <Border Style="{StaticResource StatCardStyle}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Số lượng bạn đọc" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
+
+                            <TextBlock Text="{Binding ActiveReaders}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                        </StackPanel>
+                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Success/1_light}" CornerRadius="12"
+                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <fa:IconImage Icon="PeopleGroup" Foreground="{StaticResource Success/1}" Width="24" Height="24" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+
+            </UniformGrid>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Cột trái -->
+                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,20,0">
+
+                    <!-- Xu hướng mượn/trả sách -->
+                    <Border Style="{StaticResource DashboardCardStyle}" MinHeight="400">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CardHeader}" Text="Xu hướng mượn/trả sách"/>
+                            <TextBlock Style="{StaticResource CardCaption}" Text="Thống kê hoạt động mượn và trả sách 6 tháng gần đây"/>
+
+                            <Grid MinHeight="300" Background="#F9F9F9">
+                                <TextBlock Text="[CHỖ ĐỂ BIỂU ĐỒ ĐƯỜNG (Line Chart)]" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
                     </Border>
-                </Grid>
-            </Border>
-            <Border
-            Background="White"
-            CornerRadius="15"
-            Padding="20"
-            Width="250"
-            Height="130"
-            Margin="0,10,34,10"
-            SnapsToDevicePixels="True">
-                <Border.Effect>
-                    <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-                </Border.Effect>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                    <!-- Thống kê mượn sách theo thể loại -->
+                    <Border Style="{StaticResource DashboardCardStyle}" MinHeight="400">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CardHeader}" Text="Thống kê mượn sách theo thể loại"/>
+                            <TextBlock Style="{StaticResource CardCaption}" Text="Số lượt mượn theo từng thể loại sách"/>
 
-                    <!-- Left: text -->
-                    <StackPanel>
-                        <TextBlock Text="Đang được mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="20"/>
-                        <TextBlock Text="700" FontWeight="Bold" FontSize="18" Foreground="{StaticResource Black}"/>
-                    </StackPanel>
-
-                    <!-- Right: icon container -->
-                    <Border
-                Grid.Column="1"
-                Width="40" Height="40"
-                Background="{StaticResource InUse_light}"
-                CornerRadius="12"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center">
-                        <fa:IconImage Icon="BookOpen" Foreground="{StaticResource InUse}" Width="20" Height="20" 
-          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Grid MinHeight="300" Background="#F9F9F9">
+                                <TextBlock Text="[CHỖ ĐỂ BIỂU ĐỒ CỘT (Bar Chart)]" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>
                     </Border>
-                </Grid>
-            </Border>
+
+                    <!-- Hoạt động gần đây -->
+                    <Border Style="{StaticResource DashboardCardStyle}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CardHeader}" Text="Hoạt động gần đây"/>
+
+                            <ItemsControl ItemsSource="{Binding RecentActivitiesList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,15">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <fa:IconImage Icon="User" Width="20" Height="20" Margin="0,0,15,0"
+                                                          Foreground="{StaticResource TitleOfWindow}"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding ActivityDescription}" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding TimeAgo}" Foreground="{StaticResource TitleOfWindow}" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+
+                <!-- Cột phải -->
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+
+                    <!-- Phân bổ trạng thái sách -->
+                    <Border Style="{StaticResource DashboardCardStyle}" MinHeight="300">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CardHeader}" Text="Phân bổ trạng thái sách"/>
+                            <TextBlock Style="{StaticResource CardCaption}" Text="Tỷ lệ trạng thái các bản sao"/>
+
+                            <lvc:PieChart
+                                Series="{Binding PieChartSeries}"
+                                MinHeight="300"
+                                InitialRotation="-90"
+                                LegendPosition="Bottom">
+                            </lvc:PieChart>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sách được mượn nhiều nhất -->
+                    <Border Style="{StaticResource DashboardCardStyle}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CardHeader}" Text="Sách được mượn nhiều nhất"/>
+
+                            <ItemsControl ItemsSource="{Binding TopBooksList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,15">
+                                            <TextBlock Text="{Binding BookTitle}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Bạn đọc mới đăng ký -->
+                    <Border Style="{StaticResource DashboardCardStyle}" MinHeight="300">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CardHeader}" Text="Bạn đọc mới đăng ký"/>
+                            <TextBlock Style="{StaticResource CardCaption}" Text="Xu hướng các tháng gần đây"/>
+
+                            <lvc:CartesianChart
+                                Series="{Binding AreaChartSeries}"
+                                XAxes="{Binding AreaChartXAxes}"
+                                YAxes="{Binding AreaChartYAxes}"
+                                MinHeight="200"
+                                LegendPosition="Hidden">
+                            </lvc:CartesianChart>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sách quá hạn cần xử lý -->
+                    <Border Style="{StaticResource DashboardCardStyle}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource CardHeader}" Text="Sách quá hạn cần xử lý"/>
+
+                            <ItemsControl ItemsSource="{Binding OverdueBooksList}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{StaticResource Danger/Overdue}" BorderThickness="1" 
+                                                Background="{StaticResource Danger/Overdue_light}" 
+                                                CornerRadius="5" Padding="10" Margin="0,0,0,10">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding BookTitle}" FontWeight="SemiBold"/>
+                                                <TextBlock Text="{Binding ReaderName}"/>
+                                                <TextBlock Text="{Binding OverdueDate, StringFormat='Quá hạn: {0:dd/MM/yyyy}'}" 
+                                                           Foreground="{StaticResource Danger/Overdue}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </Grid>
         </StackPanel>
-        <Border
-     Grid.Row="1"
-    Background="{StaticResource White}"
-    CornerRadius="15"
-    Width="1100"
-    Height="520"
-    Margin="0,10,0,10"
-    SnapsToDevicePixels="True"
-    HorizontalAlignment="Left"
-    >
-            <Border.Effect>
-                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-            </Border.Effect>
-            <StackPanel Margin="30">
-                <TextBlock Text="Hoạt động gần đây" FontWeight="SemiBold" FontSize="18" Foreground="{StaticResource Black}"/>
-
-            </StackPanel>
-        </Border>
-    </Grid>
+    </ScrollViewer>
 </UserControl>
