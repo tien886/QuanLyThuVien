@@ -20,7 +20,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="DataGrid">
                     <Border x:Name="Root"
-                            CornerRadius="0"
+                            CornerRadius="10"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
