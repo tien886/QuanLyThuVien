@@ -14,22 +14,20 @@ namespace QuanLyThuVien.ViewModels
             _studentModel = model;
             _accountStatus = model.AccountStatus;
         }
+
         // Những thuộc tính chỉ đọc để hiển thị thông tin
         public int StudentId => _studentModel.StudentId;
         public string StudentName => _studentModel.StudentName;
         public string Email => _studentModel.Email;
         public string PhoneNumber => _studentModel.PhoneNumber;
-        public DateTime RegistRegistrationDate => _studentModel.RegistrationDate;
+        public DateTime RegistrationDate => _studentModel.RegistrationDate;
 
         // Thuộc tính cần bind hai chiều với UI
         [ObservableProperty]
         private string _accountStatus; 
 
-        // 5. (QUAN TRỌNG) Khi thuộc tính này thay đổi,
-        //    hãy cập nhật lại model "ngốc" bên trong nó.
         partial void OnAccountStatusChanged(string value)
         {
-            // Cập nhật model trên máy tính
             _studentModel.AccountStatus = value;
         }
     }
