@@ -1,4 +1,5 @@
-﻿using QuanLyThuVien.Models;
+﻿using LiveChartsCore;
+using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Services
 {
@@ -8,5 +9,6 @@ namespace QuanLyThuVien.Services
         Task<int> GetTotalBookCopiesAsync();
         Task<int> AddBookCopiesAsync(BookCopies bookCopies);
         Task<string> GetNextAvailableBookCopyID();
+        Task<ISeries[]> GetBookStatusData();
     }
 }
