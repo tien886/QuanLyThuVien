@@ -16,11 +16,12 @@ namespace QuanLyThuVien.Models
         public string Author { get; set; }
         public string Publisher { get; set; }
         public int PublicationYear { get; set; }
-        public string Genre { get; set; }
+        public int GenreID { get; set; }
         public int CategoryID { get; set; }
         public string Description { get; set; } 
         // Navigation property
         public BookCategories BookCategory { get; set; }
+        public Genres Genre { get; set; }
         public ICollection<BookCopies> BookCopies { get; set; }
         // break db rule 
         public int TotalCopies => BookCopies?.Count ?? 0;

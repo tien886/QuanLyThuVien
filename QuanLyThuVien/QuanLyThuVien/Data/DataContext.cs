@@ -20,6 +20,8 @@ namespace QuanLyThuVien.Data
         public DbSet<BookCopies> BookCopies { get; set; }
         public DbSet<Students> Students { get; set; }   
         public DbSet<Loans> Loans { get; set; }
+        public DbSet<Faculties> Faculties { get; set; }
+        public DbSet<Genres> Genres { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -28,6 +30,12 @@ namespace QuanLyThuVien.Data
                 .HasOne(b => b.BookCategory)
                 .WithMany(c => c.Books)
                 .HasForeignKey(b => b.CategoryID)
+                .OnDelete(DeleteBehavior.Cascade);
+            // one genre to many books
+            modelBuilder.Entity<Books>()
+                .HasOne(b => b.Genre)
+                .WithMany(g => g.Books)
+                .HasForeignKey(b => b.GenreID)
                 .OnDelete(DeleteBehavior.Cascade);
             // one book to many book copies
             modelBuilder.Entity<BookCopies>()
@@ -47,7 +55,12 @@ namespace QuanLyThuVien.Data
                 .WithMany(s => s.Loans)
                 .HasForeignKey(l => l.StudentID)
                 .OnDelete(DeleteBehavior.Cascade);
-
+            // one faculty to many students
+            modelBuilder.Entity<Students>()
+                .HasOne(s => s.Faculty)
+                .WithMany(f => f.Students)
+                .HasForeignKey(s => s.FacultyID)
+                .OnDelete(DeleteBehavior.Cascade);
             // Seed data
             DataSeeder.SeedData(modelBuilder);
         }
