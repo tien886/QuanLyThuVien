@@ -17,8 +17,13 @@ namespace QuanLyThuVien.ViewModels
 
         [ObservableProperty]
         private string searchText = string.Empty;
+
         [ObservableProperty]
-        private string accountStatus = "1";
+        private bool _isDetailPopupVisible = false; 
+
+        [ObservableProperty]
+        private StudentItemViewModel? _selectedStudent;
+
 
         private CancellationTokenSource? _searchCts;
 
@@ -27,7 +32,6 @@ namespace QuanLyThuVien.ViewModels
             _studentService = service;
         }
 
-        // Gọi từ View.Loaded
         public async Task InitializeAsync()
         {
             await LoadAsync();
@@ -38,7 +42,7 @@ namespace QuanLyThuVien.ViewModels
         {
             var list = await _studentService.GetAllStudentsAsync(searchText);
             Students.Clear();
-            foreach (var s in list)
+            foreach (var s in list.Take(60)) // LẤY ÍT THÔI KẺO LAG
             {
                 Students.Add(new StudentItemViewModel(s)); // Chuyển model thành ViewModel item
             }
@@ -59,17 +63,21 @@ namespace QuanLyThuVien.ViewModels
             catch (TaskCanceledException) { }
         }
 
-        //[RelayCommand]
-        //private void ViewDetail(StudentItemViewModel? sVM)
-        //{
-        //    if (sVM is null)
-        //        return;
+        [RelayCommand]
+        private void ViewDetail(StudentItemViewModel? sVM)
+        {
+            if (sVM is null)
+                return;
+            SelectedStudent = sVM;
+            IsDetailPopupVisible = true;
+        }
 
-        //    // Lấy dữ liệu từ các thuộc tính của ItemViewModel
-        //    System.Windows.MessageBox.Show(
-        //        $"MSSV: {sVM.StudentId}\nHọ tên: {sVM.StudentName}\nEmail: {sVM.Email}\nTrạng thái: {sVM.AccountStatus}",
-        //        "Thông tin sinh viên");
-        //}
+        [RelayCommand]
+        private void CloseDetailPopup()
+        {
+            IsDetailPopupVisible = false;
+            SelectedStudent = null; 
+        }
 
         [RelayCommand]
         private void AddNew()
@@ -95,13 +103,10 @@ namespace QuanLyThuVien.ViewModels
             }
             catch (Exception ex)
             {
-                // XỬ LÝ LỖI: Nếu lưu DB thất bại
                 System.Windows.MessageBox.Show($"Lỗi khi cập nhật trạng thái: {ex.Message}", "Lỗi Database", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-
-                // Rollback: Trả trạng thái trên UI về như cũ
+                // Rollback
                 studentVM.AccountStatus = originalStatus;
             }
-            Debug.WriteLine($"Sinh viên {studentVM.StudentName} hiện có trạng thái: {studentVM.AccountStatus} trong VM");
         }
     }
 }
