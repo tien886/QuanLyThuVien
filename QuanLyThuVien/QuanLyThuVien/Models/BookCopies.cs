@@ -17,6 +17,7 @@ namespace QuanLyThuVien.Models
         public Books Book { get; set; }
         public Locations Location { get; set; }
         public ICollection<Loans> Loans { get; set; }
+        public string LocationName => Location.LocName;
         // 
         public string StatusDescription
         {
