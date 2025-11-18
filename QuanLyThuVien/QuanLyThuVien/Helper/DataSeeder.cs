@@ -14,14 +14,22 @@ namespace QuanLyThuVien.Helper
     {
         public static void SeedData(ModelBuilder modelBuilder)
         {
-            BookSeeder.SeedBook(modelBuilder);
-            Debug.WriteLine("Seed books succesfullly");
+            BookSeeder.SeedBooks(modelBuilder);
+            Debug.WriteLine("Seed books successfullly");
             BookCategorySeeder.SeedBookCategory(modelBuilder);
-            Debug.WriteLine("Seed bookcategory succesfullly");
-            BookCopySeeder.SeedBookCopy(modelBuilder);
-            Debug.WriteLine("Seed bookcopies succesfullly");
-            StudentSeeder.SeedStudent(modelBuilder);
-            Debug.WriteLine("Seed students succesfullly");
+            Debug.WriteLine("Seed bookcategory successfullly");
+            GenreSeeder.SeedGenres(modelBuilder);
+            Debug.WriteLine("Seed genre successfullly");
+            BookCopySeeder.SeedBookCopies(modelBuilder);
+            Debug.WriteLine("Seed bookcopies successfullly");
+            StudentSeeder.SeedStudents(modelBuilder);
+            Debug.WriteLine("Seed students successfullly");
+            LocationSeeder.SeedLocations(modelBuilder);
+            Debug.WriteLine("Seed locations successfully");
+            FacultySeeder.SeedFaculties(modelBuilder);
+            Debug.WriteLine("Seed faculties successfully");
+            LoanSeeder.SeedLoans(modelBuilder);
+            Debug.WriteLine("Seed loans successfully");
         }
     }
 }
