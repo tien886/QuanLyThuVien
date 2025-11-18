@@ -52,7 +52,6 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 CopyID = await _bookCopyService.GetNextAvailableBookCopyID(),
                 BookID = currentBook.BookID,
                 Status = "1",
-                Location = Location,
                 DateAdded = DateTime.Now
             };
             await _bookCopyService.AddBookCopiesAsync(bookCopies);
