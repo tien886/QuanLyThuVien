@@ -65,33 +65,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-        <Style x:Key="StatusPillBorder" TargetType="Border">
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Background" Value="{StaticResource InUse_light}"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Status}" Value="Overdue">
-                    <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="StatusPillText" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{StaticResource InUse}"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Status}" Value="Overdue">
-                    <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
     </UserControl.Resources>
 
     
@@ -113,7 +86,7 @@
                             <TextBlock Text="Đang mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
                             <!-- (Sau này bổ sung) -->
-                            <TextBlock Text="{Binding DangMuonCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                            <TextBlock Text="{Binding DangMuon}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
                         </StackPanel>
                         <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource InUse_light}" CornerRadius="12"
                                 HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -134,7 +107,7 @@
                             <TextBlock Text="Quá hạn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
                             <!-- (Sau này bổ sung) -->
-                            <TextBlock Text="{Binding QuaHanCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                            <TextBlock Text="{Binding QuaHan}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
                         </StackPanel>
                         <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Danger/Overdue_light}" CornerRadius="12"
                                 HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -144,7 +117,6 @@
                     </Grid>
                 </Border>
 
-                <!-- Badge số lượng đã trả tháng này -->
                 <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -154,8 +126,7 @@
                         <StackPanel>
                             <TextBlock Text="Đã trả (tháng này)" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                            <!-- (Sau này bổ sung) -->
-                            <TextBlock Text="{Binding DaTraCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                            <TextBlock Text="{Binding DaTraThangNay}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
                         </StackPanel>
                         <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Success/1_light}" CornerRadius="12"
                                 HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -198,15 +169,13 @@
                         <!-- SearchBar -->
                         <TextBox Grid.Column="1"
                                  Style="{StaticResource SearchTextBox}"
-                                 HorizontalAlignment="Right"
-                                 Tag="Tìm theo mã phiếu, sinh viên, sách, mã vạch...">
+                                 HorizontalAlignment="Right">
                             <TextBox.Text>
-                                <Binding Path="SearchText" UpdateSourceTrigger="PropertyChanged"/>
+                                <Binding Path="SearchBarText" UpdateSourceTrigger="PropertyChanged"/>
                             </TextBox.Text>
                         </TextBox>
                     </Grid>
 
-                    <!-- Bảng thông mượn trả sách -->
                     <DataGrid AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               CanUserDeleteRows="False"
@@ -214,15 +183,14 @@
                               Style="{StaticResource RoundedDataGrid}">
 
                         <DataGrid.ItemsSource>
-                            <Binding Path="PhieuMuonList"/>
+                            <Binding Path="LoanList"/>
                         </DataGrid.ItemsSource>
 
                         <DataGrid.Columns>
 
-                            <!-- Cột mã phiếu --> 
                             <DataGridTextColumn Header="Mã phiếu" Width="0.8*">
                                 <DataGridTextColumn.Binding>
-                                    <Binding Path="PhieuMuonID"/>
+                                    <Binding Path="LoanID"/>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
@@ -230,10 +198,7 @@
                             <DataGridTemplateColumn Header="Sinh viên" Width="1.5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel VerticalAlignment="Center">
-                                            <TextBlock Text="{Binding StudentName}" FontWeight="SemiBold"/>
-                                            <TextBlock Text="{Binding StudentID}" FontSize="12" Foreground="{StaticResource TitleOfWindow}"/>
-                                        </StackPanel>
+                                            <TextBlock Text="{Binding Student.StudentName}" FontWeight="SemiBold"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -241,21 +206,21 @@
                             <!-- Cột sách -->
                             <DataGridTextColumn Header="Sách" Width="2*">
                                 <DataGridTextColumn.Binding>
-                                    <Binding Path="BookTitle"/>
+                                    <Binding Path="BookCopy.Book.Title"/>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
                             <!-- Cột ngày mượn -->
                             <DataGridTextColumn Header="Ngày mượn" Width="1*">
                                 <DataGridTextColumn.Binding>
-                                    <Binding Path="NgayMuon" StringFormat="{}{0:dd/MM/yyyy}"/>
+                                    <Binding Path="LoanDate" StringFormat="{}{0:dd/MM/yyyy}"/>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
                             <!-- Cột hạn trả -->
                             <DataGridTextColumn Header="Hạn trả" Width="1*">
                                 <DataGridTextColumn.Binding>
-                                    <Binding Path="HanTra" StringFormat="{}{0:dd/MM/yyyy}"/>
+                                    <Binding Path="DueDate" StringFormat="{}{0:dd/MM/yyyy}"/>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
 
@@ -263,10 +228,11 @@
                             <DataGridTemplateColumn Header="Trạng thái" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Border Style="{StaticResource StatusPillBorder}">
-                                            <TextBlock Style="{StaticResource StatusPillText}"
-                                                       Text="{Binding Status, Converter={StaticResource StatusToTextConverter}}"/>
+                                        <Border x:Name="StatusBorder" Style="{StaticResource StatusPillBorder}">
+                                            <TextBlock Style="{StaticResource StatusPillText}" x:Name="StatusText"
+                                                       Text="{Binding LoanStatusDescription}"/>
                                         </Border>
+                                        
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

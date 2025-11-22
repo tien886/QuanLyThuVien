@@ -11,73 +11,210 @@ namespace QuanLyThuVien.Helper.SeedModule
 {
     public class StudentSeeder
     {
-        // Vùng dữ liệu ngẫu nhiên
-        private static readonly Random random = new Random();
-
-        // Dùng tên không dấu để dễ tạo email
-        private static readonly string[] LastNames = {
-            "Nguyen", "Tran", "Le", "Pham", "Hoang", "Huynh",
-            "Vo", "Phan", "Dang", "Bui", "Do", "Vu"
-        };
-        private static readonly string[] MaleFirstNames = {
-            "Van Tung", "Minh Quan", "Duc Huy", "Anh Khoa",
-            "Tuan Kiet", "Gia Bao", "Thanh Dat", "Quoc Tuan"
-        };
-        private static readonly string[] FemaleFirstNames = {
-            "Phuong Thao", "Ngoc Anh", "Gia Han", "Khanh Linh",
-            "Minh Chau", "Bao Ngoc", "Hong Anh", "Thu Uyen"
-        };
-        private static readonly string[] Statuses = { "Active", "Disabled" };
-
-        public static void SeedStudent(ModelBuilder modelBuilder)
+        public static void SeedStudents(ModelBuilder modelBuilder)
         {
-
-            int totalStudentsToGenerate = 1000;
-            int startIndex = 6; // Bắt đầu ID từ 6 (vì đã có 1-5)
-
-            for (int i = 0; i < totalStudentsToGenerate; i++)
-            {
-                int currentId = startIndex + i;
-                string lastName = LastNames[random.Next(LastNames.Length)];
-                string firstName;
-
-                // 50/50 chọn tên Nam hoặc Nữ
-                if (random.Next(2) == 0)
-                {
-                    firstName = MaleFirstNames[random.Next(MaleFirstNames.Length)];
-                }
-                else
-                {
-                    firstName = FemaleFirstNames[random.Next(FemaleFirstNames.Length)];
-                }
-
-                string studentName = $"{lastName} {firstName}";
-
-                // Tạo email duy nhất từ tên và ID (ví dụ: giabao6@example.com)
-                string emailName = firstName.Replace(" ", "").ToLower();
-                string email = $"{emailName}{currentId}@example.com";
-
-                // Tạo SĐT ngẫu nhiên
-                string phoneNumber = $"09{random.Next(10000000, 99999999)}";
-
-                // Chọn trạng thái ngẫu nhiên
-                string status = Statuses[random.Next(Statuses.Length)];
-
-                // Ngày đăng ký ngẫu nhiên trong 4 năm qua
-                DateTime registrationDate = DateTime.Now.AddDays(-random.Next(1, 4 * 365));
-
-                modelBuilder.Entity<Students>().HasData(
-                    new Students
-                    {
-                        StudentId = currentId,
-                        StudentName = studentName,
-                        Email = email,
-                        PhoneNumber = phoneNumber,
-                        AccountStatus = status,
-                        RegistrationDate = registrationDate
-                    }
-                );
-            }
+            modelBuilder.Entity<Models.Students>().HasData(
+                new Models.Students { StudentId = 1, StudentName = "Nguyễn Thị Anh", Email = "nanh001@student.university.vn", PhoneNumber = "0970000001", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 9, 4) },
+                new Models.Students { StudentId = 2, StudentName = "Trần Văn Huy", Email = "thuy002@student.university.vn", PhoneNumber = "0970000002", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 9, 7) },
+                new Models.Students { StudentId = 3, StudentName = "Lê Minh Trang", Email = "ltrang003@student.university.vn", PhoneNumber = "0970000003", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 9, 10) },
+                new Models.Students { StudentId = 4, StudentName = "Phạm Ngọc Long", Email = "plong004@student.university.vn", PhoneNumber = "0970000004", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 9, 13) },
+                new Models.Students { StudentId = 5, StudentName = "Hoàng Hoài Bảo", Email = "hbao005@student.university.vn", PhoneNumber = "0970000005", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 9, 16) },
+                new Models.Students { StudentId = 6, StudentName = "Võ Thanh Ngân", Email = "vngan006@student.university.vn", PhoneNumber = "0970000006", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 9, 19) },
+                new Models.Students { StudentId = 7, StudentName = "Bùi Quang Tùng", Email = "btung007@student.university.vn", PhoneNumber = "0970000007", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 9, 22) },
+                new Models.Students { StudentId = 8, StudentName = "Đặng Hồng Nguyên", Email = "dnguyen008@student.university.vn", PhoneNumber = "0970000008", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 9, 25) },
+                new Models.Students { StudentId = 9, StudentName = "Đỗ Tuấn Nam", Email = "dnam009@student.university.vn", PhoneNumber = "0970000009", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 9, 28) },
+                new Models.Students { StudentId = 10, StudentName = "Huỳnh Anh Lan", Email = "hlan010@student.university.vn", PhoneNumber = "0970000010", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 10, 1) },
+                new Models.Students { StudentId = 11, StudentName = "Vũ Duy Phong", Email = "vphong011@student.university.vn", PhoneNumber = "0970000011", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 10, 4) },
+                new Models.Students { StudentId = 12, StudentName = "Mai Khánh Linh", Email = "mlinh012@student.university.vn", PhoneNumber = "0970000012", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 10, 7) },
+                new Models.Students { StudentId = 13, StudentName = "Trương Bảo Việt", Email = "tviet013@student.university.vn", PhoneNumber = "0970000013", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 10, 10) },
+                new Models.Students { StudentId = 14, StudentName = "Phan Thùy Thư", Email = "pthu014@student.university.vn", PhoneNumber = "0970000014", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 10, 13) },
+                new Models.Students { StudentId = 15, StudentName = "Đoàn Mạnh Kiệt", Email = "dkiet015@student.university.vn", PhoneNumber = "0970000015", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 10, 16) },
+                new Models.Students { StudentId = 16, StudentName = "Nguyễn Thị Nhung", Email = "nnhung016@student.university.vn", PhoneNumber = "0970000016", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 10, 19) },
+                new Models.Students { StudentId = 17, StudentName = "Trần Văn Khánh", Email = "tkhanh017@student.university.vn", PhoneNumber = "0970000017", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 10, 22) },
+                new Models.Students { StudentId = 18, StudentName = "Lê Minh Châu", Email = "lchau018@student.university.vn", PhoneNumber = "0970000018", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 10, 25) },
+                new Models.Students { StudentId = 19, StudentName = "Phạm Ngọc Trí", Email = "ptri019@student.university.vn", PhoneNumber = "0970000019", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 10, 28) },
+                new Models.Students { StudentId = 20, StudentName = "Hoàng Hoài Hiền", Email = "hhien020@student.university.vn", PhoneNumber = "0970000020", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 10, 31) },
+                new Models.Students { StudentId = 21, StudentName = "Võ Thanh Hạnh", Email = "vhanh021@student.university.vn", PhoneNumber = "0970000021", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 11, 3) },
+                new Models.Students { StudentId = 22, StudentName = "Bùi Quang Phúc", Email = "bphuc022@student.university.vn", PhoneNumber = "0970000022", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 11, 6) },
+                new Models.Students { StudentId = 23, StudentName = "Đặng Hồng Thắng", Email = "dthang023@student.university.vn", PhoneNumber = "0970000023", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 11, 9) },
+                new Models.Students { StudentId = 24, StudentName = "Đỗ Tuấn Dũng", Email = "ddung024@student.university.vn", PhoneNumber = "0970000024", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 11, 12) },
+                new Models.Students { StudentId = 25, StudentName = "Huỳnh Anh Sơn", Email = "hson025@student.university.vn", PhoneNumber = "0970000025", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 11, 15) },
+                new Models.Students { StudentId = 26, StudentName = "Vũ Duy Giang", Email = "vgiang026@student.university.vn", PhoneNumber = "0970000026", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 11, 18) },
+                new Models.Students { StudentId = 27, StudentName = "Mai Khánh Yến", Email = "myen027@student.university.vn", PhoneNumber = "0970000027", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 11, 21) },
+                new Models.Students { StudentId = 28, StudentName = "Trương Bảo My", Email = "tmy028@student.university.vn", PhoneNumber = "0970000028", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 11, 24) },
+                new Models.Students { StudentId = 29, StudentName = "Phan Thùy Phương", Email = "pphuong029@student.university.vn", PhoneNumber = "0970000029", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 11, 27) },
+                new Models.Students { StudentId = 30, StudentName = "Đoàn Mạnh Tú", Email = "dtu030@student.university.vn", PhoneNumber = "0970000030", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 11, 30) },
+                new Models.Students { StudentId = 31, StudentName = "Nguyễn Thị Anh", Email = "nanh031@student.university.vn", PhoneNumber = "0970000031", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 12, 3) },
+                new Models.Students { StudentId = 32, StudentName = "Trần Văn Huy", Email = "thuy032@student.university.vn", PhoneNumber = "0970000032", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 12, 6) },
+                new Models.Students { StudentId = 33, StudentName = "Lê Minh Trang", Email = "ltrang033@student.university.vn", PhoneNumber = "0970000033", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 12, 9) },
+                new Models.Students { StudentId = 34, StudentName = "Phạm Ngọc Long", Email = "plong034@student.university.vn", PhoneNumber = "0970000034", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 12, 12) },
+                new Models.Students { StudentId = 35, StudentName = "Hoàng Hoài Bảo", Email = "hbao035@student.university.vn", PhoneNumber = "0970000035", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 12, 15) },
+                new Models.Students { StudentId = 36, StudentName = "Võ Thanh Ngân", Email = "vngan036@student.university.vn", PhoneNumber = "0970000036", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 12, 18) },
+                new Models.Students { StudentId = 37, StudentName = "Bùi Quang Tùng", Email = "btung037@student.university.vn", PhoneNumber = "0970000037", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 12, 21) },
+                new Models.Students { StudentId = 38, StudentName = "Đặng Hồng Nguyên", Email = "dnguyen038@student.university.vn", PhoneNumber = "0970000038", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 12, 24) },
+                new Models.Students { StudentId = 39, StudentName = "Đỗ Tuấn Nam", Email = "dnam039@student.university.vn", PhoneNumber = "0970000039", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 12, 27) },
+                new Models.Students { StudentId = 40, StudentName = "Huỳnh Anh Lan", Email = "hlan040@student.university.vn", PhoneNumber = "0970000040", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 12, 30) },
+                new Models.Students { StudentId = 41, StudentName = "Vũ Duy Phong", Email = "vphong041@student.university.vn", PhoneNumber = "0970000041", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 1, 2) },
+                new Models.Students { StudentId = 42, StudentName = "Mai Khánh Linh", Email = "mlinh042@student.university.vn", PhoneNumber = "0970000042", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 1, 5) },
+                new Models.Students { StudentId = 43, StudentName = "Trương Bảo Việt", Email = "tviet043@student.university.vn", PhoneNumber = "0970000043", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 1, 8) },
+                new Models.Students { StudentId = 44, StudentName = "Phan Thùy Thư", Email = "pthu044@student.university.vn", PhoneNumber = "0970000044", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 1, 11) },
+                new Models.Students { StudentId = 45, StudentName = "Đoàn Mạnh Kiệt", Email = "dkiet045@student.university.vn", PhoneNumber = "0970000045", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 1, 14) },
+                new Models.Students { StudentId = 46, StudentName = "Nguyễn Thị Nhung", Email = "nnhung046@student.university.vn", PhoneNumber = "0970000046", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 1, 17) },
+                new Models.Students { StudentId = 47, StudentName = "Trần Văn Khánh", Email = "tkhanh047@student.university.vn", PhoneNumber = "0970000047", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 1, 20) },
+                new Models.Students { StudentId = 48, StudentName = "Lê Minh Châu", Email = "lchau048@student.university.vn", PhoneNumber = "0970000048", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 1, 23) },
+                new Models.Students { StudentId = 49, StudentName = "Phạm Ngọc Trí", Email = "ptri049@student.university.vn", PhoneNumber = "0970000049", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 1, 26) },
+                new Models.Students { StudentId = 50, StudentName = "Hoàng Hoài Hiền", Email = "hhien050@student.university.vn", PhoneNumber = "0970000050", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 1, 29) },
+                new Models.Students { StudentId = 51, StudentName = "Võ Thanh Hạnh", Email = "vhanh051@student.university.vn", PhoneNumber = "0970000051", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 2, 1) },
+                new Models.Students { StudentId = 52, StudentName = "Bùi Quang Phúc", Email = "bphuc052@student.university.vn", PhoneNumber = "0970000052", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 2, 4) },
+                new Models.Students { StudentId = 53, StudentName = "Đặng Hồng Thắng", Email = "dthang053@student.university.vn", PhoneNumber = "0970000053", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 2, 7) },
+                new Models.Students { StudentId = 54, StudentName = "Đỗ Tuấn Dũng", Email = "ddung054@student.university.vn", PhoneNumber = "0970000054", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 2, 10) },
+                new Models.Students { StudentId = 55, StudentName = "Huỳnh Anh Sơn", Email = "hson055@student.university.vn", PhoneNumber = "0970000055", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 2, 13) },
+                new Models.Students { StudentId = 56, StudentName = "Vũ Duy Giang", Email = "vgiang056@student.university.vn", PhoneNumber = "0970000056", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 2, 16) },
+                new Models.Students { StudentId = 57, StudentName = "Mai Khánh Yến", Email = "myen057@student.university.vn", PhoneNumber = "0970000057", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 2, 19) },
+                new Models.Students { StudentId = 58, StudentName = "Trương Bảo My", Email = "tmy058@student.university.vn", PhoneNumber = "0970000058", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 2, 22) },
+                new Models.Students { StudentId = 59, StudentName = "Phan Thùy Phương", Email = "pphuong059@student.university.vn", PhoneNumber = "0970000059", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 2, 25) },
+                new Models.Students { StudentId = 60, StudentName = "Đoàn Mạnh Tú", Email = "dtu060@student.university.vn", PhoneNumber = "0970000060", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 2, 28) },
+                new Models.Students { StudentId = 61, StudentName = "Nguyễn Thị Anh", Email = "nanh061@student.university.vn", PhoneNumber = "0970000061", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 3, 3) },
+                new Models.Students { StudentId = 62, StudentName = "Trần Văn Huy", Email = "thuy062@student.university.vn", PhoneNumber = "0970000062", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 3, 6) },
+                new Models.Students { StudentId = 63, StudentName = "Lê Minh Trang", Email = "ltrang063@student.university.vn", PhoneNumber = "0970000063", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 3, 9) },
+                new Models.Students { StudentId = 64, StudentName = "Phạm Ngọc Long", Email = "plong064@student.university.vn", PhoneNumber = "0970000064", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 3, 12) },
+                new Models.Students { StudentId = 65, StudentName = "Hoàng Hoài Bảo", Email = "hbao065@student.university.vn", PhoneNumber = "0970000065", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 3, 15) },
+                new Models.Students { StudentId = 66, StudentName = "Võ Thanh Ngân", Email = "vngan066@student.university.vn", PhoneNumber = "0970000066", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 3, 18) },
+                new Models.Students { StudentId = 67, StudentName = "Bùi Quang Tùng", Email = "btung067@student.university.vn", PhoneNumber = "0970000067", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 3, 21) },
+                new Models.Students { StudentId = 68, StudentName = "Đặng Hồng Nguyên", Email = "dnguyen068@student.university.vn", PhoneNumber = "0970000068", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 3, 24) },
+                new Models.Students { StudentId = 69, StudentName = "Đỗ Tuấn Nam", Email = "dnam069@student.university.vn", PhoneNumber = "0970000069", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 3, 27) },
+                new Models.Students { StudentId = 70, StudentName = "Huỳnh Anh Lan", Email = "hlan070@student.university.vn", PhoneNumber = "0970000070", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 3, 30) },
+                new Models.Students { StudentId = 71, StudentName = "Vũ Duy Phong", Email = "vphong071@student.university.vn", PhoneNumber = "0970000071", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 4, 2) },
+                new Models.Students { StudentId = 72, StudentName = "Mai Khánh Linh", Email = "mlinh072@student.university.vn", PhoneNumber = "0970000072", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 4, 5) },
+                new Models.Students { StudentId = 73, StudentName = "Trương Bảo Việt", Email = "tviet073@student.university.vn", PhoneNumber = "0970000073", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 4, 8) },
+                new Models.Students { StudentId = 74, StudentName = "Phan Thùy Thư", Email = "pthu074@student.university.vn", PhoneNumber = "0970000074", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 4, 11) },
+                new Models.Students { StudentId = 75, StudentName = "Đoàn Mạnh Kiệt", Email = "dkiet075@student.university.vn", PhoneNumber = "0970000075", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 4, 14) },
+                new Models.Students { StudentId = 76, StudentName = "Nguyễn Thị Nhung", Email = "nnhung076@student.university.vn", PhoneNumber = "0970000076", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 4, 17) },
+                new Models.Students { StudentId = 77, StudentName = "Trần Văn Khánh", Email = "tkhanh077@student.university.vn", PhoneNumber = "0970000077", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 4, 20) },
+                new Models.Students { StudentId = 78, StudentName = "Lê Minh Châu", Email = "lchau078@student.university.vn", PhoneNumber = "0970000078", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 4, 23) },
+                new Models.Students { StudentId = 79, StudentName = "Phạm Ngọc Trí", Email = "ptri079@student.university.vn", PhoneNumber = "0970000079", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 4, 26) },
+                new Models.Students { StudentId = 80, StudentName = "Hoàng Hoài Hiền", Email = "hhien080@student.university.vn", PhoneNumber = "0970000080", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 4, 29) },
+                new Models.Students { StudentId = 81, StudentName = "Võ Thanh Hạnh", Email = "vhanh081@student.university.vn", PhoneNumber = "0970000081", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 5, 2) },
+                new Models.Students { StudentId = 82, StudentName = "Bùi Quang Phúc", Email = "bphuc082@student.university.vn", PhoneNumber = "0970000082", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 5, 5) },
+                new Models.Students { StudentId = 83, StudentName = "Đặng Hồng Thắng", Email = "dthang083@student.university.vn", PhoneNumber = "0970000083", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 5, 8) },
+                new Models.Students { StudentId = 84, StudentName = "Đỗ Tuấn Dũng", Email = "ddung084@student.university.vn", PhoneNumber = "0970000084", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 5, 11) },
+                new Models.Students { StudentId = 85, StudentName = "Huỳnh Anh Sơn", Email = "hson085@student.university.vn", PhoneNumber = "0970000085", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 5, 14) },
+                new Models.Students { StudentId = 86, StudentName = "Vũ Duy Giang", Email = "vgiang086@student.university.vn", PhoneNumber = "0970000086", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 5, 17) },
+                new Models.Students { StudentId = 87, StudentName = "Mai Khánh Yến", Email = "myen087@student.university.vn", PhoneNumber = "0970000087", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 5, 20) },
+                new Models.Students { StudentId = 88, StudentName = "Trương Bảo My", Email = "tmy088@student.university.vn", PhoneNumber = "0970000088", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 5, 23) },
+                new Models.Students { StudentId = 89, StudentName = "Phan Thùy Phương", Email = "pphuong089@student.university.vn", PhoneNumber = "0970000089", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 5, 26) },
+                new Models.Students { StudentId = 90, StudentName = "Đoàn Mạnh Tú", Email = "dtu090@student.university.vn", PhoneNumber = "0970000090", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 5, 29) },
+                new Models.Students { StudentId = 91, StudentName = "Nguyễn Thị Anh", Email = "nanh091@student.university.vn", PhoneNumber = "0970000091", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 6, 1) },
+                new Models.Students { StudentId = 92, StudentName = "Trần Văn Huy", Email = "thuy092@student.university.vn", PhoneNumber = "0970000092", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 6, 4) },
+                new Models.Students { StudentId = 93, StudentName = "Lê Minh Trang", Email = "ltrang093@student.university.vn", PhoneNumber = "0970000093", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 6, 7) },
+                new Models.Students { StudentId = 94, StudentName = "Phạm Ngọc Long", Email = "plong094@student.university.vn", PhoneNumber = "0970000094", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 6, 10) },
+                new Models.Students { StudentId = 95, StudentName = "Hoàng Hoài Bảo", Email = "hbao095@student.university.vn", PhoneNumber = "0970000095", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 6, 13) },
+                new Models.Students { StudentId = 96, StudentName = "Võ Thanh Ngân", Email = "vngan096@student.university.vn", PhoneNumber = "0970000096", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 6, 16) },
+                new Models.Students { StudentId = 97, StudentName = "Bùi Quang Tùng", Email = "btung097@student.university.vn", PhoneNumber = "0970000097", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 6, 19) },
+                new Models.Students { StudentId = 98, StudentName = "Đặng Hồng Nguyên", Email = "dnguyen098@student.university.vn", PhoneNumber = "0970000098", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 6, 22) },
+                new Models.Students { StudentId = 99, StudentName = "Đỗ Tuấn Nam", Email = "dnam099@student.university.vn", PhoneNumber = "0970000099", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 6, 25) },
+                new Models.Students { StudentId = 100, StudentName = "Huỳnh Anh Lan", Email = "hlan100@student.university.vn", PhoneNumber = "0970000100", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 6, 28) },
+                new Models.Students { StudentId = 101, StudentName = "Vũ Duy Phong", Email = "vphong101@student.university.vn", PhoneNumber = "0970000101", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 7, 1) },
+                new Models.Students { StudentId = 102, StudentName = "Mai Khánh Linh", Email = "mlinh102@student.university.vn", PhoneNumber = "0970000102", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 7, 4) },
+                new Models.Students { StudentId = 103, StudentName = "Trương Bảo Việt", Email = "tviet103@student.university.vn", PhoneNumber = "0970000103", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 7, 7) },
+                new Models.Students { StudentId = 104, StudentName = "Phan Thùy Thư", Email = "pthu104@student.university.vn", PhoneNumber = "0970000104", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 7, 10) },
+                new Models.Students { StudentId = 105, StudentName = "Đoàn Mạnh Kiệt", Email = "dkiet105@student.university.vn", PhoneNumber = "0970000105", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 7, 13) },
+                new Models.Students { StudentId = 106, StudentName = "Nguyễn Thị Nhung", Email = "nnhung106@student.university.vn", PhoneNumber = "0970000106", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 7, 16) },
+                new Models.Students { StudentId = 107, StudentName = "Trần Văn Khánh", Email = "tkhanh107@student.university.vn", PhoneNumber = "0970000107", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 7, 19) },
+                new Models.Students { StudentId = 108, StudentName = "Lê Minh Châu", Email = "lchau108@student.university.vn", PhoneNumber = "0970000108", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 7, 22) },
+                new Models.Students { StudentId = 109, StudentName = "Phạm Ngọc Trí", Email = "ptri109@student.university.vn", PhoneNumber = "0970000109", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 7, 25) },
+                new Models.Students { StudentId = 110, StudentName = "Hoàng Hoài Hiền", Email = "hhien110@student.university.vn", PhoneNumber = "0970000110", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 7, 28) },
+                new Models.Students { StudentId = 111, StudentName = "Võ Thanh Hạnh", Email = "vhanh111@student.university.vn", PhoneNumber = "0970000111", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 7, 31) },
+                new Models.Students { StudentId = 112, StudentName = "Bùi Quang Phúc", Email = "bphuc112@student.university.vn", PhoneNumber = "0970000112", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 8, 3) },
+                new Models.Students { StudentId = 113, StudentName = "Đặng Hồng Thắng", Email = "dthang113@student.university.vn", PhoneNumber = "0970000113", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 8, 6) },
+                new Models.Students { StudentId = 114, StudentName = "Đỗ Tuấn Dũng", Email = "ddung114@student.university.vn", PhoneNumber = "0970000114", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 8, 9) },
+                new Models.Students { StudentId = 115, StudentName = "Huỳnh Anh Sơn", Email = "hson115@student.university.vn", PhoneNumber = "0970000115", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 8, 12) },
+                new Models.Students { StudentId = 116, StudentName = "Vũ Duy Giang", Email = "vgiang116@student.university.vn", PhoneNumber = "0970000116", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 8, 15) },
+                new Models.Students { StudentId = 117, StudentName = "Mai Khánh Yến", Email = "myen117@student.university.vn", PhoneNumber = "0970000117", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 8, 18) },
+                new Models.Students { StudentId = 118, StudentName = "Trương Bảo My", Email = "tmy118@student.university.vn", PhoneNumber = "0970000118", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 8, 21) },
+                new Models.Students { StudentId = 119, StudentName = "Phan Thùy Phương", Email = "pphuong119@student.university.vn", PhoneNumber = "0970000119", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 8, 24) },
+                new Models.Students { StudentId = 120, StudentName = "Đoàn Mạnh Tú", Email = "dtu120@student.university.vn", PhoneNumber = "0970000120", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 8, 27) },
+                new Models.Students { StudentId = 121, StudentName = "Nguyễn Thị Anh", Email = "nanh121@student.university.vn", PhoneNumber = "0970000121", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 8, 30) },
+                new Models.Students { StudentId = 122, StudentName = "Trần Văn Huy", Email = "thuy122@student.university.vn", PhoneNumber = "0970000122", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 9, 2) },
+                new Models.Students { StudentId = 123, StudentName = "Lê Minh Trang", Email = "ltrang123@student.university.vn", PhoneNumber = "0970000123", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 9, 5) },
+                new Models.Students { StudentId = 124, StudentName = "Phạm Ngọc Long", Email = "plong124@student.university.vn", PhoneNumber = "0970000124", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 9, 8) },
+                new Models.Students { StudentId = 125, StudentName = "Hoàng Hoài Bảo", Email = "hbao125@student.university.vn", PhoneNumber = "0970000125", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 9, 11) },
+                new Models.Students { StudentId = 126, StudentName = "Võ Thanh Ngân", Email = "vngan126@student.university.vn", PhoneNumber = "0970000126", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 9, 14) },
+                new Models.Students { StudentId = 127, StudentName = "Bùi Quang Tùng", Email = "btung127@student.university.vn", PhoneNumber = "0970000127", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 9, 17) },
+                new Models.Students { StudentId = 128, StudentName = "Đặng Hồng Nguyên", Email = "dnguyen128@student.university.vn", PhoneNumber = "0970000128", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 9, 20) },
+                new Models.Students { StudentId = 129, StudentName = "Đỗ Tuấn Nam", Email = "dnam129@student.university.vn", PhoneNumber = "0970000129", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 9, 23) },
+                new Models.Students { StudentId = 130, StudentName = "Huỳnh Anh Lan", Email = "hlan130@student.university.vn", PhoneNumber = "0970000130", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 9, 26) },
+                new Models.Students { StudentId = 131, StudentName = "Vũ Duy Phong", Email = "vphong131@student.university.vn", PhoneNumber = "0970000131", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 9, 29) },
+                new Models.Students { StudentId = 132, StudentName = "Mai Khánh Linh", Email = "mlinh132@student.university.vn", PhoneNumber = "0970000132", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 10, 2) },
+                new Models.Students { StudentId = 133, StudentName = "Trương Bảo Việt", Email = "tviet133@student.university.vn", PhoneNumber = "0970000133", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 10, 5) },
+                new Models.Students { StudentId = 134, StudentName = "Phan Thùy Thư", Email = "pthu134@student.university.vn", PhoneNumber = "0970000134", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 10, 8) },
+                new Models.Students { StudentId = 135, StudentName = "Đoàn Mạnh Kiệt", Email = "dkiet135@student.university.vn", PhoneNumber = "0970000135", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 10, 11) },
+                new Models.Students { StudentId = 136, StudentName = "Nguyễn Thị Nhung", Email = "nnhung136@student.university.vn", PhoneNumber = "0970000136", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 10, 14) },
+                new Models.Students { StudentId = 137, StudentName = "Trần Văn Khánh", Email = "tkhanh137@student.university.vn", PhoneNumber = "0970000137", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 10, 17) },
+                new Models.Students { StudentId = 138, StudentName = "Lê Minh Châu", Email = "lchau138@student.university.vn", PhoneNumber = "0970000138", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 10, 20) },
+                new Models.Students { StudentId = 139, StudentName = "Phạm Ngọc Trí", Email = "ptri139@student.university.vn", PhoneNumber = "0970000139", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 10, 23) },
+                new Models.Students { StudentId = 140, StudentName = "Hoàng Hoài Hiền", Email = "hhien140@student.university.vn", PhoneNumber = "0970000140", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 10, 26) },
+                new Models.Students { StudentId = 141, StudentName = "Võ Thanh Hạnh", Email = "vhanh141@student.university.vn", PhoneNumber = "0970000141", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 10, 29) },
+                new Models.Students { StudentId = 142, StudentName = "Bùi Quang Phúc", Email = "bphuc142@student.university.vn", PhoneNumber = "0970000142", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 11, 1) },
+                new Models.Students { StudentId = 143, StudentName = "Đặng Hồng Thắng", Email = "dthang143@student.university.vn", PhoneNumber = "0970000143", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 11, 4) },
+                new Models.Students { StudentId = 144, StudentName = "Đỗ Tuấn Dũng", Email = "ddung144@student.university.vn", PhoneNumber = "0970000144", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 11, 7) },
+                new Models.Students { StudentId = 145, StudentName = "Huỳnh Anh Sơn", Email = "hson145@student.university.vn", PhoneNumber = "0970000145", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 11, 10) },
+                new Models.Students { StudentId = 146, StudentName = "Vũ Duy Giang", Email = "vgiang146@student.university.vn", PhoneNumber = "0970000146", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 11, 13) },
+                new Models.Students { StudentId = 147, StudentName = "Mai Khánh Yến", Email = "myen147@student.university.vn", PhoneNumber = "0970000147", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 11, 16) },
+                new Models.Students { StudentId = 148, StudentName = "Trương Bảo My", Email = "tmy148@student.university.vn", PhoneNumber = "0970000148", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 11, 19) },
+                new Models.Students { StudentId = 149, StudentName = "Phan Thùy Phương", Email = "pphuong149@student.university.vn", PhoneNumber = "0970000149", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 11, 22) },
+                new Models.Students { StudentId = 150, StudentName = "Đoàn Mạnh Tú", Email = "dtu150@student.university.vn", PhoneNumber = "0970000150", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 11, 25) },
+                new Models.Students { StudentId = 151, StudentName = "Nguyễn Thị Anh", Email = "nanh151@student.university.vn", PhoneNumber = "0970000151", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 11, 28) },
+                new Models.Students { StudentId = 152, StudentName = "Trần Văn Huy", Email = "thuy152@student.university.vn", PhoneNumber = "0970000152", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 12, 1) },
+                new Models.Students { StudentId = 153, StudentName = "Lê Minh Trang", Email = "ltrang153@student.university.vn", PhoneNumber = "0970000153", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 12, 4) },
+                new Models.Students { StudentId = 154, StudentName = "Phạm Ngọc Long", Email = "plong154@student.university.vn", PhoneNumber = "0970000154", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 12, 7) },
+                new Models.Students { StudentId = 155, StudentName = "Hoàng Hoài Bảo", Email = "hbao155@student.university.vn", PhoneNumber = "0970000155", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 12, 10) },
+                new Models.Students { StudentId = 156, StudentName = "Võ Thanh Ngân", Email = "vngan156@student.university.vn", PhoneNumber = "0970000156", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 12, 13) },
+                new Models.Students { StudentId = 157, StudentName = "Bùi Quang Tùng", Email = "btung157@student.university.vn", PhoneNumber = "0970000157", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2022, 12, 16) },
+                new Models.Students { StudentId = 158, StudentName = "Đặng Hồng Nguyên", Email = "dnguyen158@student.university.vn", PhoneNumber = "0970000158", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2022, 12, 19) },
+                new Models.Students { StudentId = 159, StudentName = "Đỗ Tuấn Nam", Email = "dnam159@student.university.vn", PhoneNumber = "0970000159", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2022, 12, 22) },
+                new Models.Students { StudentId = 160, StudentName = "Huỳnh Anh Lan", Email = "hlan160@student.university.vn", PhoneNumber = "0970000160", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2022, 12, 25) },
+                new Models.Students { StudentId = 161, StudentName = "Vũ Duy Phong", Email = "vphong161@student.university.vn", PhoneNumber = "0970000161", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2022, 12, 28) },
+                new Models.Students { StudentId = 162, StudentName = "Mai Khánh Linh", Email = "mlinh162@student.university.vn", PhoneNumber = "0970000162", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2022, 12, 31) },
+                new Models.Students { StudentId = 163, StudentName = "Trương Bảo Việt", Email = "tviet163@student.university.vn", PhoneNumber = "0970000163", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 1, 3) },
+                new Models.Students { StudentId = 164, StudentName = "Phan Thùy Thư", Email = "pthu164@student.university.vn", PhoneNumber = "0970000164", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 1, 6) },
+                new Models.Students { StudentId = 165, StudentName = "Đoàn Mạnh Kiệt", Email = "dkiet165@student.university.vn", PhoneNumber = "0970000165", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 1, 9) },
+                new Models.Students { StudentId = 166, StudentName = "Nguyễn Thị Nhung", Email = "nnhung166@student.university.vn", PhoneNumber = "0970000166", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 1, 12) },
+                new Models.Students { StudentId = 167, StudentName = "Trần Văn Khánh", Email = "tkhanh167@student.university.vn", PhoneNumber = "0970000167", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 1, 15) },
+                new Models.Students { StudentId = 168, StudentName = "Lê Minh Châu", Email = "lchau168@student.university.vn", PhoneNumber = "0970000168", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 1, 18) },
+                new Models.Students { StudentId = 169, StudentName = "Phạm Ngọc Trí", Email = "ptri169@student.university.vn", PhoneNumber = "0970000169", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 1, 21) },
+                new Models.Students { StudentId = 170, StudentName = "Hoàng Hoài Hiền", Email = "hhien170@student.university.vn", PhoneNumber = "0970000170", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 1, 24) },
+                new Models.Students { StudentId = 171, StudentName = "Võ Thanh Hạnh", Email = "vhanh171@student.university.vn", PhoneNumber = "0970000171", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 1, 27) },
+                new Models.Students { StudentId = 172, StudentName = "Bùi Quang Phúc", Email = "bphuc172@student.university.vn", PhoneNumber = "0970000172", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 1, 30) },
+                new Models.Students { StudentId = 173, StudentName = "Đặng Hồng Thắng", Email = "dthang173@student.university.vn", PhoneNumber = "0970000173", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 2, 2) },
+                new Models.Students { StudentId = 174, StudentName = "Đỗ Tuấn Dũng", Email = "ddung174@student.university.vn", PhoneNumber = "0970000174", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 2, 5) },
+                new Models.Students { StudentId = 175, StudentName = "Huỳnh Anh Sơn", Email = "hson175@student.university.vn", PhoneNumber = "0970000175", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 2, 8) },
+                new Models.Students { StudentId = 176, StudentName = "Vũ Duy Giang", Email = "vgiang176@student.university.vn", PhoneNumber = "0970000176", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 2, 11) },
+                new Models.Students { StudentId = 177, StudentName = "Mai Khánh Yến", Email = "myen177@student.university.vn", PhoneNumber = "0970000177", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 2, 14) },
+                new Models.Students { StudentId = 178, StudentName = "Trương Bảo My", Email = "tmy178@student.university.vn", PhoneNumber = "0970000178", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 2, 17) },
+                new Models.Students { StudentId = 179, StudentName = "Phan Thùy Phương", Email = "pphuong179@student.university.vn", PhoneNumber = "0970000179", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 2, 20) },
+                new Models.Students { StudentId = 180, StudentName = "Đoàn Mạnh Tú", Email = "dtu180@student.university.vn", PhoneNumber = "0970000180", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 2, 23) },
+                new Models.Students { StudentId = 181, StudentName = "Nguyễn Thị Anh", Email = "nanh181@student.university.vn", PhoneNumber = "0970000181", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 2, 26) },
+                new Models.Students { StudentId = 182, StudentName = "Trần Văn Huy", Email = "thuy182@student.university.vn", PhoneNumber = "0970000182", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 3, 1) },
+                new Models.Students { StudentId = 183, StudentName = "Lê Minh Trang", Email = "ltrang183@student.university.vn", PhoneNumber = "0970000183", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 3, 4) },
+                new Models.Students { StudentId = 184, StudentName = "Phạm Ngọc Long", Email = "plong184@student.university.vn", PhoneNumber = "0970000184", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 3, 7) },
+                new Models.Students { StudentId = 185, StudentName = "Hoàng Hoài Bảo", Email = "hbao185@student.university.vn", PhoneNumber = "0970000185", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 3, 10) },
+                new Models.Students { StudentId = 186, StudentName = "Võ Thanh Ngân", Email = "vngan186@student.university.vn", PhoneNumber = "0970000186", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 3, 13) },
+                new Models.Students { StudentId = 187, StudentName = "Bùi Quang Tùng", Email = "btung187@student.university.vn", PhoneNumber = "0970000187", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 3, 16) },
+                new Models.Students { StudentId = 188, StudentName = "Đặng Hồng Nguyên", Email = "dnguyen188@student.university.vn", PhoneNumber = "0970000188", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 3, 19) },
+                new Models.Students { StudentId = 189, StudentName = "Đỗ Tuấn Nam", Email = "dnam189@student.university.vn", PhoneNumber = "0970000189", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 3, 22) },
+                new Models.Students { StudentId = 190, StudentName = "Huỳnh Anh Lan", Email = "hlan190@student.university.vn", PhoneNumber = "0970000190", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 3, 25) },
+                new Models.Students { StudentId = 191, StudentName = "Vũ Duy Phong", Email = "vphong191@student.university.vn", PhoneNumber = "0970000191", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 3, 28) },
+                new Models.Students { StudentId = 192, StudentName = "Mai Khánh Linh", Email = "mlinh192@student.university.vn", PhoneNumber = "0970000192", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 3, 31) },
+                new Models.Students { StudentId = 193, StudentName = "Trương Bảo Việt", Email = "tviet193@student.university.vn", PhoneNumber = "0970000193", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 4, 3) },
+                new Models.Students { StudentId = 194, StudentName = "Phan Thùy Thư", Email = "pthu194@student.university.vn", PhoneNumber = "0970000194", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 4, 6) },
+                new Models.Students { StudentId = 195, StudentName = "Đoàn Mạnh Kiệt", Email = "dkiet195@student.university.vn", PhoneNumber = "0970000195", AccountStatus = "Active", FacultyID = 3, RegistrationDate = new DateTime(2023, 4, 9) },
+                new Models.Students { StudentId = 196, StudentName = "Nguyễn Thị Nhung", Email = "nnhung196@student.university.vn", PhoneNumber = "0970000196", AccountStatus = "Active", FacultyID = 4, RegistrationDate = new DateTime(2023, 4, 12) },
+                new Models.Students { StudentId = 197, StudentName = "Trần Văn Khánh", Email = "tkhanh197@student.university.vn", PhoneNumber = "0970000197", AccountStatus = "Active", FacultyID = 5, RegistrationDate = new DateTime(2023, 4, 15) },
+                new Models.Students { StudentId = 198, StudentName = "Lê Minh Châu", Email = "lchau198@student.university.vn", PhoneNumber = "0970000198", AccountStatus = "Active", FacultyID = 6, RegistrationDate = new DateTime(2023, 4, 18) },
+                new Models.Students { StudentId = 199, StudentName = "Phạm Ngọc Trí", Email = "ptri199@student.university.vn", PhoneNumber = "0970000199", AccountStatus = "Active", FacultyID = 1, RegistrationDate = new DateTime(2023, 4, 21) },
+                new Models.Students { StudentId = 200, StudentName = "Hoàng Hoài Hiền", Email = "hhien200@student.university.vn", PhoneNumber = "0970000200", AccountStatus = "Active", FacultyID = 2, RegistrationDate = new DateTime(2023, 4, 24) }
+            );
         }
     }
 }

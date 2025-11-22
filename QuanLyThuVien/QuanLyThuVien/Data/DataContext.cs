@@ -22,6 +22,7 @@ namespace QuanLyThuVien.Data
         public DbSet<Loans> Loans { get; set; }
         public DbSet<Faculties> Faculties { get; set; }
         public DbSet<Genres> Genres { get; set; }
+        public DbSet<Locations> Locations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -42,6 +43,12 @@ namespace QuanLyThuVien.Data
                 .HasOne(bc => bc.Book)
                 .WithMany(b => b.BookCopies)
                 .HasForeignKey(bc => bc.BookID)
+                .OnDelete(DeleteBehavior.Cascade);
+            // one location to many book copies
+            modelBuilder.Entity<BookCopies>()
+                .HasOne(bc => bc.Location)
+                .WithMany(l => l.BookCopies)
+                .HasForeignKey(bc => bc.LocationID)
                 .OnDelete(DeleteBehavior.Cascade);
             // one book copy to many loans
             modelBuilder.Entity<Loans>()

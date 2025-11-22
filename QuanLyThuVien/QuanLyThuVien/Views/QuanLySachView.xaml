@@ -106,8 +106,7 @@
 
         <TextBox Grid.Row="0"
                  Style="{StaticResource SearchTextBox}"
-                 Text="{Binding SearchBarText, UpdateSourceTrigger=PropertyChanged}"
-                 Tag="Tìm kiếm theo tên sách, tác giả, ISBN..."/>
+                 Text="{Binding SearchBarText, UpdateSourceTrigger=PropertyChanged}"/>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding BookList}"
                   AutoGenerateColumns="False"

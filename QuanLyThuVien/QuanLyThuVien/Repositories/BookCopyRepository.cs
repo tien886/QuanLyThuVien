@@ -24,7 +24,9 @@ namespace QuanLyThuVien.Repositories
         public async Task<IEnumerable<BookCopies>> GetAllBookCopiesAsync(Books book)
         {
             return await _dataContext.BookCopies.
-                Where(bc => bc.BookID == book.BookID && (bc.Status == "1" || bc.Status == "0" || bc.Status == "-1" || bc.Status == "-2")).ToListAsync();
+                Where(bc => bc.BookID == book.BookID && (bc.Status == "1" || bc.Status == "0" || bc.Status == "-1" || bc.Status == "-2"))
+                .Include(bc => bc.Location) 
+                .ToListAsync();
         }
         public async Task<int> GetTotalBookCopiesAsync()
         {
@@ -43,12 +45,12 @@ namespace QuanLyThuVien.Repositories
                                     .FirstOrDefaultAsync();
 
             if (string.IsNullOrEmpty(maxIdString))
-                return "C0001";
+                return "CP0001";
 
             var numericPart = maxIdString.Substring(1);
             if (!int.TryParse(numericPart, out int maxNumericId))
                 maxNumericId = 0;
-            string AvailableID  = "C" + (maxNumericId + 1).ToString("D4");
+            string AvailableID  = "CP" + (maxNumericId + 1).ToString("D4");
             return AvailableID;
         }
 

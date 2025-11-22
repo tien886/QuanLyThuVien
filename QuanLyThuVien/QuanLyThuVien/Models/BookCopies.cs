@@ -10,12 +10,14 @@ namespace QuanLyThuVien.Models
         public string CopyID { get; set; }
         public int BookID { get; set; }
         public string Status { get; set; } // e.g., 1, 0, -1
-        public string Location { get; set; }
+        public int LocationID { get; set; }
         public DateTime DateAdded { get; set; }
 
         // Navigation property
         public Books Book { get; set; }
+        public Locations Location { get; set; }
         public ICollection<Loans> Loans { get; set; }
+        public string LocationName => Location.LocName;
         // 
         public string StatusDescription
         {
