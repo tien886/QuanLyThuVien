@@ -15,7 +15,7 @@ namespace QuanLyThuVien.Models
         public string CopyID { get; set; }
         public int StudentID { get; set; }
         // Navigation property
-        public BookCopies BookCopy { get; set; }
+        public BookCopies BookCopy { get; set; }    
         public Students Student { get; set; }
         // 
         public string LoanStatusDescription

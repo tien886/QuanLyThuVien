@@ -18,5 +18,17 @@ namespace QuanLyThuVien.Models
         // Navigation pane 
         public ICollection<Loans> Loans { get; set; }
         public Faculties Faculty     { get; set; }
+        //
+        public string AccountStatusDescription
+        {
+            get
+            {
+                return AccountStatus switch
+                {
+                    "0" => "Vô hiệu hóa", 
+                    "1" => "Hoạt động" 
+                };
+            }
+        }
     }
 }
