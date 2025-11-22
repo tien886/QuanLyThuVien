@@ -67,7 +67,7 @@ namespace QuanLyThuVien.Repositories
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
                 return;
-            s.AccountStatus = "Vô hiệu hóa";
+            s.AccountStatus = "0";
             await _dataContext.SaveChangesAsync();
         }
 
@@ -76,7 +76,7 @@ namespace QuanLyThuVien.Repositories
             var s = await _dataContext.Students.FindAsync(id);
             if (s is null)
                 return;
-            s.AccountStatus = "Hoạt động";
+            s.AccountStatus = "1";
             await _dataContext.SaveChangesAsync();
         }
         //public async Task ChangeStatus(Students students)
