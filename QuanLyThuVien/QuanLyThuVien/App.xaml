@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="/Resources/Style/SearchBarStyle.xaml" />
                 <ResourceDictionary Source="/Resources/Style/DataGridStyle.xaml" />
                 <ResourceDictionary Source="/Resources/Style/ComboBoxStyle.xaml" />
+                <ResourceDictionary Source="/Resources/Style/StatusPillStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!-- ✅ Đặt converter vào đây -->
