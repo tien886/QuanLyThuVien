@@ -17,5 +17,17 @@ namespace QuanLyThuVien.Models
         // Navigation property
         public BookCopies BookCopy { get; set; }
         public Students Student { get; set; }
+        // 
+        public string LoanStatusDescription
+        {
+            get
+            {
+                return LoanStatus switch
+                {
+                    "0" => "borrowed",
+                    "1" => "overdue"
+                };
+            }
+        }
     }
 }

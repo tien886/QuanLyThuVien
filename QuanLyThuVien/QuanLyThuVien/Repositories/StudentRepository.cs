@@ -19,15 +19,11 @@ namespace QuanLyThuVien.Repositories
             _dataContext = dataContext;
         }
 
-        //public async Task<IEnumerable<Students>> GetAllStudentsAsync()
-        //{
-        //    return await _dataContext.Students
-        //        .Include(s => s.Loans)
-        //        .ToListAsync();
-        //}
         public async Task<IEnumerable<Students>> GetAllStudentsAsync(string? keyword = null)
         {
-            var q = _dataContext.Students.AsNoTracking();
+            var q = _dataContext.Students
+                .Include(s => s.Faculty) //  Để lấy thông tin khoa luôn
+                .AsNoTracking(); // Đọc thôi nên là không cần track 
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
@@ -35,7 +31,9 @@ namespace QuanLyThuVien.Repositories
                 q = q.Where(s =>
                     EF.Functions.Like(s.StudentName!, $"%{keyword}%") ||
                     EF.Functions.Like(s.Email!, $"%{keyword}%") ||
-                    EF.Functions.Like(s.StudentId.ToString(), $"%{keyword}%"));
+                    EF.Functions.Like(s.StudentId.ToString(), $"%{keyword}%") ||
+                    EF.Functions.Like(s.PhoneNumber!, $"%{keyword}%") ||
+                    EF.Functions.Like(s.Faculty.FacultyName!, $"%{keyword}%"));
             }
 
             return await q.OrderBy(s => s.StudentName).ToListAsync();
@@ -79,16 +77,6 @@ namespace QuanLyThuVien.Repositories
             s.AccountStatus = "Hoạt động";
             await _dataContext.SaveChangesAsync();
         }
-        //public async Task ChangeStatus(Students students)
-        //{
-        //    var s = await _dataContext.Students.FindAsync(students.StudentId);
-        //    if (s is null)
-        //        return;
-        //    students.AccountStatus = students.AccountStatus == "Active" ? "Disabled" : "Active";
-        //    Debug.WriteLine($"Sinh viên {students.StudentName} hiện có trạng thái: {students.AccountStatus} trong repo");
-
-        //    await _dataContext.SaveChangesAsync();
-        //}
 
         public async Task<(ISeries[] Series, Axis[] XAxes)> GetNewReadersData()
         {

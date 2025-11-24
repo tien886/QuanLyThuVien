@@ -211,7 +211,7 @@
                         </DataGridTextColumn>
 
                         <!-- Vị trí -->
-                        <DataGridTextColumn Header="Vị trí" Binding="{Binding Location}" Width="50" >
+                        <DataGridTextColumn Header="Vị trí" Binding="{Binding LocationName}" Width="50" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -273,14 +273,14 @@
                                     <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
-                                        <Button Style="{StaticResource IconButton}"
+                                        <Button Style="{StaticResource CircularIconButton}"
                                     Command="{Binding DataContext.EditCopyCommand,
                                                       RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}">
                                             <fa:IconBlock Icon="PenToSquare" Width="14" Height="14"/>
                                         </Button>
 
-                                        <Button Style="{StaticResource IconButton}"
+                                        <Button Style="{StaticResource CircularIconButton}"
                                     Command="{Binding DataContext.DeleteCopyCommand,
                                                       RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}">

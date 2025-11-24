@@ -8,96 +8,6 @@
              d:DesignHeight="1080"
              d:DesignWidth="1660">
 
-    <UserControl.Resources>
-        <Style x:Key="CellTextCenter" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="CircularIconButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="{x:Null}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="root" Background="{TemplateBinding Background}"
-                                CornerRadius="14">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="root" Property="Background" Value="{StaticResource InUse_light}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="root" Property="Background" Value="{StaticResource Stroke}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="BookDataGridHeader" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="{StaticResource White}"/>
-            <Setter Property="Foreground" Value="{StaticResource Black}"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="8,0"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Stroke}"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="BookDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource RoundedDataGrid}">
-            <Setter Property="ColumnHeaderStyle" Value="{StaticResource BookDataGridHeader}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="DataGrid">
-                        <Border x:Name="Root"
-                                CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                SnapsToDevicePixels="True">
-                            <Border x:Name="ClipBorder"
-                                    CornerRadius="10"
-                                    Background="{TemplateBinding Background}"
-                                    ClipToBounds="True">
-                                <ScrollViewer x:Name="DG_ScrollViewer"
-                                              Focusable="false"
-                                              CanContentScroll="true">
-                                    <ScrollViewer.Template>
-                                        <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto"/>
-                                                    <RowDefinition Height="*"/>
-                                                </Grid.RowDefinitions>
-                                                <Grid Grid.Row="0"
-                                                      x:Name="ColumnHeadersPresenter"
-                                                      Background="{StaticResource White}"
-                                                      Margin="0,0,0,4">
-                                                    <DataGridColumnHeadersPresenter/>
-                                                </Grid>
-                                                <ScrollContentPresenter Grid.Row="1"/>
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </ScrollViewer.Template>
-                                    <ItemsPresenter/>
-                                </ScrollViewer>
-                            </Border>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-    </UserControl.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -106,44 +16,45 @@
 
         <TextBox Grid.Row="0"
                  Style="{StaticResource SearchTextBox}"
-                 Text="{Binding SearchBarText, UpdateSourceTrigger=PropertyChanged}"
-                 Tag="Tìm kiếm theo tên sách, tác giả, ISBN..."/>
+                 Text="{Binding SearchBarText, UpdateSourceTrigger=PropertyChanged}"/>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding BookList}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   IsReadOnly="True"
-                  Margin="0,20,0,0" Style="{StaticResource BookDataGridStyle}">
+                  Margin="0,20,0,0" 
+                  Style="{StaticResource RoundedDataGrid}">
             <DataGrid.Columns>
+                <!-- Mã sách -->
                 <DataGridTextColumn Header="Mã sách"
                                     Binding="{Binding BookID}"
-                                    Width="100"
+                                    Width="70"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tên sách"
                                     Binding="{Binding Title}"
-                                    Width="2*"
+                                    Width="3*"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tác giả"
                                     Binding="{Binding Author}"
-                                    Width="1.5*"
+                                    Width="140"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="ISBN"
                                     Binding="{Binding ISBN}"
-                                    Width="1.5*"
+                                    Width="110"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Thể loại"
                                     Binding="{Binding BookCategory.CategoryName}"
-                                    Width="1.5*"
+                                    Width="110"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tổng bản sao"
                                     Binding="{Binding TotalCopies}"
-                                    Width="100"
+                                    Width="110"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTemplateColumn Header="Có sẵn" Width="100">
