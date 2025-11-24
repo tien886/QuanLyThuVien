@@ -93,7 +93,7 @@ namespace QuanLyThuVien.ViewModels
 
             // Lấy trạng thái cũ, phòng khi cần rollback
             string originalStatus = studentVM.AccountStatus;
-            string newStatus = originalStatus == "Active" ? "Disabled" : "Active"; 
+            string newStatus = originalStatus == "1" ? "0" : "1"; 
 
             studentVM.AccountStatus = newStatus;
 
