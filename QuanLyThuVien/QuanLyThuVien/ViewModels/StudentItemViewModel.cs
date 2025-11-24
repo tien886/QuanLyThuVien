@@ -20,9 +20,18 @@ namespace QuanLyThuVien.ViewModels
         public string StudentName => _studentModel.StudentName;
         public string Email => _studentModel.Email;
         public string PhoneNumber => _studentModel.PhoneNumber;
-        public DateTime RegistrationDate => _studentModel.RegistrationDate;
+        public DateTime RegistrationDate => _studentModel.RegistrationDate  ;
+        public string FacultyName => _studentModel.Faculty?.FacultyName ?? "Chưa cập nhật";
 
-        // Thuộc tính cần bind hai chiều với UI
+        [ObservableProperty]
+        private int _tongDaMuon;
+
+        [ObservableProperty]
+        private int _dangMuon;
+
+        [ObservableProperty]
+        private int _quaHan;
+
         [ObservableProperty]
         private string _accountStatus; 
 
