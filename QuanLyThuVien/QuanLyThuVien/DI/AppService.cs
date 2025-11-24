@@ -51,6 +51,7 @@ namespace QuanLyThuVien.DI
             services.AddTransient<IBookCategoryService, BookCategoryRepository>();
             services.AddTransient<ILoanService, LoanRepository>();
             services.AddTransient<IStudentService, StudentRepository>();
+            services.AddTransient<IFacultyService, FacultyRepository>();
             return services;
         }
     }

@@ -9,175 +9,205 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="600">
 
-    <UserControl.Resources>
-        <Style x:Key="CircularIconButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="{x:Null}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="root" Background="{TemplateBinding Background}"
-                                CornerRadius="14">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="root" Property="Background" Value="{StaticResource InUse_light}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="root" Property="Background" Value="{StaticResource Stroke}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="StatusPillBorder" TargetType="Border">
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding AccountStatus}" Value="Active">
-                    <Setter Property="Background" Value="{StaticResource Success/1_light}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="StatusPillText" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding AccountStatus}" Value="Active">
-                    <Setter Property="Foreground" Value="{StaticResource Success/1}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
-    
     <Grid>
         
-        <Grid Height="50" VerticalAlignment="Top">
-            <TextBlock Text="Thông tin sinh viên" FontSize="18" FontWeight="SemiBold"
-                       HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0"/>
+        <!-- Popup title and Close button -->
+        <Grid Margin="0,15" 
+            VerticalAlignment="Top">
+            <!-- Popup title -->
+            <StackPanel Margin="25,0,0,0"
+                Orientation="Vertical">
+                <TextBlock Text="Thông tin sinh viên" 
+                       FontSize="15" 
+                       FontWeight="Medium"
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Center"/>
+                <TextBlock Text="Chi tiết thông tin tài khoản sinh viên"
+                           HorizontalAlignment="Left"/>
+            </StackPanel>
+            
 
+            <!-- Close button -->
             <Button Style="{StaticResource CircularIconButton}"
-                    HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,15,0"
-                    Width="32" Height="32"
-                    Command="{Binding Path=DataContext.CurrentChildView.ClosePopupCommand, 
-                          RelativeSource={RelativeSource AncestorType={x:Type local:MainView}}}">
-
-                <fa:IconImage Icon="Xmark" Width="18" Height="18" Foreground="{StaticResource TitleOfWindow}"/>
+                HorizontalAlignment="Right" 
+                    VerticalAlignment="Center" 
+                    Margin="0,0,15,0"
+                    Width="25" Height="25"
+                    Command="{Binding DataContext.CloseDialogCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                <fa:IconImage Icon="Xmark" 
+                              Width="12" 
+                              Height="12" 
+                              Foreground="{StaticResource TitleOfWindow}"/>
             </Button>
-
         </Grid>
 
-        <Border BorderBrush="{StaticResource Stroke}" BorderThickness="0,1,0,0" Margin="0,50,0,0"/>
-
-        <StackPanel Orientation="Vertical" Margin="25,70,25,25">
-
+        <!-- Popup content -->
+        <StackPanel Height="450"
+                    Orientation="Vertical" 
+                    Margin="25,70,25,25">
+            
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- Left column -->
                 <StackPanel Grid.Column="0" Margin="0,0,15,0">
-                    <TextBlock Text="Mã sinh viên" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding StudentId}" FontSize="14"  Margin="0,4,0,15"/>
+                    <!-- Mã sinh viên -->
+                    <TextBlock Text="Mã sinh viên" 
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Foreground="{StaticResource TitleOfWindow}"/>
+                    <TextBlock Text="{Binding StudentId}" 
+                               FontSize="14"  
+                               Margin="0,4,0,15"/>
+                    <!-- Họ tên -->
+                    <TextBlock Text="Họ và tên" 
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Foreground="{StaticResource TitleOfWindow}"/>
+                    <TextBlock Text="{Binding StudentName}" 
+                               FontSize="14" Margin="0,4,0,15"/>
 
-                    <TextBlock Text="Họ và tên" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding StudentName}" FontSize="14" Margin="0,4,0,15"/>
+                    <!-- Email -->
+                    <TextBlock Text="Email" 
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Foreground="{StaticResource TitleOfWindow}"/>
+                    <TextBlock Text="{Binding Email}" 
+                               FontSize="14" 
+                               Margin="0,4,0,15"/>
 
-                    <TextBlock Text="Email" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding Email}" FontSize="14" Margin="0,4,0,15"/>
-
-                    <TextBlock Text="Số điện thoại" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding PhoneNumber}" FontSize="14" Margin="0,4,0,15"/>
+                    <!-- Số điện thoại -->
+                    <TextBlock Text="Số điện thoại" 
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Foreground="{StaticResource TitleOfWindow}"/>
+                    <TextBlock Text="{Binding PhoneNumber}" 
+                               FontSize="14" Margin="0,4,0,15"/>
                 </StackPanel>
 
+                <!-- Right column -->
                 <StackPanel Grid.Column="1" Margin="15,0,0,0">
-                    <TextBlock Text="Khoa" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding Department}" FontSize="14" Margin="0,4,0,15"/>
+                    <!-- Khoa -->
+                    <TextBlock Text="Khoa" 
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Foreground="{StaticResource TitleOfWindow}"/>
+                    <TextBlock Text="{Binding FacultyName}" 
+                               FontSize="14" Margin="0,4,0,15"/>
+                    
+                    <!-- Ngày tạo -->
+                    <TextBlock Text="Ngày tạo" 
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Foreground="{StaticResource TitleOfWindow}"/>
+                    <TextBlock Text="{Binding RegistrationDate, StringFormat='dd/MM/yyyy'}" 
+                               FontSize="14" 
+                               Margin="0,4,0,15"/>
 
-                    <TextBlock Text="Ngày tạo" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding RegistrationDate, StringFormat='dd/MM/yyyy'}" FontSize="14" Margin="0,4,0,15"/>
-
-                    <TextBlock Text="Trạng thái" FontSize="15" FontWeight="SemiBold" Foreground="{StaticResource TitleOfWindow}" Margin="0,0,0,4"/>
-
-                    <Border Style="{StaticResource StatusPillBorder}" HorizontalAlignment="Left">
+                    <!-- Trạng thái -->
+                    <TextBlock Text="Trạng thái" 
+                               FontSize="14" 
+                               FontWeight="Medium" 
+                               Foreground="{StaticResource TitleOfWindow}" 
+                               Margin="0,0,0,4"/>
+                    <Border Style="{StaticResource StatusPillBorder}" 
+                            HorizontalAlignment="Left">
                         <TextBlock Style="{StaticResource StatusPillText}"
-                                   Text="{Binding AccountStatus, Converter={StaticResource StatusToTextConverter}}"/>
+                                   Text="{Binding AccountStatus, 
+                                            Converter={StaticResource StatusToTextConverter}}"/>
                     </Border>
                 </StackPanel>
             </Grid>
+            
+            <!-- Thanh ngang phân cách -->
+            <Border BorderBrush="{StaticResource Stroke}" 
+                    BorderThickness="0,1,0,0" 
+                    Margin="0,15,0,20"/>
 
-            <Border BorderBrush="{StaticResource Stroke}" BorderThickness="0,1,0,0" Margin="0,15,0,20"/>
+            <!-- Thống kê mượn sách -->
+            <TextBlock Text="Thống kê mượn sách" FontSize="15" FontWeight="Medium" Margin="0,0,0,20"/>
 
-            <TextBlock Text="Thống kê mượn sách" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,20"/>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                    <TextBlock Text="Tổng đã mượn" FontSize="14" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding TongDaMuon}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                    <TextBlock Text="Đang mượn" FontSize="14" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding DangMuon}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                    <TextBlock Text="Quá hạn" FontSize="14" Foreground="{StaticResource TitleOfWindow}"/>
-                    <TextBlock Text="{Binding QuaHan}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Grid>
+
+            <UniformGrid Columns="3" Rows="1">
+                <Border Margin="0,0,0,10" 
+                            Padding="10" CornerRadius="8" 
+                            Background="{StaticResource DeepBackgroundSolid}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Tổng đã mượn" 
+                                       FontWeight="Normal"
+                                       Foreground="{StaticResource TitleOfWindow}" 
+                                       FontSize="15" />
+                        <TextBlock Text="{Binding TongDaMuon}" 
+                                       FontSize="15" 
+                                       FontWeight="Normal" 
+                                       Foreground="{StaticResource Black}" 
+                                       HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="5,0,0,10" 
+                            Padding="15"
+                            CornerRadius="8"
+                            Background="{StaticResource InUse_light}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Đang mượn" 
+                                       FontWeight="Normal"
+                                       Foreground="{StaticResource InUse}" 
+                                       FontSize="15" />
+                        <TextBlock Text="{Binding DangMuon}" 
+                                       FontSize="15" 
+                                       FontWeight="Normal" 
+                                       Foreground="{StaticResource InUse}" 
+                                       HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="5,0,0,10" 
+                            Padding="15" 
+                            CornerRadius="8" 
+                            Background="{StaticResource Danger/Overdue_light}">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Quá hạn" 
+                                       FontWeight="Normal"
+                                       Foreground="{StaticResource Danger/Overdue}" 
+                                       FontSize="15" />
+                        <TextBlock Text="{Binding QuaHan}" 
+                                       FontSize="15" 
+                                       FontWeight="Normal" 
+                                       Foreground="{StaticResource Danger/Overdue}" 
+                                       HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+            
+            <!-- Thanh ngang phân cách -->
+            <Border BorderBrush="{StaticResource Stroke}" 
+                    BorderThickness="0,1,0,0"
+                    Margin="0,15,0,20"
+                    VerticalAlignment="Bottom"/>
+            <!-- Disable and Close button -->
+            <Button Grid.Column="1" 
+                Content="Đóng"
+                Style="{StaticResource RoundedButton}"
+                Background="{StaticResource White}"
+                Foreground="{StaticResource Black}"
+                BorderBrush="{StaticResource Stroke}"
+                HorizontalAlignment="Right" 
+                Margin="0,0,0,25"
+                Width="80"
+                Height="30"
+                Command="{Binding DataContext.CloseDialogCommand, 
+                    RelativeSource={RelativeSource AncestorType=Window}}">
+            </Button>
         </StackPanel>
 
-        <Border BorderBrush="{StaticResource Stroke}" BorderThickness="0,1,0,0" VerticalAlignment="Bottom" Height="80">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-
-                <Button Grid.Column="0" FontWeight="Medium" FontSize="13" Content="Vô hiệu hóa tài khoản" 
-                        Style="{StaticResource RoundedButton}"
-                        Background="White"
-                        Foreground="{StaticResource Danger/Overdue}"
-                        BorderBrush="{StaticResource Danger/Overdue}"
-                        HorizontalAlignment="Left" VerticalAlignment="Center" Margin="25,0,0,0" Width="240"
-                        Command="{Binding Path=DataContext.CurrentChildView.ToggleStatusCommand, 
-                                    RelativeSource={RelativeSource AncestorType={x:Type local:MainView}}}"
-                        CommandParameter="{Binding}">
-
-                </Button>
-
-                <Button Grid.Column="1" Content="Đóng" 
-                        Style="{StaticResource RoundedButton}"
-                        Background="{StaticResource White}"
-                        Foreground="{StaticResource Black}"
-                        BorderBrush="{StaticResource Stroke}"
-                        HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,25,0" Width="100"
-                        Command="{Binding Path=DataContext.CurrentChildView.ClosePopupCommand, 
-                                    RelativeSource={RelativeSource AncestorType={x:Type local:MainView}}}">
-                </Button>
-            </Grid>
-        </Border>
+        
+        
+        
     </Grid>
 
 </UserControl>

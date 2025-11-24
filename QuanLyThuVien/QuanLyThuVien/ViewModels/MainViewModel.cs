@@ -1,4 +1,7 @@
 ﻿
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.ViewModels;
 using QuanLyThuVien.ViewModels.QuanLySachPopup;
@@ -11,9 +14,25 @@ using System.Windows.Input;
 
 namespace QuanLyThuVien.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ObservableObject
     {
         private readonly IServiceProvider _serviceProvider;
+
+        // Thuộc tính giữ nội dung của Popup (Ví dụ: StudentItemViewModel)
+        [ObservableProperty]
+        private object? _currentDialogViewModel;
+
+        // Thuộc tính bật/tắt Popup
+        [ObservableProperty]
+        private bool _isDialogOpen;
+
+        [RelayCommand]
+        private void CloseDialog()
+        {
+            IsDialogOpen = false;
+            CurrentDialogViewModel = null;
+        }
+
         public MainViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
@@ -25,6 +44,21 @@ namespace QuanLyThuVien.ViewModels
             //ShowAddStudentView = new ViewModelCommand();
             //ShowAddPhieuMuonView = new ViewModelCommand();
             ExecuteShowDashBoardView(null);
+
+            // Đăng ký lắng nghe tin nhắn mở Popup từ bất kỳ đâu
+            WeakReferenceMessenger.Default.Register<OpenDialogMessage>(this, (r, m) =>
+            {
+                if (m.ViewModel == null)
+                {
+                    IsDialogOpen = false;
+                    CurrentDialogViewModel = null;
+                }
+                else
+                {
+                    CurrentDialogViewModel = m.ViewModel;
+                    IsDialogOpen = true;
+                }
+            });
         }
 
         private FrameworkElement _currentChildView;
@@ -140,5 +174,12 @@ namespace QuanLyThuVien.ViewModels
         //{
 
         //}
+
+    }
+
+    public class OpenDialogMessage
+    {
+        public object ViewModel { get; }
+        public OpenDialogMessage(object vm) => ViewModel = vm;
     }
 }

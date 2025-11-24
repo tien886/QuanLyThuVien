@@ -14,14 +14,14 @@ namespace QuanLyThuVien.Repositories
     public class LoanRepository : ILoanService
     {
         private readonly DataContext _dataContext;
-        public LoanRepository(DataContext dataContext) {
+        public LoanRepository(DataContext dataContext)
+        {
             _dataContext = dataContext;
         }
         public async Task<int> GetDangMuon()
         {
             return await _dataContext.Loans.CountAsync(l => l.LoanStatus == "0");
         }
-
         public async Task<int> GetQuaHan()
         {
             return await _dataContext.Loans.CountAsync(l => l.LoanStatus == "0" && l.ReturnDate > l.DueDate);
@@ -45,5 +45,26 @@ namespace QuanLyThuVien.Repositories
                 .Include(b => b.BookCopy.Book)
                 .ToListAsync();
         }
+        public async Task<StudentLoanStats> GetLoanStatsByStudentIdAsync(int studentId)
+        {
+            // Lấy tất cả phiếu mượn của sinh viên này (Query 1 lần)
+            var studentLoans = await _dataContext.Loans
+                                    .Where(l => l.StudentID == studentId)
+                                    .AsNoTracking()
+                                    .ToListAsync();
+
+            return new StudentLoanStats
+            {
+                // 1. Tổng đã mượn (Tính cả lịch sử)
+                TotalBorrowed = studentLoans.Count,
+
+                // 2. Đang mượn (Status = "0" là đang mượn - dựa theo logic cũ của bạn)
+                CurrentlyBorrowed = studentLoans.Count(l => l.LoanStatus == "0"),
+
+                // 3. Quá hạn (Đang mượn VÀ Quá hạn trả)
+                Overdue = studentLoans.Count(l => l.LoanStatus == "0" && DateTime.Now > l.DueDate)
+            };
+        }
+
     }
 }
