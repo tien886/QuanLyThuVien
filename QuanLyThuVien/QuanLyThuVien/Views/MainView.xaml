@@ -12,85 +12,7 @@
         Title="Quản lý thư viện">
 
     <Window.Resources>
-        <!-- -->
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
-        <!-- Các nút điều hướng -->
-        <Style x:Key="menuButton" TargetType="RadioButton">
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="Margin" Value="12,0,12,5"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource Black}"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="RadioButton">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                CornerRadius="20">
-                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <!-- Khi rê chuột vào -->
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource InUse_light}"/>
-                    <Setter Property="Foreground" Value="{StaticResource InUse}"/>
-                </Trigger>
-                <!-- Khi đang được chọn -->
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Background" Value="{StaticResource ChanelBackground}"/>
-                    <Setter Property="Foreground" Value="{StaticResource White}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Icon các nút điều hướng -->
-        <Style x:Key="menuButtonIcon" TargetType="fa:IconImage">
-            <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
-            <Setter Property="Width" Value="20"/>
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="Margin" Value="15,0,15,0"/>
-        </Style>
-        <!-- Text của các nút điều hướng -->
-        <Style x:Key="menuButtonText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
-            <Setter Property="FontFamily" Value="Montserrat"/>
-            <Setter Property="FontWeight" Value="Medium"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <!-- Nút đăng xuất --> 
-        <Style x:Key="LogoutButtonStyle" TargetType="Button">
-            <Setter Property="Height" Value="44"/>
-            <Setter Property="Margin" Value="12,0,12,5"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource TitleOfWindow}"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                CornerRadius="15">
-                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
-                    <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
     </Window.Resources>
 
     <Grid>
@@ -141,10 +63,8 @@
                         <TextBlock Text="Quản trị viên" FontSize="14" FontFamily="Montserrat" Foreground="{StaticResource TitleOfWindow}"/>
                     </StackPanel>
                 </Grid>
-
                 <!-- Thanh ngang phân cách -->
                 <Border Grid.Row="3" Background="{StaticResource Stroke}" />
-
                 <!-- Menu điều hướng -->
                 <Grid Grid.Row="4">
                     <Grid.RowDefinitions>
@@ -278,15 +198,15 @@
 
                 </Grid>
             </Grid>
+            
         </Grid>
 
-
+        <!-- 
         <Border Background="#80000000" 
-                Visibility="{Binding ElementName=ChildViewHost, 
-                                    Path=DataContext.IsDetailPopupVisible, 
-                                    Converter={StaticResource BooleanToVisibilityConverter}, 
-                                    FallbackValue=Collapsed}"/>
-
+                 Visibility="{Binding ElementName=ChildViewHost, 
+                            Path=Content.DataContext.IsDetailPopupVisible, 
+                            Converter={StaticResource BooleanToVisibilityConverter},
+                            FallbackValue=Collapsed}"/>
         <Border 
             Background="{StaticResource White}"
             CornerRadius="10" VerticalAlignment="Center"
@@ -294,17 +214,37 @@
             Width="400"
             Height="550"
             Visibility="{Binding ElementName=ChildViewHost, 
-                            Path=DataContext.IsDetailPopupVisible, 
-                            Converter={StaticResource BooleanToVisibilityConverter}, 
-                            FallbackValue=Collapsed}">
+                    Path=Content.DataContext.IsDetailPopupVisible, 
+                    Converter={StaticResource BooleanToVisibilityConverter},
+                    FallbackValue=Collapsed}">
 
             <Border.Effect>
                 <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
             </Border.Effect>
 
-            <local:StudentDetailPopupView DataContext="{Binding ElementName=ChildViewHost, Path=DataContext.SelectedStudent}"/>
+            <local:StudentDetailPopupView DataContext="{Binding ElementName=ChildViewHost, Path=Content.DataContext}"/>
 
         </Border>
+        -->
+
+        <Border Background="#80000000" 
+            Visibility="{Binding IsDialogOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding CloseDialogCommand}"/>
+            </Border.InputBindings>
+        </Border>
+
+        <Grid Visibility="{Binding IsDialogOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="{StaticResource White}"
+                CornerRadius="10"
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center">
+                <Border.Effect>
+                    <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
+                </Border.Effect>
+                <ContentControl Content="{Binding CurrentDialogViewModel}"/>
+            </Border>
+        </Grid>
 
     </Grid>
     
