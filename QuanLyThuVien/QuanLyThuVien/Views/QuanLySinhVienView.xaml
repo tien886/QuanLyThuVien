@@ -8,124 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1660">
 
-    <!-- Resource -->
-    <UserControl.Resources>
-        <Style x:Key="CellTextCenter" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-        </Style>
-
-        <!-- Circular Icon Button Style -->
-        <Style x:Key="CircularIconButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderBrush" Value="{x:Null}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="28"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="root" Background="{TemplateBinding Background}"
-                                CornerRadius="14">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="root" Property="Background" Value="{StaticResource InUse_light}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="root" Property="Background" Value="{StaticResource Stroke}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Trạng thái sính viên - Border -->
-        <Style x:Key="StatusPillBorder" TargetType="Border">
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="8,4"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding AccountStatus}" Value="Active">
-                    <Setter Property="Background" Value="{StaticResource Success/1_light}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Trạng thái sinh viên - TextBlock -->
-        <Style x:Key="StatusPillText" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding AccountStatus}" Value="Active">
-                    <Setter Property="Foreground" Value="{StaticResource Success/1}"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        
-        <Style x:Key="StudentDataGridHeader" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="{StaticResource White}"/>
-            <Setter Property="Foreground" Value="{StaticResource Black}"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Padding" Value="8,0"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Stroke}"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="StudentDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource RoundedDataGrid}">
-            <Setter Property="ColumnHeaderStyle" Value="{StaticResource StudentDataGridHeader}"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="DataGrid">
-                        <Border x:Name="Root"
-                                CornerRadius="10" Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                SnapsToDevicePixels="True">
-                            <ScrollViewer x:Name="DG_ScrollViewer"
-                                          Focusable="false"
-                                          CanContentScroll="true">
-                                <ScrollViewer.Template>
-                                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                                <RowDefinition Height="*"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid Grid.Row="0"
-                                                  x:Name="ColumnHeadersPresenter"
-                                                  Background="{StaticResource White}"
-                                                  Margin="0,0,0,4">
-                                                <DataGridColumnHeadersPresenter/>
-                                            </Grid>
-                                            <ScrollContentPresenter Grid.Row="1"/>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </ScrollViewer.Template>
-                                <ItemsPresenter/>
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-    </UserControl.Resources>
-
-    <!-- Code -->
     <Grid>
         <Grid>
         <Grid.RowDefinitions>
@@ -134,13 +16,15 @@
         </Grid.RowDefinitions>
 
         <!-- Thanh tìm kiếm -->
-        <TextBox 
-            Grid.Row="0"
-            Style="{StaticResource SearchTextBox}"
-            Text="{Binding SearchBarText, UpdateSourceTrigger = PropertyChanged}"
-            Tag="Tìm kiếm theo tên, mã SV, email..."/>
+            <TextBox Style="{StaticResource SearchTextBox}"
+                     Tag="Tìm kiếm theo Mã SV, Họ và tên, Email, Số điện thoại, Khoa"
+                Grid.Row="0">
+                <TextBox.Text>
+                    <Binding Path="SearchText" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
 
-        <!-- Bảng thông tin sinh viên -->
+            <!-- Bảng thông tin sinh viên -->
             <DataGrid ItemsSource="{Binding Students}"
               Grid.Row="1"
               AutoGenerateColumns="False"
@@ -149,36 +33,37 @@
               CanUserResizeRows="False"
               IsReadOnly="True"
               Margin="0,20,0,0"
-              Style="{StaticResource StudentDataGridStyle}">
+              Style="{StaticResource RoundedDataGrid}">
 
                 <DataGrid.Columns>
                     <!-- Cột mã sinh viên -->
-                    <DataGridTextColumn Header="Mã SV" Binding="{Binding StudentId}" Width="150"
+                    <DataGridTextColumn Header="Mã SV" Binding="{Binding StudentId}" Width="70"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                     <!-- Cột họ tên sinh viên -->
-                    <DataGridTextColumn Header="Họ và tên" Binding="{Binding StudentName}" Width="2*"
+                    <DataGridTextColumn Header="Họ và tên" Binding="{Binding StudentName}" Width="1.5*"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                     <!-- Cột email -->
-                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="2*"
+                    <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="2.3*"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                     <!-- Cột số điện thoại -->
-                    <DataGridTextColumn Header="Số điện thoại" Binding="{Binding PhoneNumber}" Width="120"
+                    <DataGridTextColumn Header="Số điện thoại" Binding="{Binding PhoneNumber}" Width="100"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                     <!-- Cột khoa  -->
-                    <DataGridTextColumn Header="Khoa" Binding="{Binding Department}" Width="2*"
+                    <DataGridTextColumn Header="Khoa" Binding="{Binding FacultyName}" Width="2*"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                     <!-- Ngày tạo  -->
                     <DataGridTextColumn Header="Ngày tạo"
                                     Binding="{Binding RegistrationDate, StringFormat=\{0:dd/MM/yyyy\}}" 
-                                    Width="160"
+                                    Width="130"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
-                    <DataGridTemplateColumn Header="Trạng thái" Width="150">
+                    <!-- Trạng thái -->
+                    <DataGridTemplateColumn Header="Trạng thái" Width="130">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Border Style="{StaticResource StatusPillBorder}">
@@ -189,12 +74,13 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-
+                    <!-- Thao tác -->
                     <DataGridTemplateColumn Header="Thao tác" Width="150">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
 
+                                    <!-- Mở popup xem chi tiết sinh viên -->
                                     <Button Style="{StaticResource CircularIconButton}"
                                         Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}">
@@ -202,13 +88,16 @@
                                                   Foreground="{StaticResource Success/1}"/>
                                     </Button>
 
-
+                                    <!-- Mở popup chỉnh sửa thông tin sinh viên -->
                                     <Button Style="{StaticResource CircularIconButton}"
-                                        Margin="5,0,0,0">
+                                            Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Margin="5,0,0,0">
                                         <fa:IconImage Icon="PenToSquare" Width="16" Height="16"
                                                   Foreground="{StaticResource TitleOfWindow}"/>
                                     </Button>
 
+                                    <!-- Chuyển đổi trạng thái kích hoạt / vô hiệu hóa tài khoản -->
                                     <Button Style="{StaticResource CircularIconButton}"
                                         Margin="5,0,0,0"
                                         Command="{Binding DataContext.ToggleStatusCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
@@ -225,15 +114,15 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        
+
         <!-- 
         <Border Background="#80000000" 
-                Visibility="{Binding IsDetailPopupVisible, 
-                Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                Visibility="{Binding IsDetailPopupVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
         <Border 
             Background="{StaticResource White}"
-            CornerRadius="10" VerticalAlignment="Center"
+            CornerRadius="10" 
+            VerticalAlignment="Center"
             HorizontalAlignment="Center"
             Width="400"
             Height="550"
@@ -247,5 +136,6 @@
 
         </Border>
         -->
+        
     </Grid>
 </UserControl>
