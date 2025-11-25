@@ -228,17 +228,17 @@
         -->
 
         <Border Background="#80000000" 
-            Visibility="{Binding IsDialogOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Border.InputBindings>
+        Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVis}}">
+            <Border.InputBindings>  
                 <MouseBinding MouseAction="LeftClick" Command="{Binding CloseDialogCommand}"/>
             </Border.InputBindings>
         </Border>
 
-        <Grid Visibility="{Binding IsDialogOpen, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVis}}">
             <Border Background="{StaticResource White}"
-                CornerRadius="10"
-                VerticalAlignment="Center" 
-                HorizontalAlignment="Center">
+            CornerRadius="10"
+            VerticalAlignment="Center" 
+            HorizontalAlignment="Center">
                 <Border.Effect>
                     <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
                 </Border.Effect>

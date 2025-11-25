@@ -17,7 +17,7 @@ namespace QuanLyThuVien.Views.QuanLySachPopup
     /// <summary>
     /// Interaction logic for ThemBooKHeadPopup.xaml
     /// </summary>
-    public partial class ThemBooKHeadPopup : Window
+    public partial class ThemBooKHeadPopup : UserControl
     {
         public ThemBooKHeadPopup()
         {

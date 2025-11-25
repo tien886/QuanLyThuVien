@@ -2,8 +2,10 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:QuanLyThuVien.Views"
+             xmlns:local1="clr-namespace:QuanLyThuVien.Views.QuanLySachPopup"
              xmlns:converters="clr-namespace:QuanLyThuVien.Resources.Converters"
-             xmlns:vm="clr-namespace:QuanLyThuVien.ViewModels"> 
+             xmlns:vm="clr-namespace:QuanLyThuVien.ViewModels" 
+             xmlns:vm1="clr-namespace:QuanLyThuVien.ViewModels.QuanLySach"> 
 
     <Application.Resources>
         <ResourceDictionary>
@@ -15,7 +17,6 @@
                 <ResourceDictionary Source="/Resources/Style/CardStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/ButtonStyles.xaml" />
                 <ResourceDictionary Source="/Resources/Style/DataGridStyles.xaml"/>
-                
             </ResourceDictionary.MergedDictionaries>
 
             <!-- ✅ Đặt converter vào đây -->
@@ -32,9 +33,12 @@
             <DataTemplate DataType="{x:Type vm:StudentEditViewModel}">
                 <local:StudentEditPopupView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm1:ThemBookHeadViewModel}">
+                <local1:ThemBooKHeadPopup/>
+            </DataTemplate>
+            
 
-            
-            
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

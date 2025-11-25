@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
@@ -99,26 +100,29 @@ namespace QuanLyThuVien.ViewModels
         [RelayCommand]
         public async Task OpenBookDetailAndCopyPopup(Books book)
         {
-            Debug.WriteLine($"HI OPEN {book.Title}");
 
             var bookDetailAndCopyWindow = _serviceProvider.GetRequiredService<BookDetailAndCopyPopup>();
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(bookDetailAndCopyWindow));
             if (bookDetailAndCopyWindow.DataContext is BookDetailAndCopyViewModel vm)
             {
                 await vm.LoadPage(book);
             }
-            bookDetailAndCopyWindow.ShowDialog();
         }
         [RelayCommand]
         public async Task OpenThemBookHeadPopup()
         {
             var themBookHeadPopup = _serviceProvider.GetRequiredService<ThemBooKHeadPopup>();
-            themBookHeadPopup.ShowDialog();
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(themBookHeadPopup));
         }
         [RelayCommand]
         public async Task OpenSuaBookHeadPopup(Books book)
         {
             var suaBookHeadPopup = _serviceProvider.GetRequiredService<SuaBookHeadPopup>();
-            suaBookHeadPopup.ShowDialog();
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaBookHeadPopup));
+            if (suaBookHeadPopup.DataContext is SuaBookHeadViewModel vm)
+            {
+                await vm.LoadPage(book);
+            }
         }
     } 
 }

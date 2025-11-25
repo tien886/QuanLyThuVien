@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Repositories;
@@ -91,22 +92,18 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
         [RelayCommand]
         public async Task ClosePopup()
         {
-            var window = Application.Current.Windows
-            .OfType<BookDetailAndCopyPopup>()
-            .FirstOrDefault(w => w.IsActive);
-
-            window?.Close();
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
         }
         [RelayCommand]
         public async Task AddCopies()
         {
             var themBookCopyPopup = _serviceProvider.GetRequiredService<ThemBookCopyPopup>();
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(themBookCopyPopup));
             if(themBookCopyPopup.DataContext is ThemBookCopyViewModel vm)
             {
                 await vm.SetCurrentBook(currentBook);
             }
             await LoadPage(currentBook);
-            themBookCopyPopup.ShowDialog();
         }
     }
 }

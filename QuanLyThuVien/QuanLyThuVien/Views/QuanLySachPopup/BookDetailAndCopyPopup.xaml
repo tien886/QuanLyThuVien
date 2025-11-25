@@ -1,39 +1,57 @@
-﻿<Window x:Class="QuanLyThuVien.ViewModels.QuanLySachPopup.BookDetailAndCopyPopup"
+﻿<UserControl x:Class="QuanLyThuVien.ViewModels.QuanLySachPopup.BookDetailAndCopyPopup"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuanLyThuVien.ViewModels.QuanLySachPopup"
-        mc:Ignorable="d"
-        Title="BookDetailAndCopyPopup" Height="800" Width="400"
         HorizontalAlignment="Center"
         VerticalAlignment="Center"
-        Background="{StaticResource DeepBackgroundSolid}"
+        mc:Ignorable="d" 
+        d:DesignHeight="800" d:DesignWidth="400"
         >
     <Grid Margin="20,20,20,40" >
         <Grid.RowDefinitions >
+
             <RowDefinition Height="40"/>
             <RowDefinition Height="300"/>
             <RowDefinition Height="25"/>
-            <RowDefinition Height="205"/>
+            <RowDefinition Height="11.6"/>
+            <RowDefinition Height="193.4"/>
             <RowDefinition Height="100"/>
             <RowDefinition Height="25"/>
-        
+
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Chi tiết đầu sách và bản sao " 
-                           FontSize="16" 
-                           FontWeight="Bold" 
-                           Foreground="{StaticResource TitleOfWindow}" 
-                           HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock Text="Chi tiết đầu sách và bản sao " 
+                        FontSize="16" 
+                        FontWeight="Bold" 
+                        Foreground="{StaticResource TitleOfWindow}" 
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Margin="0,0,130,0"
+                               />
+                    <Button Style="{StaticResource CircularIconButton}"
+                            HorizontalAlignment="Right" 
+                                VerticalAlignment="Center" 
+                                Margin="0,0,15,0"
+                                Width="25" Height="25"
+                                Command="{Binding DataContext.CloseDialogCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                        <fa:IconImage Icon="Xmark" 
+                                Width="12" 
+                                Height="12" 
+                                Foreground="{StaticResource TitleOfWindow}"/>
+                    </Button>
+                </StackPanel>
+
                 <TextBlock Text="Thông tin đầu sách và bản sao vật lí" 
                            FontSize="12" 
                            FontWeight="SemiBold" 
                            Foreground="{StaticResource TitleOfWindow}" 
                            HorizontalAlignment="Left" VerticalAlignment="Center"
                             />
+
             </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
@@ -153,16 +171,16 @@
                                FontSize="14" 
                                FontWeight="SemiBold" 
                                Foreground="{StaticResource TitleOfWindow}" 
-                               HorizontalAlignment="Left" VerticalAlignment="Center"/>                  
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
                     <TextBlock Text="{Binding MoTa}" 
                                FontSize="14" 
                                FontWeight="Normal" 
                                TextWrapping="Wrap"
-                               HorizontalAlignment="Left" VerticalAlignment="Center"/> 
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Grid>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="3" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="160"/>
@@ -176,8 +194,8 @@
                            HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <Button 
                      Style="{StaticResource RoundedButton}"
-                     Width="120"
-                     Height="25"
+                     Width="130"
+                     Height="30"
                      HorizontalAlignment="Right"
                      BorderBrush="{StaticResource ChanelBackground}" 
                      Command="{Binding AddCopiesCommand}"
@@ -200,7 +218,7 @@
                     <DataGrid.Columns>
 
                         <!-- Mã bản sao -->
-                        <DataGridTextColumn Header="Mã bản sao" Binding="{Binding CopyID}" Width="100">
+                        <DataGridTextColumn Header="Mã bản sao" Binding="{Binding CopyID}" Width="90">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -211,7 +229,7 @@
                         </DataGridTextColumn>
 
                         <!-- Vị trí -->
-                        <DataGridTextColumn Header="Vị trí" Binding="{Binding LocationName}" Width="50" >
+                        <DataGridTextColumn Header="Vị trí" Binding="{Binding LocationName}" Width="90" >
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -297,7 +315,7 @@
 
 
         </Grid>
-        <Grid Grid.Row="4" >
+        <Grid Grid.Row="5" >
             <StackPanel Orientation="Horizontal"
             HorizontalAlignment="Left"
             Margin="0,10,0,10"
@@ -406,14 +424,16 @@
                 </Border>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Button Style="{StaticResource RoundedButton}"
             Background="#F87171"
             Foreground="White"
-            Width="100"
-            Height="25"
-            HorizontalAlignment="Right"
-            Command="{Binding ClosePopupCommand}"
+            Height="30"
+            Command="{Binding ClosePopupCommand}" Margin="260,0,0,-5" Grid.RowSpan="2"
                     >
                 <Button.Triggers>
                     <EventTrigger RoutedEvent="MouseEnter">
@@ -439,5 +459,5 @@
                 <TextBlock Text="Hủy"/>
             </Button>
         </Grid>
-    </Grid> 
-</Window>
+    </Grid>
+</UserControl>

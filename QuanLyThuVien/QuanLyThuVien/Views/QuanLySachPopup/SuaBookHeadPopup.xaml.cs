@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyThuVien.ViewModels.QuanLySach;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +18,12 @@ namespace QuanLyThuVien.Views.QuanLySachPopup
     /// <summary>
     /// Interaction logic for SuaBookHeadPopup.xaml
     /// </summary>
-    public partial class SuaBookHeadPopup : Window
+    public partial class SuaBookHeadPopup : UserControl
     {
-        public SuaBookHeadPopup()
+        public SuaBookHeadPopup(SuaBookHeadViewModel vm)
         {
             InitializeComponent();
+            DataContext = vm;
         }
     }
 }

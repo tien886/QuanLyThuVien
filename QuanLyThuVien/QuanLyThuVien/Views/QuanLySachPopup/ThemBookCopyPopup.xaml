@@ -1,12 +1,13 @@
-﻿<Window x:Class="QuanLyThuVien.Views.QuanLySachPopup.ThemBookCopyPopup"
+﻿<UserControl x:Class="QuanLyThuVien.Views.QuanLySachPopup.ThemBookCopyPopup"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuanLyThuVien.Views.QuanLySachPopup"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="ThemBookCopyPopup" Height="280" Width="350">
-    <Window.Resources>
+        Height="280" Width="350">
+    <UserControl.Resources>
 
         <!-- Compact rounded input textbox -->
         <Style x:Key="RoundedInputTextBox" TargetType="TextBox">
@@ -104,7 +105,7 @@
             </Setter>
         </Style>
 
-    </Window.Resources>
+    </UserControl.Resources>
 
     <!-- Main rounded card -->
     <Border CornerRadius="20"
@@ -129,10 +130,26 @@
 
             <!-- Title + subtitle -->
             <StackPanel Grid.Row="0" Margin="0,0,0,10">
-                <TextBlock Text="Thêm bản sao mới"
-                           FontSize="18"
-                           FontWeight="SemiBold"
-                           Foreground="#111827"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Thêm bản sao mới"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#111827"
+                               Margin="0,0,150,0"
+                               />
+                    <Button Style="{StaticResource CircularIconButton}"
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Top" 
+                                Margin="0,0,15,0"
+                                Width="25" Height="25"
+                                Command="{Binding DataContext.CloseDialogCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                                    <fa:IconImage Icon="Xmark" 
+                                Width="12" 
+                                Height="12" 
+                                Foreground="{StaticResource TitleOfWindow}"/>
+                    </Button>
+
+                </StackPanel>
                 <TextBlock Text="Thêm bản sao vật lí cho đầu sách"
                            Margin="0,2,0,0"
                            FontSize="11"
@@ -159,9 +176,12 @@
                     <Run Text="*" Foreground="#EF4444"/>
                 </TextBlock>
 
-                <TextBox Style="{StaticResource RoundedInputTextBox}"
-                         Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
-                         />
+                <ComboBox Style="{StaticResource RoundedComboBoxStyle}"
+                          Height="45"
+                          HorizontalAlignment="Stretch"
+                          ItemsSource="{Binding Locations}"
+                          DisplayMemberPath="LocName"
+                          SelectedItem="{Binding LocationSelected, Mode=TwoWay}"/>
             </StackPanel>
 
             <!-- Buttons -->
@@ -201,4 +221,4 @@
             </StackPanel>
         </Grid>
     </Border>
-</Window>
+</UserControl>
