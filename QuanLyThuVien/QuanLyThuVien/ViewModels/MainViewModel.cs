@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.ViewModels;
+using QuanLyThuVien.ViewModels.QuanLySach;
 using QuanLyThuVien.ViewModels.QuanLySachPopup;
 using QuanLyThuVien.Views;
 using QuanLyThuVien.Views.QuanLySachPopup;
@@ -163,8 +164,10 @@ namespace QuanLyThuVien.ViewModels
         private void ExecuteShowAddBookHeadView(object obj)
         {
             Debug.WriteLine("Show add bookhead");
-            var bookDetailAndCopyWindow = _serviceProvider.GetRequiredService<ThemBooKHeadPopup>();
-            bookDetailAndCopyWindow.ShowDialog();
+            var themBooKHeadPopup = _serviceProvider.GetRequiredService<ThemBooKHeadPopup>();
+            var vm = _serviceProvider.GetRequiredService<ThemBookHeadViewModel>();
+            IsDialogOpen = true;
+            CurrentDialogViewModel = vm;
         }
         //private void ShowAddStudentView(object obj)
         //{
