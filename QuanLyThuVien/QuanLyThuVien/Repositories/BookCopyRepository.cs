@@ -40,18 +40,24 @@ namespace QuanLyThuVien.Repositories
         public async Task<string> GetNextAvailableBookCopyID()
         {
             var maxIdString = await _dataContext.BookCopies
-                                    .OrderByDescending(bc => bc.CopyID)
-                                    .Select(bc => bc.CopyID)
-                                    .FirstOrDefaultAsync();
+                .OrderByDescending(bc => bc.CopyID)
+                .Select(bc => bc.CopyID)
+                .FirstOrDefaultAsync();
 
-            if (string.IsNullOrEmpty(maxIdString))
-                return "CP0001";
+            if (string.IsNullOrWhiteSpace(maxIdString))
+                return "CP000001";
 
-            var numericPart = maxIdString.Substring(1);
-            if (!int.TryParse(numericPart, out int maxNumericId))
-                maxNumericId = 0;
-            string AvailableID  = "CP" + (maxNumericId + 1).ToString("D4");
-            return AvailableID;
+            if (!maxIdString.StartsWith("CP"))
+                return "CP000001";
+
+            string numericPart = maxIdString.Substring(2);
+
+            if (!int.TryParse(numericPart, out int number))
+                number = 0;   // fallback if parsing fails
+
+            number++;
+
+            return "CP" + number.ToString("D6");
         }
 
         public async Task<ISeries[]> GetBookStatusData()
