@@ -14,9 +14,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBox Grid.Row="0"
-                 Style="{StaticResource SearchTextBox}"
-                 Text="{Binding SearchBarText, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Style="{StaticResource SearchTextBox}"
+                Tag="Tìm kiếm theo Mã sách, Tên sách, Họ và tên tác giả, Thể loại "
+                Grid.Row="0">
+            <TextBox.Text>
+                <Binding Path="SearchBarText" UpdateSourceTrigger="PropertyChanged"/>
+            </TextBox.Text>
+        </TextBox>
+        
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding BookList}"
                   AutoGenerateColumns="False"
