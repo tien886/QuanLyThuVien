@@ -1,11 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using QuanLyThuVien.ViewModels.QuanLySachPopup;
 using QuanLyThuVien.Views.QuanLySachPopup;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -18,21 +20,28 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IBookCopyService _bookCopyService;
+        private readonly ILocationService _locationService;
         private Books currentBook;
         [ObservableProperty]
-        private string location;
+        private Locations locationSelected;
+        [ObservableProperty]
+        private ObservableCollection<Locations> locations;
         [ObservableProperty]
         private string copyID;
         public ThemBookCopyViewModel(
             IServiceProvider serviceProvider,
-            IBookCopyService bookCopyService
+            IBookCopyService bookCopyService,
+            ILocationService locationService
             )
         {
             _serviceProvider = serviceProvider;
             _bookCopyService = bookCopyService;
+            _locationService = locationService;
         }
         public async Task SetCurrentBook(Books book)
         {
+            var locs = await _locationService.GetAllLocationsAsync();
+            Locations = new ObservableCollection<Locations>(locs);
             currentBook = book;
             if(currentBook == null)
             {
@@ -52,6 +61,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 CopyID = await _bookCopyService.GetNextAvailableBookCopyID(),
                 BookID = currentBook.BookID,
                 Status = "1",
+                LocationID = LocationSelected.LocationID,
                 DateAdded = DateTime.Now
             };
             await _bookCopyService.AddBookCopiesAsync(bookCopies);
@@ -60,12 +70,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
         [RelayCommand]
         public async Task ClosePopup()
         {
-            var window = Application.Current.Windows
-             .OfType<ThemBookCopyPopup>()
-             .FirstOrDefault(w => w.IsActive);
-
-            window?.Close();
-
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
         }
     }
 }
