@@ -11,5 +11,7 @@ namespace QuanLyThuVien.Services
         Task UpdateBookAsync(Books book);
         Task DeleteBookAsync (Books book);
         Task<int> GetTotalBooksAsync();
+        Task<IEnumerable<Books>> GetBooksPage(int size);
+        Task<int> GetTotalPages(int size);
     }
 }
