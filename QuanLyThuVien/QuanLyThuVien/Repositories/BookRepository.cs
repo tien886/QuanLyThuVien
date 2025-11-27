@@ -44,12 +44,12 @@ namespace QuanLyThuVien.Repositories
         {
             return await _dataContext.Books.CountAsync();
         }
-        public async Task<IEnumerable<Books>> GetBooksPage(int size)
+        public async Task<IEnumerable<Books>> GetBooksPage(int offset, int size)
         {
             return await _dataContext.Books
                 .Include(b => b.BookCategory)
                 .Include(b => b.BookCopies)
-                .Skip(0)
+                .Skip(offset * size)
                 .Take(size)
                 .ToListAsync();
         }
