@@ -12,13 +12,13 @@
             <ResourceDictionary.MergedDictionaries>
                 <!-- Phải đặt UIColor lên trước không là lỗi - StackOverflow -->
                 <ResourceDictionary Source="/Resources/Style/UIColors.xaml" />
-                <ResourceDictionary Source="/Resources/Style/MenuStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/InputStyles.xaml" />
-                <ResourceDictionary Source="/Resources/Style/CardStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/ButtonStyles.xaml" />
                 <ResourceDictionary Source="/Resources/Style/DataGridStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/BorderStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/RadioButtonStyle.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/IconStyles.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/TextBlockStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <!-- ✅ Đặt converter vào đây -->
