@@ -5,6 +5,7 @@ using QuanLyThuVien.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,6 +43,25 @@ namespace QuanLyThuVien.Repositories
         public async Task<int> GetTotalBooksAsync()
         {
             return await _dataContext.Books.CountAsync();
+        }
+        public async Task<IEnumerable<Books>> GetBooksPage(int offset, int size)
+        {
+            return await _dataContext.Books
+                .Include(b => b.BookCategory)
+                .Include(b => b.BookCopies)
+                .Skip(offset * size)
+                .Take(size)
+                .ToListAsync();
+        }
+        public async Task<int> GetTotalPages(int size)
+        {
+            int remaining = await _dataContext.Books.CountAsync() % size;
+            int totalPages = await _dataContext.Books.CountAsync() / size;
+            if (remaining > 0)
+            {
+                totalPages++;
+            }
+            return totalPages;
         }
     }
 }
