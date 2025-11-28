@@ -87,6 +87,11 @@ namespace QuanLyThuVien.ViewModels
         {
             try
             {
+                if(hint == "")
+                {
+                    await LoadCurrentPageAsync();
+                    return;
+                }
                 var books = await _bookService.GetAllBooksAsync();
                 ObservableCollection<Books> searchedResults = [];
                 foreach (Books book in books)
@@ -94,8 +99,9 @@ namespace QuanLyThuVien.ViewModels
                     string pseudoTitle = book.Title.ToLower();
                     string pseudoISBN = book.ISBN.ToLower();
                     string pseudoAuthor = book.Author.ToLower();
+                    string pseudoCategoryName = book.BookCategory.CategoryName.ToLower();
                     string pseudoHint = hint.ToLower();
-                    if (pseudoTitle.Contains(pseudoHint) || pseudoISBN.Contains(pseudoHint) || pseudoAuthor.Contains(pseudoHint))
+                    if (pseudoTitle.Contains(pseudoHint) || pseudoISBN.Contains(pseudoHint) || pseudoAuthor.Contains(pseudoHint) || pseudoCategoryName.Contains(pseudoHint))
                         searchedResults.Add(book);
                 }
                 BookList = searchedResults;
@@ -165,27 +171,27 @@ namespace QuanLyThuVien.ViewModels
         [RelayCommand]
         private async Task GoToPreviousPage()
         {
-            if (CurrentPage > 0)
-            {
-                CurrentPage--;
-                UpdateWindow();
+            if (CurrentPage <= 1)
+                return;
 
-                var books = await _bookService.GetBooksPage(CurrentPage, PageSize);
-                BookList = new ObservableCollection<Books>(books);
-            }
+            CurrentPage--;
+            UpdateWindow();
+            Debug.WriteLine(CurrentPage);
+
+            await LoadCurrentPageAsync();
         }
 
         [RelayCommand]
         private async Task GoToNextPage()
         {
-            if (CurrentPage < TotalPages)
-            {
-                CurrentPage++;
-                UpdateWindow();
+            if (CurrentPage >= TotalPages)
+                return;
 
-                var books = await _bookService.GetBooksPage(CurrentPage, PageSize);
-                BookList = new ObservableCollection<Books>(books);
-            }
+            CurrentPage++;
+            UpdateWindow();
+            Debug.WriteLine(CurrentPage);
+
+            await LoadCurrentPageAsync();
         }
         private void UpdateWindow()
         {
