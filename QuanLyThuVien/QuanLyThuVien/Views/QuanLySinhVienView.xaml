@@ -82,7 +82,7 @@
 
                                     <!-- Mở popup xem chi tiết sinh viên -->
                                     <Button Style="{StaticResource CircularIconButton}"
-                                        Command="{Binding DataContext.ViewDetailCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                        Command="{Binding DataContext.OpenStudentDetailPopupCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}">
                                         <fa:IconImage Icon="Eye" Width="18" Height="18"
                                                   Foreground="{StaticResource Success/1}"/>
@@ -90,7 +90,7 @@
 
                                     <!-- Mở popup chỉnh sửa thông tin sinh viên -->
                                     <Button Style="{StaticResource CircularIconButton}"
-                                            Command="{Binding DataContext.EditStudentCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Command="{Binding DataContext.OpenSuaStudentPopupCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}"
                                             Margin="5,0,0,0">
                                         <fa:IconImage Icon="PenToSquare" Width="16" Height="16"

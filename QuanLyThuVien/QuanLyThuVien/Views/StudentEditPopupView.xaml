@@ -115,7 +115,7 @@
                 <!-- X button -->
                 <Button Grid.Column="1" Style="{StaticResource CircularIconButton}"
                         VerticalAlignment="Top"
-                        Command="{Binding CancelCommand}">
+                        Command="{Binding ClosePopupCommand}">
                     <fa:IconImage Icon="Xmark" Width="16" Height="16" Foreground="{StaticResource TitleOfWindow}"/>
                 </Button>
             </Grid>
@@ -218,7 +218,7 @@
             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0" VerticalAlignment="Center">
                 <!-- Cancel button -->
                 <Button Content="Hủy" 
-                        Command="{Binding CancelCommand}"
+                        Command="{Binding ClosePopupCommand}"
                         Style="{StaticResource RoundedButton}"
                         Background="White" 
                         Foreground="{StaticResource Black}" 
