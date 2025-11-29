@@ -30,7 +30,7 @@
                 <local:StudentDetailPopupView/>
             </DataTemplate>
  
-            <DataTemplate DataType="{x:Type vm:StudentEditViewModel}">
+            <DataTemplate DataType="{x:Type vm:SuaStudentViewModel}">
                 <local:StudentEditPopupView/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm1:ThemBookHeadViewModel}">
