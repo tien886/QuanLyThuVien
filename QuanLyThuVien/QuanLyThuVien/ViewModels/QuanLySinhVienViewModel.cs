@@ -23,8 +23,8 @@ namespace QuanLyThuVien.ViewModels
             _facultyService = facultyService;
         }
 
-        [ObservableProperty]
-        private bool _isDetailPopupVisible = false; 
+        //[ObservableProperty]
+        //private bool _isDetailPopupVisible = false;
 
         [ObservableProperty]
         private StudentItemViewModel? _selectedStudent;
@@ -74,9 +74,31 @@ namespace QuanLyThuVien.ViewModels
             }
         }
 
+        [RelayCommand]
+        private async Task ToggleStatus(StudentItemViewModel studentVM)
+        {
+            if (studentVM == null) return;
+
+            // Lấy trạng thái cũ, phòng khi cần rollback
+            string originalStatus = studentVM.AccountStatus;
+            string newStatus = originalStatus == "Active" ? "Disabled" : "Active";
+
+            studentVM.AccountStatus = newStatus;
+
+            try
+            {
+                await _studentService.UpdateStudentAsync(studentVM.Student);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Lỗi khi cập nhật trạng thái: {ex.Message}", "Lỗi Database", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                // Rollback
+                studentVM.AccountStatus = originalStatus;
+            }
+        }
 
         [RelayCommand]
-        private async Task ViewDetail(StudentItemViewModel? sVM)
+        private async Task OpenStudentDetailPopup(StudentItemViewModel? sVM)
         {
             if (sVM is null)
                 return;
@@ -95,50 +117,28 @@ namespace QuanLyThuVien.ViewModels
             }
         }
 
-        [RelayCommand]
-        private void CloseDetailPopup()
-        {
-            IsDetailPopupVisible = false;
-            SelectedStudent = null; 
-        }
+        //[RelayCommand]
+        //private void CloseDetailPopup()
+        //{
+        //    IsDetailPopupVisible = false;
+        //    SelectedStudent = null; 
+        //}
 
         [RelayCommand]
-        private void AddNew()
+        private void OpenThemStudentPopup()
         {
             // TODO: mở popup tạo tài khoản mới (dialog view riêng)
             System.Windows.MessageBox.Show("Mở popup tạo tài khoản sinh viên.");
         }
 
-        [RelayCommand]
-        private async Task ToggleStatus(StudentItemViewModel studentVM)
-        {
-            if (studentVM == null) return;
-
-            // Lấy trạng thái cũ, phòng khi cần rollback
-            string originalStatus = studentVM.AccountStatus;
-            string newStatus = originalStatus == "Active" ? "Disabled" : "Active"; 
-
-            studentVM.AccountStatus = newStatus;
-
-            try
-            {
-                await _studentService.UpdateStudentAsync(studentVM.Student);
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show($"Lỗi khi cập nhật trạng thái: {ex.Message}", "Lỗi Database", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
-                // Rollback
-                studentVM.AccountStatus = originalStatus;
-            }
-        }
 
         [RelayCommand]
-        private void EditStudent(StudentItemViewModel? sVM)
+        private void OpenSuaStudentPopup(StudentItemViewModel? sVM)
         {
             if (sVM is null) 
                 return;
-            var editVM = new StudentEditViewModel(sVM.Student, _studentService, _facultyService);
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(editVM));
+            var suaStudentPopup = new SuaStudentViewModel(sVM.Student, _studentService, _facultyService);
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaStudentPopup));
         }
     }
 }

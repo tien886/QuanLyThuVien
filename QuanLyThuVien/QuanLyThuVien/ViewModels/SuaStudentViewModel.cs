@@ -8,20 +8,13 @@ using System.Windows;
 
 namespace QuanLyThuVien.ViewModels
 {
-    public partial class StudentEditViewModel : ObservableObject
+    public partial class SuaStudentViewModel : ObservableObject
     {
         private readonly IStudentService _studentService;
         private readonly IFacultyService _facultyService;
-        private readonly Students _originalStudent; // Giữ tham chiếu gốc để update sau khi Save
-        public ObservableCollection<Faculties> FacultyList { get; } = new();
-        [ObservableProperty] private string _studentName;
-        [ObservableProperty] private string _email;
-        [ObservableProperty] private string _phoneNumber;
-        [ObservableProperty] private string _faculty;
-        [ObservableProperty] private int _selectedFacultyId;
-        public string StudentId => _originalStudent.StudentId.ToString();
+        private readonly Students _originalStudent; // Giữ tham chiếu gốc để update sau khi Save 
 
-        public StudentEditViewModel(Students student,
+        public SuaStudentViewModel(Students student,
             IStudentService studentService,
             IFacultyService facultyService)
         {
@@ -37,6 +30,19 @@ namespace QuanLyThuVien.ViewModels
 
             LoadFaculties();
         }
+
+        [ObservableProperty] 
+        private string _studentName;
+        [ObservableProperty] 
+        private string _email;
+        [ObservableProperty] 
+        private string _phoneNumber;
+        [ObservableProperty] 
+        private string _faculty;
+        [ObservableProperty] 
+        private int _selectedFacultyId;
+        public ObservableCollection<Faculties> FacultyList { get; } = new();
+        public string StudentId => _originalStudent.StudentId.ToString();
 
         private async void LoadFaculties()
         {
@@ -72,7 +78,7 @@ namespace QuanLyThuVien.ViewModels
         }
 
         [RelayCommand]
-        private void Cancel()
+        private void ClosePopup()
         {
             WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
         }
