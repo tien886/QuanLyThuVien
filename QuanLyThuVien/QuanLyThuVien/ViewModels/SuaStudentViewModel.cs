@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace QuanLyThuVien.ViewModels
@@ -22,7 +23,6 @@ namespace QuanLyThuVien.ViewModels
             _facultyService = facultyService;
             _originalStudent = student;
 
-            // Copy dữ liệu từ Model gốc sang các biến tạm Để khi gõ phím, danh sách bên dưới KHÔNG bị thay đổi theo ngay lập tức.
             StudentName = student.StudentName;
             Email = student.Email;
             PhoneNumber = student.PhoneNumber;
@@ -50,26 +50,77 @@ namespace QuanLyThuVien.ViewModels
             FacultyList.Clear();
             foreach (var item in list)
                 FacultyList.Add(item);
+
+            if (FacultyList.Count > 0)
+            {
+                SelectedFacultyId = FacultyList[0].FacultyID;
+            }
+        }
+
+        private bool ValidateInput()
+        {
+            // 1.1 Kiểm tra Họ và tên
+            if (string.IsNullOrWhiteSpace(StudentName))
+            {
+                MessageBox.Show("Vui lòng nhập họ và tên sinh viên!", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            // 1.2 Kiểm tra Số điện thoại (Phải là số, 10-11 ký tự, bắt đầu bằng số 0)
+            if (string.IsNullOrWhiteSpace(PhoneNumber))
+            {
+                MessageBox.Show("Vui lòng nhập số điện thoại!", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            // Logic: Phải là số VÀ (độ dài 10 hoặc 11) VÀ (bắt đầu bằng '0')
+            if (!PhoneNumber.All(char.IsDigit) ||
+                (PhoneNumber.Length != 10 && PhoneNumber.Length != 11) ||
+                !PhoneNumber.StartsWith("0"))
+            {
+                MessageBox.Show("Số điện thoại không hợp lệ (Phải là 10-11 số và bắt đầu bằng số 0).", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            // 1.3 Kiểm tra Email (Dùng Regex chuẩn)
+            if (string.IsNullOrWhiteSpace(Email))
+            {
+                MessageBox.Show("Vui lòng nhập Email!", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(Email, emailPattern))
+            {
+                MessageBox.Show("Định dạng Email không hợp lệ!", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
         }
 
         [RelayCommand]
         private async Task Save()
         {
-            // 1. Validate dữ liệu (nếu cần)
-            if (string.IsNullOrWhiteSpace(StudentName))
+            if(!ValidateInput())
                 return;
 
-            // 2. Cập nhật ngược lại vào Model gốc
+            //// 2. Cập nhật ngược lại vào model gốc (cái này là trong Student List - ObservableList)
             _originalStudent.StudentName = StudentName;
             _originalStudent.Email = Email;
             _originalStudent.PhoneNumber = PhoneNumber;
             _originalStudent.FacultyID = SelectedFacultyId;
+            var selectedFacultyObj = FacultyList.FirstOrDefault(f => f.FacultyID == SelectedFacultyId);
+            if (selectedFacultyObj != null)
+            {
+                _originalStudent.Faculty = selectedFacultyObj;
+            }
 
             try
             {
                 await _studentService.UpdateStudentAsync(_originalStudent);
+                WeakReferenceMessenger.Default.Send(new StudentUpdatedMessage(_originalStudent));
                 MessageBox.Show("Cập nhật thành công!", "Thông báo");
-                WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
+                ClosePopup();
             }
             catch (Exception ex)
             {
@@ -82,5 +133,11 @@ namespace QuanLyThuVien.ViewModels
         {
             WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
         }
+    }
+
+    public class StudentUpdatedMessage
+    {
+        public Students UpdatedStudent { get; }
+        public StudentUpdatedMessage(Students s) => UpdatedStudent = s;
     }
 }
