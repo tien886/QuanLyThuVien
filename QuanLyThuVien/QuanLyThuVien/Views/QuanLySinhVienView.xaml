@@ -10,12 +10,12 @@
 
     <Grid>
         <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <!-- Thanh tìm kiếm -->
+            <!-- Thanh tìm kiếm -->
             <TextBox Style="{StaticResource SearchTextBox}"
                      Tag="Tìm kiếm theo Mã SV, Họ và tên, Email, Số điện thoại, Khoa"
                 Grid.Row="0">
@@ -115,27 +115,5 @@
             </DataGrid>
         </Grid>
 
-        <!-- 
-        <Border Background="#80000000" 
-                Visibility="{Binding IsDetailPopupVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-
-        <Border 
-            Background="{StaticResource White}"
-            CornerRadius="10" 
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            Width="400"
-            Height="550"
-            Visibility="{Binding IsDetailPopupVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-
-            <Border.Effect>
-                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-            </Border.Effect>
-
-            <local:StudentDetailPopupView DataContext="{Binding SelectedStudent}"/>
-
-        </Border>
-        -->
-        
     </Grid>
 </UserControl>
