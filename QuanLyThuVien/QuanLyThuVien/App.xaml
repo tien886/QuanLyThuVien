@@ -36,11 +36,14 @@
             <DataTemplate DataType="{x:Type vm:SuaStudentViewModel}">
                 <local:StudentEditPopupView/>
             </DataTemplate>
+            
             <DataTemplate DataType="{x:Type vm1:ThemBookHeadViewModel}">
                 <local1:ThemBooKHeadPopup/>
             </DataTemplate>
-            
 
+            <DataTemplate DataType="{x:Type vm:ThemSinhVienViewModel}">
+                <local:StudentAddPopupView/>
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>
