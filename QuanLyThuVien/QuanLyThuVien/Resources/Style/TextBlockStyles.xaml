@@ -21,4 +21,12 @@
         <Setter Property="Foreground" Value="{StaticResource TitleOfWindow}"/>
         <Setter Property="FontFamily" Value="Montserrat"/>
     </Style>
+
+    <!-- Style cho Label tiêu đề của ô nhập -->
+    <Style x:Key="InputLabel" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="{StaticResource Black}"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
 </ResourceDictionary>
