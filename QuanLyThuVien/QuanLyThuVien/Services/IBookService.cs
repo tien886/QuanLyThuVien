@@ -14,4 +14,5 @@ namespace QuanLyThuVien.Services
         Task<IEnumerable<Books>> GetBooksPage(int offsetm, int size);
         Task<int> GetTotalPages(int size);
     }
+
 }

@@ -1,4 +1,5 @@
-﻿using QuanLyThuVien.Models;
+﻿using QuanLyThuVien.DTOs;
+using QuanLyThuVien.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,5 +24,9 @@ namespace QuanLyThuVien.Services
         Task<IEnumerable<Loans>> GetAllLoansAsync();
 
         Task<StudentLoanStats> GetLoanStatsByStudentIdAsync(int studentId);
+        Task<IEnumerable<LoanTrendStats>> GetLoanTrendsAsync();
+        Task<IEnumerable<CategoryLoanStats>> GetLoanStatsByCategoryAsync();
+        Task<IEnumerable<BookLoanStats>> GetTopBorrowedBooksAsync();
+        Task<IEnumerable<Loans>> GetRecentLoansAsync(int count);
     }
 }
