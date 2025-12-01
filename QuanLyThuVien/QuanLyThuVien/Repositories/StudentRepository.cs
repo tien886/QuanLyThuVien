@@ -3,6 +3,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Data;
+using QuanLyThuVien.DTOs;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using SkiaSharp;
@@ -47,8 +48,12 @@ namespace QuanLyThuVien.Repositories
 
         public async Task UpdateStudentAsync(Students s)
         {
-            _dataContext.Students.Update(s);
-            await _dataContext.SaveChangesAsync();
+            var existing = await _dataContext.Students.FindAsync(s.StudentId);
+            if (existing != null)
+            {
+                _dataContext.Entry(existing).CurrentValues.SetValues(s);
+                await _dataContext.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteStudentAsync(int id)
@@ -78,28 +83,26 @@ namespace QuanLyThuVien.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task<(ISeries[] Series, Axis[] XAxes)> GetNewReadersData()
+        public async Task<IEnumerable<MonthlyReaderStats>> GetNewReadersStatsAsync()
         {
-            var numOfMonths = 10;
+            var numOfMonths = 10; // Lấy 10 tháng
+            var startDate = DateTime.Now.AddMonths(-numOfMonths + 1);
+            startDate = new DateTime(startDate.Year, startDate.Month, 1);
 
-            var numOfMonthsAgo = DateTime.Now.AddMonths(-numOfMonths).Date;
-            var startDate = new DateTime(numOfMonthsAgo.Year, numOfMonthsAgo.Month, 1);
-
-            var monthlyCounts = await _dataContext.Students
-                .Where(s => s.RegistrationDate >= startDate) 
+            // Query Database (Giữ nguyên logic Group By của bạn)
+            var dbData = await _dataContext.Students
+                .Where(s => s.RegistrationDate >= startDate)
                 .GroupBy(s => new { s.RegistrationDate.Year, s.RegistrationDate.Month })
                 .Select(g => new
                 {
                     Year = g.Key.Year,
                     Month = g.Key.Month,
-                    Count = g.Count() 
+                    Count = g.Count()
                 })
-                .ToListAsync(); 
+                .ToListAsync();
 
-            var labels = new List<string>();
-            var counts = new List<int>();
-
-            var culture = new CultureInfo("vi-VN");
+            // Logic lấp đầy các tháng trống (vẫn cần thiết)
+            var result = new List<MonthlyReaderStats>();
 
             for (int i = numOfMonths - 1; i >= 0; i--)
             {
@@ -107,47 +110,26 @@ namespace QuanLyThuVien.Repositories
                 var year = date.Year;
                 var month = date.Month;
 
-                labels.Add($"T{month}/{year.ToString().Substring(2)}");
+                var existing = dbData.FirstOrDefault(x => x.Year == year && x.Month == month);
 
-                var dataForMonth = monthlyCounts.FirstOrDefault(m => m.Year == year && m.Month == month);
-
-                if (dataForMonth != null)
+                result.Add(new MonthlyReaderStats
                 {
-                    counts.Add(dataForMonth.Count);
-                }
-                else
-                {
-                    counts.Add(0);
-                }
+                    Month = month,
+                    Year = year,
+                    Count = existing?.Count ?? 0
+                });
             }
-            var areaSeries = new ISeries[]
-            {
-                new LineSeries<int>
-                {
-                    Values = counts.ToArray(),
-                    Name = "Bạn đọc mới",
-                    Stroke = new SolidColorPaint(SKColor.Parse("#10B981")) { StrokeThickness = 3 },
-                    Fill = new SolidColorPaint(SKColor.Parse("#10B981").WithAlpha(50)),
-                    GeometryFill = new SolidColorPaint(SKColor.Parse("#10B981")),
-                    GeometryStroke = new SolidColorPaint(SKColor.Parse("#FFFFFF")) { StrokeThickness = 3 },
-                    GeometrySize = 10
-                }
-                };
 
-            var xAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Labels = labels.ToArray(),
-                    LabelsRotation = 0,
-                    SeparatorsPaint = new SolidColorPaint(SKColor.Parse("#E2E8F0")),
-                    SeparatorsAtCenter = false,
-                    TicksPaint = new SolidColorPaint(SKColor.Parse("#E2E8F0")),
-                    TicksAtCenter = true
-                }
-            };
-
-            return (areaSeries, xAxes);
+            return result;
         }
+        public async Task<IEnumerable<Students>> GetRecentStudentsAsync(int count)
+        {
+            return await _dataContext.Students
+                .OrderByDescending(s => s.RegistrationDate)
+                .Take(count)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
     }
 }

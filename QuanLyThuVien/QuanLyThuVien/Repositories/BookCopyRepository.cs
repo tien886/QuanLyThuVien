@@ -60,47 +60,63 @@ namespace QuanLyThuVien.Repositories
             return "CP" + number.ToString("D6");
         }
 
-        public async Task<ISeries[]> GetBookStatusData()
+        //public async Task<ISeries[]> GetBookStatusData()
+        //{
+        //    int coSan = _dataContext.BookCopies.Count(bc => bc.Status == "1");
+        //    int dangMuon = _dataContext.BookCopies.Count(bc => bc.Status == "0");
+        //    int mat = _dataContext.BookCopies.Count(bc => bc.Status == "-1");
+        //    int hong = _dataContext.BookCopies.Count(bc => bc.Status == "-2");
+
+        //    var PieChartSeries = new ISeries[]
+        //    {
+        //        new PieSeries<int>
+        //        {
+        //            Values = new [] { coSan },
+        //            Name = "Có sẵn",
+        //            InnerRadius = 50,
+        //            Fill = new SolidColorPaint(SKColor.Parse("#10B981")) // Màu Success/1
+        //        },
+        //        new PieSeries<int>
+        //        {
+        //            Values = new [] { dangMuon },
+        //            Name = "Đang mượn",
+        //            InnerRadius = 50,
+        //            Fill = new SolidColorPaint(SKColor.Parse("#0EA5E9")) // Màu InUse
+        //        },
+        //        new PieSeries<int>
+        //        {
+        //            Values = new [] { hong },
+        //            Name = "Hỏng",
+        //            InnerRadius = 50,
+        //            Fill = new SolidColorPaint(SKColor.Parse("#F59E0B")) // Màu Warning/Waiting
+        //        },
+        //        new PieSeries<int>
+        //        {
+        //            Values = new [] { mat },
+        //            Name = "Mất",
+        //            InnerRadius = 50,
+        //            Fill = new SolidColorPaint(SKColor.Parse("#EF4444")) // Màu Danger/Overdue
+        //        }
+        //    }; ;
+
+
+        //    return PieChartSeries;
+        //}
+        public async Task<BookStatusStats> GetBookStatusStatsAsync()
         {
-            int coSan = _dataContext.BookCopies.Count(bc => bc.Status == "1");
-            int dangMuon = _dataContext.BookCopies.Count(bc => bc.Status == "0");
-            int mat = _dataContext.BookCopies.Count(bc => bc.Status == "-1");
-            int hong = _dataContext.BookCopies.Count(bc => bc.Status == "-2");
+            // Logic truy vấn giữ nguyên, nhưng trả về DTO
+            int coSan = await _dataContext.BookCopies.CountAsync(bc => bc.Status == "1");
+            int dangMuon = await _dataContext.BookCopies.CountAsync(bc => bc.Status == "0");
+            int mat = await _dataContext.BookCopies.CountAsync(bc => bc.Status == "-1");
+            int hong = await _dataContext.BookCopies.CountAsync(bc => bc.Status == "-2");
 
-            var PieChartSeries = new ISeries[]
+            return new BookStatusStats
             {
-                new PieSeries<int>
-                {
-                    Values = new [] { coSan },
-                    Name = "Có sẵn",
-                    InnerRadius = 50,
-                    Fill = new SolidColorPaint(SKColor.Parse("#10B981")) // Màu Success/1
-                },
-                new PieSeries<int>
-                {
-                    Values = new [] { dangMuon },
-                    Name = "Đang mượn",
-                    InnerRadius = 50,
-                    Fill = new SolidColorPaint(SKColor.Parse("#0EA5E9")) // Màu InUse
-                },
-                new PieSeries<int>
-                {
-                    Values = new [] { hong },
-                    Name = "Hỏng",
-                    InnerRadius = 50,
-                    Fill = new SolidColorPaint(SKColor.Parse("#F59E0B")) // Màu Warning/Waiting
-                },
-                new PieSeries<int>
-                {
-                    Values = new [] { mat },
-                    Name = "Mất",
-                    InnerRadius = 50,
-                    Fill = new SolidColorPaint(SKColor.Parse("#EF4444")) // Màu Danger/Overdue
-                }
-            }; ;
-
-            
-            return PieChartSeries;
+                CoSan = coSan,
+                DangMuon = dangMuon,
+                Mat = mat,
+                Hong = hong
+            };
         }
     }
 }
