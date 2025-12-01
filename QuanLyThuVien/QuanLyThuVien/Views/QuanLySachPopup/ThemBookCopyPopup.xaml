@@ -142,7 +142,7 @@
                                 VerticalAlignment="Top" 
                                 Margin="0,0,15,0"
                                 Width="25" Height="25"
-                                Command="{Binding DataContext.CloseDialogCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                Command="{Binding ClosePopupCommand}">
                                                     <fa:IconImage Icon="Xmark" 
                                 Width="12" 
                                 Height="12" 

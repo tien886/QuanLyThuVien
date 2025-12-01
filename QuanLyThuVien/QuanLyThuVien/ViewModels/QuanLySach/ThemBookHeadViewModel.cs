@@ -132,7 +132,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 Debug.WriteLine("[INVALID] ISBN is empty");
                 return false;
             }
-            if (book.ISBN.Length < 13)
+            if (book.ISBN.Length != 13)
             {
                 Debug.WriteLine($"[INVALID] ISBN length = {book.ISBN.Length}, expected >= 13");
                 return false;

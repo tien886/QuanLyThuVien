@@ -21,10 +21,23 @@ namespace QuanLyThuVien.ViewModels
             _studentService = service;
             _loanService = loanService;
             _facultyService = facultyService;
-        }
 
-        [ObservableProperty]
-        private bool _isDetailPopupVisible = false; 
+            WeakReferenceMessenger.Default.Register<StudentUpdatedMessage>(this, (r, m) =>
+            {
+                var itemVM = Students.FirstOrDefault(s => s.StudentId == m.UpdatedStudent.StudentId);
+
+                if (itemVM != null)
+                {
+                    itemVM.RefreshFromModel(m.UpdatedStudent);
+                }
+            });
+
+            WeakReferenceMessenger.Default.Register<StudentAddedMessage>(this, (r, m) =>
+            {
+                var newItemVM = new StudentItemViewModel(m.NewStudent);
+                Students.Insert(0, newItemVM);
+            });
+        }
 
         [ObservableProperty]
         private StudentItemViewModel? _selectedStudent;
@@ -46,7 +59,7 @@ namespace QuanLyThuVien.ViewModels
         {
             var list = await _studentService.GetAllStudentsAsync(_searchText);
             Students.Clear();
-            foreach (var s in list.Take(60)) 
+            foreach (var s in list) 
             {
                 Students.Add(new StudentItemViewModel(s)); 
             }
@@ -74,41 +87,6 @@ namespace QuanLyThuVien.ViewModels
             }
         }
 
-
-        [RelayCommand]
-        private async Task ViewDetail(StudentItemViewModel? sVM)
-        {
-            if (sVM is null)
-                return;
-            // Gửi tin nhắn yêu cầu MainViewModel mở Popup cho sinh viên này
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(sVM));
-            try
-            {
-                var stats = await _loanService.GetLoanStatsByStudentIdAsync(sVM.StudentId);
-                sVM.TongDaMuon = stats.TotalBorrowed;
-                sVM.DangMuon = stats.CurrentlyBorrowed;
-                sVM.QuaHan = stats.Overdue;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Lỗi load stats: " + ex.Message);
-            }
-        }
-
-        [RelayCommand]
-        private void CloseDetailPopup()
-        {
-            IsDetailPopupVisible = false;
-            SelectedStudent = null; 
-        }
-
-        [RelayCommand]
-        private void AddNew()
-        {
-            // TODO: mở popup tạo tài khoản mới (dialog view riêng)
-            System.Windows.MessageBox.Show("Mở popup tạo tài khoản sinh viên.");
-        }
-
         [RelayCommand]
         private async Task ToggleStatus(StudentItemViewModel studentVM)
         {
@@ -116,7 +94,7 @@ namespace QuanLyThuVien.ViewModels
 
             // Lấy trạng thái cũ, phòng khi cần rollback
             string originalStatus = studentVM.AccountStatus;
-            string newStatus = originalStatus == "Active" ? "Disabled" : "Active"; 
+            string newStatus = originalStatus == "Active" ? "Disabled" : "Active";
 
             studentVM.AccountStatus = newStatus;
 
@@ -133,12 +111,39 @@ namespace QuanLyThuVien.ViewModels
         }
 
         [RelayCommand]
-        private void EditStudent(StudentItemViewModel? sVM)
+        private async Task OpenStudentDetailPopup(StudentItemViewModel? sVM)
+        {
+            if (sVM is null)
+                return;
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(sVM));
+            try
+            {
+                var stats = await _loanService.GetLoanStatsByStudentIdAsync(sVM.StudentId);
+                sVM.TongDaMuon = stats.TotalBorrowed;
+                sVM.DangMuon = stats.CurrentlyBorrowed;
+                sVM.QuaHan = stats.Overdue;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Lỗi load stats: " + ex.Message);
+            }
+        }
+
+        [RelayCommand]
+        private void OpenThemStudentPopup()
+        {
+            var addStudentVM = new ThemSinhVienViewModel(_studentService, _facultyService);
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(addStudentVM));
+        }
+
+
+        [RelayCommand]
+        private void OpenSuaStudentPopup(StudentItemViewModel? sVM)
         {
             if (sVM is null) 
                 return;
-            var editVM = new StudentEditViewModel(sVM.Student, _studentService, _facultyService);
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(editVM));
+            var suaStudentPopup = new SuaStudentViewModel(sVM.Student, _studentService, _facultyService);
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaStudentPopup));
         }
     }
 }
