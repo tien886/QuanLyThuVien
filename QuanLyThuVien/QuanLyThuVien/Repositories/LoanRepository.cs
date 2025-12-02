@@ -67,12 +67,6 @@ namespace QuanLyThuVien.Repositories
                 Overdue = studentLoans.Count(l => l.LoanStatus == "0" && DateTime.Now > l.DueDate)
             };
         }
-        public async Task DeleteLoanAsync(Loans loan)
-        {
-            _dataContext.Loans.Remove(loan);
-            await _dataContext.SaveChangesAsync();
-        }
-
         public async Task<IEnumerable<LoanTrendStats>> GetLoanTrendsAsync()
         {
             var result = new List<LoanTrendStats>();

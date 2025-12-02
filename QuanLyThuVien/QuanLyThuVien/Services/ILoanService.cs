@@ -27,7 +27,6 @@ namespace QuanLyThuVien.Services
         Task<IEnumerable<CategoryLoanStats>> GetLoanStatsByCategoryAsync();
         Task<IEnumerable<BookLoanStats>> GetTopBorrowedBooksAsync();
         Task<IEnumerable<Loans>> GetRecentLoansAsync(int count);
-        Task DeleteLoanAsync(Loans loan);
         Task UpdateLoan(Loans loan);
     }
 }
