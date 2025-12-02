@@ -4,10 +4,14 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.ViewModels;
+using QuanLyThuVien.ViewModels.MuonTraSach;
 using QuanLyThuVien.ViewModels.QuanLySach;
 using QuanLyThuVien.ViewModels.QuanLySachPopup;
+using QuanLyThuVien.ViewModels.QuanLySinhVien;
 using QuanLyThuVien.Views;
+using QuanLyThuVien.Views.MuonTraSachPopup;
 using QuanLyThuVien.Views.QuanLySachPopup;
+using QuanLyThuVien.Views.QuanLySinhVienPopup;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -42,8 +46,8 @@ namespace QuanLyThuVien.ViewModels
             ShowQuanLySachView = new ViewModelCommand(ExecuteShowQuanLySachView);
             ShowMuonTraSachView = new ViewModelCommand(ExecuteShowMuonTraSachView);
             ShowAddBookHeadView = new ViewModelCommand(ExecuteShowAddBookHeadView);
-            //ShowAddStudentView = new ViewModelCommand();
-            //ShowAddPhieuMuonView = new ViewModelCommand();
+            ShowAddPhieuMuonView = new ViewModelCommand(ExecuteShowAddPhieuMuonView);
+            ShowAddStudentView = new ViewModelCommand(ExecuteShowAddStudentView);
             ExecuteShowDashBoardView(null);
 
             // Đăng ký lắng nghe tin nhắn mở Popup từ bất kỳ đâu
@@ -169,14 +173,23 @@ namespace QuanLyThuVien.ViewModels
             IsDialogOpen = true;
             CurrentDialogViewModel = vm;
         }
-        //private void ShowAddStudentView(object obj)
-        //{
+        private void ExecuteShowAddStudentView(object obj)
+        {
+            Debug.WriteLine("Show add student");
+            var themPhieuMuonPopup = _serviceProvider.GetRequiredService<ThemSinhVienPopup>();
+            var vm = _serviceProvider.GetRequiredService<ThemSinhVienViewModel>();
+            IsDialogOpen = true;
+            CurrentDialogViewModel = vm;
+        }
 
-        //}
-        //private void ShowAddPhieuMuonView(object obj)
-        //{
-
-        //}
+        private void ExecuteShowAddPhieuMuonView(object obj)
+        {
+            Debug.WriteLine("Show add phieu muon");
+            var themPhieuMuonPopup = _serviceProvider.GetRequiredService<ThemPhieuMuonPopup>();
+            var vm = _serviceProvider.GetRequiredService<ThemPhieuMuonViewModel>();
+            IsDialogOpen = true;
+            CurrentDialogViewModel = vm;
+        }
 
     }
 

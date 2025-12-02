@@ -1,0 +1,172 @@
+﻿<UserControl x:Class="QuanLyThuVien.Views.MuonTraSachPopup.ThemPhieuMuonPopup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuanLyThuVien.Views.MuonTraSachPopup"
+             mc:Ignorable="d" 
+            d:DesignWidth="520"
+             d:DesignHeight="340">
+    <Border Padding="24"
+            Background="White"
+            CornerRadius="12"
+            BorderBrush="#E0E0E0"
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- header -->
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Tạo phiếu mượn sách"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#222222"/>
+                    <TextBlock Text="Nhập mã sinh viên và mã bản sao để tạo phiếu mượn"
+                               Margin="0,4,0,0"
+                               FontSize="12"
+                               Foreground="#70757A"/>
+                </StackPanel>
+
+                <!-- Nút đóng (nếu bạn muốn dùng trong dialog) -->
+                <Button Grid.Column="1"
+                        Width="28" Height="28"
+                        Content="✕"
+                        Margin="8,0,0,0"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="#70757A"
+                        FontSize="12"
+                        Cursor="Hand"
+                        Command="{Binding CancelCommand}"/>
+            </Grid>
+
+            <!-- FORM -->
+            <Grid Grid.Row="1" Margin="0,16,0,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Mã sinh viên -->
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,12,12">
+                    <TextBlock FontSize="12" Margin="0,0,0,4">
+                        <Run Text="Mã sinh viên"/>
+                        <Run Text=" *" Foreground="#E53935"/>
+                    </TextBlock>
+                    <TextBox Text="{Binding StudentId, UpdateSourceTrigger=PropertyChanged}"
+                             Height="32"
+                             Padding="8,4"
+                             BorderBrush="#DADCE0"
+                             BorderThickness="1"
+                             Background="#F8F9FA"/>
+                </StackPanel>
+
+                <!-- Tên sinh viên (readonly) -->
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="12,0,0,12">
+                    <TextBlock FontSize="12" Margin="0,0,0,4"
+                               Text="Tên sinh viên"/>
+                    <TextBox
+                            Text="{Binding StudentName}"
+                             Height="32"
+                             Padding="8,4"
+                             IsReadOnly="True"
+                             BorderBrush="#E0E0E0"
+                             BorderThickness="1"
+                             Background="#F1F3F4"
+                             Foreground="#5F6368"/>
+                </StackPanel>
+
+                <!-- Mã bản sao -->
+                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,12,12">
+                    <TextBlock FontSize="12" Margin="0,0,0,4">
+                        <Run Text="Mã bản sao"/>
+                        <Run Text=" *" Foreground="#E53935"/>
+                    </TextBlock>
+                    <TextBox Text="{Binding CopyId, UpdateSourceTrigger=PropertyChanged}"
+                             Height="32"
+                             Padding="8,4"
+                             BorderBrush="#DADCE0"
+                             BorderThickness="1"
+                             Background="#F8F9FA"/>
+                </StackPanel>
+
+                <!-- Tên sách (readonly) -->
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="12,0,0,12">
+                    <TextBlock FontSize="12" Margin="0,0,0,4"
+                               Text="Tên sách"/>
+                    <TextBox Text="{Binding BookTitle}"
+                             Height="32"
+                             Padding="8,4"
+                             IsReadOnly="True"
+                             BorderBrush="#E0E0E0"
+                             BorderThickness="1"
+                             Background="#F1F3F4"
+                             Foreground="#5F6368"/>
+                </StackPanel>
+
+                <!-- Ngày mượn -->
+                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,12,0">
+                    <TextBlock FontSize="12" Margin="0,0,0,4"
+                               Text="Ngày mượn"/>
+                    <DatePicker SelectedDate="{Binding LoanDate}"
+                                Height="32"
+                                BorderBrush="#DADCE0"
+                                BorderThickness="1"
+                                Background="#FFFFFF"/>
+                </StackPanel>
+
+                <!-- Hạn trả -->
+                <StackPanel Grid.Row="2" Grid.Column="1" Margin="12,0,0,0">
+                    <TextBlock FontSize="12" Margin="0,0,0,4"
+                               Text="Hạn trả"/>
+                    <DatePicker SelectedDate="{Binding DueDate}"
+                                Height="32"
+                                BorderBrush="#DADCE0"
+                                BorderThickness="1"
+                                Background="#FFFFFF"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- BUTTONS -->
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,8,0,0">
+                <Button Content="Hủy"
+                        Width="90" Height="32"
+                        Margin="0,0,8,0"
+                        Background="Transparent"
+                        BorderBrush="#DADCE0"
+                        BorderThickness="1"
+                        Foreground="#3C4043"
+                        Command="{Binding CancelCommand}"/>
+
+                <Button Content="Tạo phiếu mượn"
+                        Width="130" Height="32"
+                        Background="#1A73E8"
+                        BorderBrush="#1A73E8"
+                        BorderThickness="1"
+                        Foreground="White"
+                        FontWeight="SemiBold"
+                        Command="{Binding CreateLoanCommand}"/>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</UserControl>

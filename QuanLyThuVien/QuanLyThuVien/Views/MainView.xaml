@@ -168,7 +168,9 @@
                             Width="200"
                             Height="40"
                             HorizontalAlignment="Right"
-                            Visibility="{Binding IsAddStudentViewVisible, Converter={StaticResource BoolToVis}}">
+                            Visibility="{Binding IsAddStudentViewVisible, Converter={StaticResource BoolToVis}}"
+                            Command="{Binding ShowAddStudentView}"
+                                >
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
                                     <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
@@ -181,7 +183,9 @@
                             Width="200"
                             Height="40"
                             HorizontalAlignment="Right"
-                            Visibility="{Binding IsAddPhieuMuonViewVisible, Converter={StaticResource BoolToVis}}">
+                            Visibility="{Binding IsAddPhieuMuonViewVisible, Converter={StaticResource BoolToVis}}"
+                            Command="{Binding ShowAddPhieuMuonView}"
+                                >
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
                                     <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>

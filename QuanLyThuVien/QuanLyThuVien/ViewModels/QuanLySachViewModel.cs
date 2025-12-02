@@ -63,6 +63,7 @@ namespace QuanLyThuVien.ViewModels
                     _searhBarText = value;
                     OnPropertyChanged();
                     _ = SearchBookAsync(SearchBarText);
+                    Task.Delay(1000);
                 }
             }
         }

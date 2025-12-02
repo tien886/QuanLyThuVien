@@ -25,7 +25,7 @@ namespace QuanLyThuVien.Repositories
         }
         public async Task<int> GetQuaHan()
         {
-            return await _dataContext.Loans.CountAsync(l => l.LoanStatus == "0" && l.ReturnDate > l.DueDate);
+            return await _dataContext.Loans.CountAsync(l => l.LoanStatus == "-1");
         }
         public async Task<int> GetDaTraTheoThang(DateTime present)
         {
@@ -44,6 +44,7 @@ namespace QuanLyThuVien.Repositories
             return await _dataContext.Loans
                 .Include(s => s.Student)
                 .Include(b => b.BookCopy.Book)
+                .Where(l => l.LoanStatus == "0" || l.LoanStatus == "-1")
                 .ToListAsync();
         }
         public async Task<StudentLoanStats> GetLoanStatsByStudentIdAsync(int studentId)
@@ -66,8 +67,6 @@ namespace QuanLyThuVien.Repositories
                 Overdue = studentLoans.Count(l => l.LoanStatus == "0" && DateTime.Now > l.DueDate)
             };
         }
-
-
         public async Task<IEnumerable<LoanTrendStats>> GetLoanTrendsAsync()
         {
             var result = new List<LoanTrendStats>();
@@ -154,6 +153,11 @@ namespace QuanLyThuVien.Repositories
                 .Take(count)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+        public async Task UpdateLoan(Loans loan)
+        {
+            _dataContext.Loans.Update(loan);
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

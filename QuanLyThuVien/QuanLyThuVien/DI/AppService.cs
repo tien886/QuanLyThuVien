@@ -3,14 +3,16 @@ using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.Config;
 using QuanLyThuVien.Data;
 using QuanLyThuVien.Repositories;
-using QuanLyThuVien.Repositories;
 using QuanLyThuVien.Services;
 using QuanLyThuVien.ViewModels;
 using QuanLyThuVien.ViewModels.QuanLySach;
 using QuanLyThuVien.ViewModels.QuanLySachPopup;
 using QuanLyThuVien.Views;
 using QuanLyThuVien.Views.QuanLySachPopup;
+using QuanLyThuVien.Views.MuonTraSachPopup;
 using System;
+using QuanLyThuVien.ViewModels.MuonTraSach;
+using QuanLyThuVien.Views.QuanLySinhVienPopup;
 
 namespace QuanLyThuVien.DI
 {
@@ -35,6 +37,8 @@ namespace QuanLyThuVien.DI
             services.AddTransient<ThemBookCopyPopup>();
             services.AddTransient<ThemBooKHeadPopup>();
             services.AddTransient<SuaBookHeadPopup>();
+            services.AddTransient<ThemPhieuMuonPopup>();
+            services.AddTransient<ThemSinhVienPopup>();
             //Register ViewModels
             services.AddTransient<MainViewModel>();
             services.AddTransient<DashBoardViewModel>();
@@ -45,6 +49,8 @@ namespace QuanLyThuVien.DI
             services.AddTransient<ThemBookCopyViewModel>();
             services.AddTransient<ThemBookHeadViewModel>();
             services.AddTransient<SuaBookHeadViewModel>();
+            services.AddTransient<ThemPhieuMuonViewModel>();
+            services.AddTransient<ThemSinhVienViewModel>();
             // Register Services
             services.AddTransient<IBookService, BookRepository>();
             services.AddTransient<IBookCopyService, BookCopyRepository>();

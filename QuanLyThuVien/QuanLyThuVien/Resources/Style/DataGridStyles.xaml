@@ -27,7 +27,15 @@
             <DataTrigger Binding="{Binding AccountStatus}" Value="Hoạt động">
                 <Setter Property="Background" Value="{StaticResource Success/1_light}"/>
             </DataTrigger>
-
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="LoanStatusPillBorder" TargetType="Border">
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
+        <Style.Triggers>
             <DataTrigger Binding="{Binding LoanStatusDescription}" Value="borrowed">
                 <Setter Property="Background" Value="{StaticResource InUse_light}"/>
             </DataTrigger>
@@ -36,7 +44,6 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-
     <Style x:Key="StatusPillText" TargetType="TextBlock">
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
@@ -50,7 +57,15 @@
             <DataTrigger Binding="{Binding AccountStatus}" Value="Hoạt động">
                 <Setter Property="Foreground" Value="{StaticResource Success/1}"/>
             </DataTrigger>
-
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="LoanStatusPillText" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
+        <Style.Triggers>
             <DataTrigger Binding="{Binding LoanStatusDescription}" Value="borrowed">
                 <Setter Property="Foreground" Value="{StaticResource InUse}"/>
             </DataTrigger>
