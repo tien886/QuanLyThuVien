@@ -3,9 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:QuanLyThuVien.Views"
              xmlns:local1="clr-namespace:QuanLyThuVien.Views.QuanLySachPopup"
+             xmlns:local2="clr-namespace:QuanLyThuVien.Views.MuonTraSachPopup"
+             xmlns:local3="clr-namespace:QuanLyThuVien.Views.QuanLySinhVienPopup" 
              xmlns:converters="clr-namespace:QuanLyThuVien.Resources.Converters"
              xmlns:vm="clr-namespace:QuanLyThuVien.ViewModels" 
-             xmlns:vm1="clr-namespace:QuanLyThuVien.ViewModels.QuanLySach"> 
+             xmlns:vm1="clr-namespace:QuanLyThuVien.ViewModels.QuanLySach"
+             xmlns:vm2="clr-namespace:QuanLyThuVien.ViewModels.MuonTraSach"
+             xmlns:vm3="clr-namespace:QuanLyThuVien.ViewModels.QuanLySinhVien"
+             > 
 
     <Application.Resources>
         <ResourceDictionary>
@@ -28,7 +33,16 @@
             <converters:StatusToIconColorConverter x:Key="StatusToIconColorConverter"/>
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <converters:PageSelectionColour x:Key="PageSelectionColour"/>
-
+            <!-- Register add button -->
+            <DataTemplate DataType="{x:Type vm1:ThemBookHeadViewModel}">
+                <local1:ThemBooKHeadPopup/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm2:ThemPhieuMuonViewModel}">
+                <local2:ThemPhieuMuonPopup/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm3:ThemSinhVienViewModel}">
+                <local3:ThemSinhVienPopup/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type vm:StudentItemViewModel}"> 
                 <local:StudentDetailPopupView/>
             </DataTemplate>
@@ -37,10 +51,7 @@
                 <local:StudentEditPopupView/>
             </DataTemplate>
             
-            <DataTemplate DataType="{x:Type vm1:ThemBookHeadViewModel}">
-                <local1:ThemBooKHeadPopup/>
-            </DataTemplate>
-
+            
             <DataTemplate DataType="{x:Type vm:ThemSinhVienViewModel}">
                 <local:StudentAddPopupView/>
             </DataTemplate>

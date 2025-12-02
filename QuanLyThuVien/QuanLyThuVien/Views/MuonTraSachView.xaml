@@ -136,8 +136,8 @@
                             <DataGridTemplateColumn Header="Trạng thái" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Border x:Name="StatusBorder" Style="{StaticResource StatusPillBorder}">
-                                            <TextBlock Style="{StaticResource StatusPillText}" x:Name="StatusText"
+                                        <Border x:Name="StatusBorder" Style="{StaticResource LoanStatusPillBorder}">
+                                            <TextBlock Style="{StaticResource LoanStatusPillText}" x:Name="StatusText"
                                                        Text="{Binding LoanStatusDescription}"/>
                                         </Border>
                                     </DataTemplate>
