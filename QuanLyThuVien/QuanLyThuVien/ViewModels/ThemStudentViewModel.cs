@@ -6,50 +6,45 @@ using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace QuanLyThuVien.ViewModels
 {
-    public partial class SuaStudentViewModel : ObservableObject
+    public partial class ThemSinhVienViewModel : ObservableObject
     {
         private readonly IStudentService _studentService;
         private readonly IFacultyService _facultyService;
-        private readonly Students _originalStudent; // Giữ tham chiếu gốc để update sau khi Save 
 
-        public SuaStudentViewModel(Students student,
-            IStudentService studentService,
-            IFacultyService facultyService)
+        public ThemSinhVienViewModel(IStudentService studentService, IFacultyService facultyService)
         {
             _studentService = studentService;
             _facultyService = facultyService;
-            _originalStudent = student;
-
-            StudentName = student.StudentName;
-            Email = student.Email;
-            PhoneNumber = student.PhoneNumber;
-            SelectedFacultyId = student.FacultyID;
 
             LoadFaculties();
         }
 
-        [ObservableProperty] 
+        [ObservableProperty]
         private string _studentName;
-        [ObservableProperty] 
+
+        [ObservableProperty]
         private string _email;
-        [ObservableProperty] 
+
+        [ObservableProperty]
         private string _phoneNumber;
-        [ObservableProperty] 
-        private string _faculty;
-        [ObservableProperty] 
+
+        [ObservableProperty]
         private int _selectedFacultyId;
+
         public ObservableCollection<Faculties> FacultyList { get; } = new();
-        public string StudentId => _originalStudent.StudentId.ToString();
 
         private async void LoadFaculties()
         {
             var list = await _facultyService.GetAllFacultiesAsync();
             FacultyList.Clear();
             foreach (var item in list)
+            {
                 FacultyList.Add(item);
+            }
 
             if (FacultyList.Count > 0)
             {
@@ -98,33 +93,36 @@ namespace QuanLyThuVien.ViewModels
             return true;
         }
 
+
         [RelayCommand]
         private async Task Save()
         {
-            if(!ValidateInput())
+            if (!ValidateInput())
                 return;
 
-            //// 2. Cập nhật ngược lại vào model gốc (cái này là trong Student List - ObservableList)
-            _originalStudent.StudentName = StudentName;
-            _originalStudent.Email = Email;
-            _originalStudent.PhoneNumber = PhoneNumber;
-            _originalStudent.FacultyID = SelectedFacultyId;
-            var selectedFacultyObj = FacultyList.FirstOrDefault(f => f.FacultyID == SelectedFacultyId);
-            if (selectedFacultyObj != null)
+            var newStudent = new Students
             {
-                _originalStudent.Faculty = selectedFacultyObj;
-            }
+                StudentName = StudentName,
+                Email = Email,
+                PhoneNumber = PhoneNumber,
+                FacultyID = SelectedFacultyId,
+                RegistrationDate = DateTime.Now, 
+                AccountStatus = "Active"      
+            };
 
             try
             {
-                await _studentService.UpdateStudentAsync(_originalStudent);
-                WeakReferenceMessenger.Default.Send(new StudentUpdatedMessage(_originalStudent));
-                MessageBox.Show("Cập nhật thành công!", "Thông báo");
+                // Lưu vào database 
+                await _studentService.AddStudentAsync(newStudent);
+                var selectedFacultyObj = FacultyList.FirstOrDefault(f => f.FacultyID == SelectedFacultyId);
+                newStudent.Faculty = selectedFacultyObj;
+                WeakReferenceMessenger.Default.Send(new StudentAddedMessage(newStudent));
+                MessageBox.Show("Thêm sinh viên thành công!", "Thông báo");
                 ClosePopup();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi: {ex.Message}", "Lỗi");
+                MessageBox.Show($"Lỗi khi thêm: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -135,9 +133,9 @@ namespace QuanLyThuVien.ViewModels
         }
     }
 
-    public class StudentUpdatedMessage
+    public class StudentAddedMessage
     {
-        public Students UpdatedStudent { get; }
-        public StudentUpdatedMessage(Students s) => UpdatedStudent = s;
+        public Students NewStudent { get; }
+        public StudentAddedMessage(Students s) => NewStudent = s;
     }
 }

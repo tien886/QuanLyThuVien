@@ -25,7 +25,7 @@ namespace QuanLyThuVien.Models
                 return LoanStatus switch
                 {
                     "0" => "borrowed",
-                    "1" => "overdue"
+                    "-1" => "overdue"
                 };
             }
         }

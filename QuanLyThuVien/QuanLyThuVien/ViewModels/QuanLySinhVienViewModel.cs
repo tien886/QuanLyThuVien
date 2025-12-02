@@ -21,10 +21,23 @@ namespace QuanLyThuVien.ViewModels
             _studentService = service;
             _loanService = loanService;
             _facultyService = facultyService;
-        }
 
-        //[ObservableProperty]
-        //private bool _isDetailPopupVisible = false;
+            WeakReferenceMessenger.Default.Register<StudentUpdatedMessage>(this, (r, m) =>
+            {
+                var itemVM = Students.FirstOrDefault(s => s.StudentId == m.UpdatedStudent.StudentId);
+
+                if (itemVM != null)
+                {
+                    itemVM.RefreshFromModel(m.UpdatedStudent);
+                }
+            });
+
+            WeakReferenceMessenger.Default.Register<StudentAddedMessage>(this, (r, m) =>
+            {
+                var newItemVM = new StudentItemViewModel(m.NewStudent);
+                Students.Insert(0, newItemVM);
+            });
+        }
 
         [ObservableProperty]
         private StudentItemViewModel? _selectedStudent;
@@ -46,7 +59,7 @@ namespace QuanLyThuVien.ViewModels
         {
             var list = await _studentService.GetAllStudentsAsync(_searchText);
             Students.Clear();
-            foreach (var s in list.Take(60)) 
+            foreach (var s in list) 
             {
                 Students.Add(new StudentItemViewModel(s)); 
             }
@@ -102,7 +115,6 @@ namespace QuanLyThuVien.ViewModels
         {
             if (sVM is null)
                 return;
-            // Gửi tin nhắn yêu cầu MainViewModel mở Popup cho sinh viên này
             WeakReferenceMessenger.Default.Send(new OpenDialogMessage(sVM));
             try
             {
@@ -117,18 +129,11 @@ namespace QuanLyThuVien.ViewModels
             }
         }
 
-        //[RelayCommand]
-        //private void CloseDetailPopup()
-        //{
-        //    IsDetailPopupVisible = false;
-        //    SelectedStudent = null; 
-        //}
-
         [RelayCommand]
         private void OpenThemStudentPopup()
         {
-            // TODO: mở popup tạo tài khoản mới (dialog view riêng)
-            System.Windows.MessageBox.Show("Mở popup tạo tài khoản sinh viên.");
+            var addStudentVM = new ThemSinhVienViewModel(_studentService, _facultyService);
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(addStudentVM));
         }
 
 
