@@ -1,9 +1,11 @@
 ﻿
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
 
 namespace QuanLyThuVien.ViewModels
 {
@@ -13,7 +15,7 @@ namespace QuanLyThuVien.ViewModels
         private ILoanService _loanService;
         public MuonTraSachViewModel(
             IServiceProvider serviceProvider
-            ,ILoanService loanService 
+            , ILoanService loanService
             )
         {
             _serviceProvider = serviceProvider;
@@ -41,7 +43,7 @@ namespace QuanLyThuVien.ViewModels
         [ObservableProperty]
         private int daTraThangNay;
         [ObservableProperty]
-        private ObservableCollection<Loans> loanList = new(); 
+        private ObservableCollection<Loans> loanList = new();
         private async Task LoadData()
         {
             DangMuon = await _loanService.GetDangMuon();
@@ -59,6 +61,35 @@ namespace QuanLyThuVien.ViewModels
             {
                 Debug.WriteLine(ex);
             }
+        }
+        [RelayCommand]
+        public async Task ReturnBook(Loans loan)
+        {
+            try
+            {
+                if (loan == null) return;
+
+                var result = System.Windows.MessageBox.Show(
+                    $"Bạn có chắc muốn xác nhận trả sách \"{loan.BookCopy.Book.Title}\" từ sinh viên {loan.Student.StudentName} không?",
+                    "Xác nhận xóa",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+                if (result != MessageBoxResult.Yes)
+                    return;
+                UpdateLoanAfterReturn(loan);
+                await LoadData();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+        private void UpdateLoanAfterReturn(Loans loan)
+        {
+            loan.BookCopy.Status = "1";
+            loan.ReturnDate = DateTime.Now;
+            loan.LoanStatus = "1";
+            _loanService.UpdateLoan(loan);
         }
     }
 }
