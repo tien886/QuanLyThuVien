@@ -21,10 +21,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding AccountStatus}" Value="Active">
-                <Setter Property="Background" Value="{StaticResource Success/1_light}"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding AccountStatus}" Value="Hoạt động">
+            <DataTrigger Binding="{Binding AccountStatus}" Value="1">
                 <Setter Property="Background" Value="{StaticResource Success/1_light}"/>
             </DataTrigger>
         </Style.Triggers>
@@ -51,7 +48,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding AccountStatus}" Value="Active">
+            <DataTrigger Binding="{Binding AccountStatus}" Value="1">
                 <Setter Property="Foreground" Value="{StaticResource Success/1}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding AccountStatus}" Value="Hoạt động">
