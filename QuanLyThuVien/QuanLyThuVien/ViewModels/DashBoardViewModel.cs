@@ -32,13 +32,15 @@ namespace QuanLyThuVien.ViewModels
         }
 
         [ObservableProperty]
-        private int totalCopies;
+        private int _totalCopies;
         [ObservableProperty]
-        private int borrowStudents;
+        private int _borrowStudents;
         [ObservableProperty]
-        private int totalBooks;
+        private int _totalBooks;
         [ObservableProperty]
-        private int borrowedBooks;
+        private int _borrowedBooks;
+        [ObservableProperty]
+        private int _overdueBooks;
 
         // Thuộc tính cho PieChart Phân bổ trạng thái sách
         [ObservableProperty] 
@@ -79,12 +81,18 @@ namespace QuanLyThuVien.ViewModels
         [ObservableProperty]
         private ObservableCollection<ActivityDisplayItem> _recentActivitiesList;
 
+        // Thuộc tính chứa các sách quá hạn 
+        [ObservableProperty]
+        private IEnumerable<OverdueBookStats> _overdueBooksList;
 
         public async Task LoadPage()
         {
             // Load các số liệu đơn
             TotalCopies = await _bookCopyService.GetTotalBookCopiesAsync();
             TotalBooks = await _bookService.GetTotalBooksAsync();
+            BorrowedBooks = await _loanService.GetCurrentlyBorrowedBooksAsync();
+            BorrowStudents = await _loanService.GetCurrentBorrowingStudentsAsync();
+            OverdueBooks = await _loanService.GetOverdueBooksAsyncCount();
 
             // 1. Load và tạo biểu đồ Tròn
             var statusStats = await _bookCopyService.GetBookStatusStatsAsync();
@@ -105,8 +113,11 @@ namespace QuanLyThuVien.ViewModels
             // 5. Load Top sách mượn nhiều nhất
             TopBooksList = await _loanService.GetTopBorrowedBooksAsync();
 
-            // 4. Load Hoạt động gần đây
+            // 6. Load Hoạt động gần đây
             await LoadRecentActivities();
+
+            // 7. Load Sách quá hạn
+            OverdueBooksList = await _loanService.GetOverdueBooksAsync(5);
         }
 
         private ISeries[] CreatePieChartData(BookStatusStats stats)
