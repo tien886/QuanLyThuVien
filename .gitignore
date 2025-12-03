@@ -53,5 +53,3 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /QuanLyThuVien/QuanLyThuVien/Views/QuanLySinhVienView.xaml
-/.vs
-/QuanLyThuVien/.vs

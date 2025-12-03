@@ -1,6 +1,4 @@
-﻿
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,14 +6,10 @@ using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using QuanLyThuVien.ViewModels.QuanLySach;
 using QuanLyThuVien.ViewModels.QuanLySachPopup;
-using QuanLyThuVien.Views;
 using QuanLyThuVien.Views.QuanLySachPopup;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Input;
 namespace QuanLyThuVien.ViewModels
 {
     public partial class QuanLySachViewModel : ObservableObject

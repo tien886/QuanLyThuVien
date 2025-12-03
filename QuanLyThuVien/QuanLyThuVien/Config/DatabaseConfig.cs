@@ -1,10 +1,8 @@
 ﻿using QuanLyThuVien.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace QuanLyThuVien.Config

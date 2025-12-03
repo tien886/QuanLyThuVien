@@ -1,9 +1,6 @@
-﻿
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -24,7 +21,7 @@ namespace QuanLyThuVien.ViewModels
 
             WeakReferenceMessenger.Default.Register<StudentUpdatedMessage>(this, (r, m) =>
             {
-                var itemVM = Students.FirstOrDefault(s => s.StudentId == m.UpdatedStudent.StudentId);
+                var itemVM = StudentList.FirstOrDefault(s => s.StudentId == m.UpdatedStudent.StudentId);
 
                 if (itemVM != null)
                 {
@@ -35,14 +32,29 @@ namespace QuanLyThuVien.ViewModels
             WeakReferenceMessenger.Default.Register<StudentAddedMessage>(this, (r, m) =>
             {
                 var newItemVM = new StudentItemViewModel(m.NewStudent);
-                Students.Insert(0, newItemVM);
+                StudentList.Add(newItemVM);
             });
         }
+
+        private int PageSize = 15;
+        private const int WindowSize = 5;
+
+        [ObservableProperty]
+        private int currentPage;
+
+        [ObservableProperty]
+        private int totalPages;
+
+        [ObservableProperty] private int firstPage;
+        [ObservableProperty] private int secondPage;
+        [ObservableProperty] private int thirdPage;
+        [ObservableProperty] private int fourthPage;
+        [ObservableProperty] private int fifthPage;
 
         [ObservableProperty]
         private StudentItemViewModel? _selectedStudent;
 
-        public ObservableCollection<StudentItemViewModel> Students { get; } = new();
+        public ObservableCollection<StudentItemViewModel> StudentList { get; set; } = new();
 
         [ObservableProperty]
         private string _searchText = string.Empty;
@@ -54,15 +66,25 @@ namespace QuanLyThuVien.ViewModels
             await LoadAsync();
         }
 
+        //[RelayCommand]
+        //private async Task LoadAsync()
+        //{
+        //    var list = await _studentService.GetAllStudentsAsync(_searchText);
+        //    StudentList.Clear();
+        //    foreach (var s in list)
+        //    {
+        //        StudentList.Add(new StudentItemViewModel(s));
+        //    }
+        //}
+
         [RelayCommand]
         private async Task LoadAsync()
         {
-            var list = await _studentService.GetAllStudentsAsync(_searchText);
-            Students.Clear();
-            foreach (var s in list) 
-            {
-                Students.Add(new StudentItemViewModel(s)); 
-            }
+            CurrentPage = 1;
+            TotalPages = await _studentService.GetTotalPages(PageSize, SearchText);
+            Debug.WriteLine($"Total Pages: {TotalPages}");
+            UpdateWindow();
+            await LoadCurrentPageAsync();
         }
 
         async partial void OnSearchTextChanged(string value)
@@ -78,6 +100,7 @@ namespace QuanLyThuVien.ViewModels
             var token = _searchCts.Token;
             try
             {
+
                 await Task.Delay(350, token);
                 await LoadAsync();
             }
@@ -94,8 +117,9 @@ namespace QuanLyThuVien.ViewModels
 
             // Lấy trạng thái cũ, phòng khi cần rollback
             string originalStatus = studentVM.AccountStatus;
-            string newStatus = originalStatus == "Active" ? "Disabled" : "Active";
+            string newStatus = originalStatus == "1" ? "0" : "1";
 
+            studentVM.Student.AccountStatus = newStatus;
             studentVM.AccountStatus = newStatus;
 
             try
@@ -140,10 +164,79 @@ namespace QuanLyThuVien.ViewModels
         [RelayCommand]
         private void OpenSuaStudentPopup(StudentItemViewModel? sVM)
         {
-            if (sVM is null) 
+            if (sVM is null)
                 return;
             var suaStudentPopup = new SuaStudentViewModel(sVM.Student, _studentService, _facultyService);
             WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaStudentPopup));
+        }
+
+        private async Task LoadCurrentPageAsync()
+        {
+            if (CurrentPage < 1 || CurrentPage > TotalPages)
+                return;
+            Debug.WriteLine($"{SearchText}");
+            var students = await _studentService.GetStudentsPage(CurrentPage - 1, PageSize, SearchText);
+            StudentList.Clear();
+            foreach (var student in students)
+            {
+                StudentList.Add(new StudentItemViewModel(student));
+            }
+        }
+
+        private void UpdateWindow()
+        {
+            if (TotalPages <= 1)
+                return;
+
+            int start = CurrentPage - WindowSize / 2;
+            if (start < 1)
+                start = 1;
+
+            int end = start + WindowSize - 1;
+            if (end > TotalPages)
+            {
+                end = TotalPages;
+                start = Math.Max(1, end - WindowSize + 1);
+            }
+
+            FirstPage = start;
+            SecondPage = start + 1 <= end ? start + 1 : 0;
+            ThirdPage = start + 2 <= end ? start + 2 : 0;
+            FourthPage = start + 3 <= end ? start + 3 : 0;
+            FifthPage = start + 4 <= end ? start + 4 : 0;
+        }
+
+        [RelayCommand]
+        private void PageSelection(int pageNumber)
+        {
+            if (pageNumber < 0 || pageNumber > TotalPages)
+                return;
+
+            CurrentPage = pageNumber;
+            UpdateWindow();
+            _ = LoadCurrentPageAsync();
+        }
+
+        [RelayCommand]
+        private async Task GoToPreviousPage()
+        {
+            if (CurrentPage <= 1)
+                return;
+
+            CurrentPage--;
+            UpdateWindow();
+            await LoadCurrentPageAsync();
+        }
+
+        [RelayCommand]
+        private async Task GoToNextPage()
+        {
+            if (CurrentPage >= TotalPages)
+                return;
+
+            CurrentPage++;
+            UpdateWindow();
+            await LoadCurrentPageAsync();
         }
     }
 }

@@ -9,10 +9,11 @@ namespace QuanLyThuVien.Services
         Task AddStudentAsync(Students s);
         Task UpdateStudentAsync(Students s);
         Task DeleteStudentAsync(int id);
-
         Task BlockStudentAsync(int id);  
         Task UnblockStudentAsync(int id);
         Task<IEnumerable<MonthlyReaderStats>> GetNewReadersStatsAsync();
         Task<IEnumerable<Students>> GetRecentStudentsAsync(int count);
+        Task<IEnumerable<Students>> GetStudentsPage(int offsetm, int size, string? keyword);
+        Task<int> GetTotalPages(int size, string? keyword = null);
     }
 }

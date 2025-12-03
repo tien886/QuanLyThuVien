@@ -6,7 +6,6 @@ using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace QuanLyThuVien.ViewModels
 {
@@ -107,7 +106,7 @@ namespace QuanLyThuVien.ViewModels
                 PhoneNumber = PhoneNumber,
                 FacultyID = SelectedFacultyId,
                 RegistrationDate = DateTime.Now, 
-                AccountStatus = "Active"      
+                AccountStatus = "1"      
             };
 
             try

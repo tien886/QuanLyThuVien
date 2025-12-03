@@ -8,7 +8,7 @@ namespace QuanLyThuVien.Resources.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             // Nền của "chip" trạng thái (màu pastel)
-            => value?.ToString() == "Active"
+            => value?.ToString() == "0"
                ? (object)new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E7F8EF")) // xanh nhạt
                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EFF1F5"));        // xám nhạt
 
