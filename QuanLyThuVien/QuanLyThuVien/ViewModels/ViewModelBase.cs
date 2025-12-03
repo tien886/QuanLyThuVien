@@ -1,6 +1,4 @@
-﻿using QuanLyThuVien.ViewModels;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 public abstract class ViewModelBase : INotifyPropertyChanged

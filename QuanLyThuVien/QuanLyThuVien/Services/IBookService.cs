@@ -1,5 +1,4 @@
-﻿
-using QuanLyThuVien.Models;
+﻿using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Services
 {
