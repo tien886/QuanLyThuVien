@@ -1,13 +1,9 @@
-﻿using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Data;
 using QuanLyThuVien.DTOs;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
-using SkiaSharp;
-using System.Globalization;
+
 
 
 namespace QuanLyThuVien.Repositories
@@ -15,6 +11,16 @@ namespace QuanLyThuVien.Repositories
     public class StudentRepository : IStudentService
     {
         private readonly DataContext _dataContext;
+
+        private bool MatchSearchKeyword(Students s, string keyword)
+        {
+            return EF.Functions.Like(s.StudentName!, $"%{keyword}%") ||
+                EF.Functions.Like(s.Email!, $"%{keyword}%") ||
+                EF.Functions.Like(s.StudentId.ToString(), $"%{keyword}%") ||
+                EF.Functions.Like(s.PhoneNumber!, $"%{keyword}%") ||
+                EF.Functions.Like(s.Faculty.FacultyName!, $"%{keyword}%");
+        }
+
         public StudentRepository(DataContext dataContext)
         {
             _dataContext = dataContext;
@@ -29,12 +35,7 @@ namespace QuanLyThuVien.Repositories
             if (!string.IsNullOrWhiteSpace(keyword))
             {
                 keyword = keyword.Trim();
-                q = q.Where(s =>
-                    EF.Functions.Like(s.StudentName!, $"%{keyword}%") ||
-                    EF.Functions.Like(s.Email!, $"%{keyword}%") ||
-                    EF.Functions.Like(s.StudentId.ToString(), $"%{keyword}%") ||
-                    EF.Functions.Like(s.PhoneNumber!, $"%{keyword}%") ||
-                    EF.Functions.Like(s.Faculty.FacultyName!, $"%{keyword}%"));
+                q = q.Where(s => MatchSearchKeyword(s, keyword));
             }
 
             return await q.OrderBy(s => s.StudentName).ToListAsync();
@@ -129,6 +130,48 @@ namespace QuanLyThuVien.Repositories
                 .Take(count)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+        public async Task<IEnumerable<Students>> GetStudentsPage(int offset, int size, string? keyword = null)
+        {
+            if (keyword is null)
+                return await _dataContext.Students
+                    .Include(st => st.Faculty)
+                    .Skip(offset * size)
+                    .Take(size)
+                    .ToListAsync();
+            return await _dataContext.Students
+                .Include(st => st.Faculty)
+                .Where(
+                    s => EF.Functions.Like(s.StudentName!, $"%{keyword}%") ||
+                         EF.Functions.Like(s.Email!, $"%{keyword}%") ||
+                         EF.Functions.Like(s.StudentId.ToString(), $"%{keyword}%") ||
+                         EF.Functions.Like(s.PhoneNumber!, $"%{keyword}%") ||
+                         EF.Functions.Like(s.Faculty.FacultyName!, $"%{keyword}%"))
+                .Skip(offset * size)
+                .Take(size)
+                .ToListAsync();
+        }
+        public async Task<int> GetTotalPages(int size, string? keyword = null)
+        {
+            IQueryable<Students> q;
+            if (keyword is null)
+                q = _dataContext.Students;
+            else
+                q = _dataContext.Students
+                    .Where(
+                        s => EF.Functions.Like(s.StudentName!, $"%{keyword}%") ||
+                            EF.Functions.Like(s.Email!, $"%{keyword}%") ||
+                            EF.Functions.Like(s.StudentId.ToString(), $"%{keyword}%") ||
+                            EF.Functions.Like(s.PhoneNumber!, $"%{keyword}%") ||
+                            EF.Functions.Like(s.Faculty.FacultyName!, $"%{keyword}%"));
+            
+            int remaining = await q.CountAsync() % size;
+            int totalPages = await q.CountAsync() / size;
+            if (remaining > 0)
+            {
+                totalPages++;
+            }
+            return totalPages;
         }
 
     }

@@ -11,7 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="650"/>
+            <RowDefinition Height="550"/>
             <RowDefinition Height="45"/>
         </Grid.RowDefinitions>
 
@@ -136,54 +136,55 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Orientation="Horizontal">
-                <Button
-            Command="{Binding GoToPreviousPageCommand}"
-            Content="← Trang trước"
-            Style="{StaticResource BackForwardButtonStyle}" />
+                    <Button
+                        Command="{Binding GoToPreviousPageCommand}"
+                        Content="← Trang trước"
+                        Style="{StaticResource BackForwardButtonStyle}" />
 
-                <Border Width="1" Margin="4,0" Background="#E0E0E0" />
-                <RadioButton
-    Command="{Binding PageSelectionCommand}"
-    CommandParameter="{Binding FirstPage}"
-    Content="{Binding FirstPage}"
-    Style="{StaticResource PageButtonUnSelectedStyle}"
-    GroupName="PagingGroup" />
+                    <Border Width="1" Margin="4,0" Background="#E0E0E0" />
+                    
+                    <RadioButton
+                        Command="{Binding PageSelectionCommand}"
+                        CommandParameter="{Binding FirstPage}"
+                        Content="{Binding FirstPage}"
+                        Style="{StaticResource PageButtonUnSelectedStyle}"
+                        GroupName="PagingGroup" />
 
-                <RadioButton
-    Command="{Binding PageSelectionCommand}"
-    CommandParameter="{Binding SecondPage}"
-    Content="{Binding SecondPage}"
-    Style="{StaticResource PageButtonUnSelectedStyle}"
-    GroupName="PagingGroup" />
+                    <RadioButton
+                        Command="{Binding PageSelectionCommand}"
+                        CommandParameter="{Binding SecondPage}"
+                        Content="{Binding SecondPage}"
+                        Style="{StaticResource PageButtonUnSelectedStyle}"
+                        GroupName="PagingGroup" />
 
-                <RadioButton
-    Command="{Binding PageSelectionCommand}"
-    CommandParameter="{Binding ThirdPage}"
-    Content="{Binding ThirdPage}"
-    Style="{StaticResource PageButtonUnSelectedStyle}"
-    GroupName="PagingGroup" />
+                    <RadioButton
+                        Command="{Binding PageSelectionCommand}"
+                        CommandParameter="{Binding ThirdPage}"
+                        Content="{Binding ThirdPage}"
+                        Style="{StaticResource PageButtonUnSelectedStyle}"
+                        GroupName="PagingGroup" />
 
-                <RadioButton
-    Command="{Binding PageSelectionCommand}"
-    CommandParameter="{Binding FourthPage}"
-    Content="{Binding FourthPage}"
-    Style="{StaticResource PageButtonUnSelectedStyle}"
-    GroupName="PagingGroup" />
+                    <RadioButton
+                        Command="{Binding PageSelectionCommand}"
+                        CommandParameter="{Binding FourthPage}"
+                        Content="{Binding FourthPage}"
+                        Style="{StaticResource PageButtonUnSelectedStyle}"
+                        GroupName="PagingGroup" />
 
-                <RadioButton
-    Command="{Binding PageSelectionCommand}"
-    CommandParameter="{Binding FifthPage}"
-    Content="{Binding FifthPage}"
-    Style="{StaticResource PageButtonUnSelectedStyle}"
-    GroupName="PagingGroup" />
+                    <RadioButton
+                        Command="{Binding PageSelectionCommand}"
+                        CommandParameter="{Binding FifthPage}"
+                        Content="{Binding FifthPage}"
+                        Style="{StaticResource PageButtonUnSelectedStyle}"
+                        GroupName="PagingGroup" />
 
-                <Border Width="1" Margin="4,0" Background="#E0E0E0" />
+                    <Border Width="1" Margin="4,0" Background="#E0E0E0" />
 
-                <Button
-            Command="{Binding GoToNextPageCommand}"
-            Content="Trang sau →"
-            Style="{StaticResource BackForwardButtonStyle}" />
-            </StackPanel>
+                    <Button
+                        Command="{Binding GoToNextPageCommand}"
+                        Content="Trang sau →"
+                        Style="{StaticResource BackForwardButtonStyle}" />
+                </StackPanel>
             </Border>
     </Grid>
     

@@ -3,19 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.Models;
-using QuanLyThuVien.Repositories;
 using QuanLyThuVien.Services;
-using QuanLyThuVien.ViewModels.QuanLySachPopup;
 using QuanLyThuVien.Views.QuanLySachPopup;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows; 
-
 namespace QuanLyThuVien.ViewModels.QuanLySach
 {
     public partial class BookDetailAndCopyViewModel : ObservableObject

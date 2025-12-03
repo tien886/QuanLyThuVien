@@ -1,16 +1,7 @@
-﻿using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Data;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
-using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuanLyThuVien.Repositories
 {

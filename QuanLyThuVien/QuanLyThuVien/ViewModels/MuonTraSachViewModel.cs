@@ -1,5 +1,4 @@
-﻿
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
@@ -46,8 +45,8 @@ namespace QuanLyThuVien.ViewModels
         private ObservableCollection<Loans> loanList = new();
         private async Task LoadData()
         {
-            DangMuon = await _loanService.GetDangMuon();
-            QuaHan = await _loanService.GetQuaHan();
+            DangMuon = await _loanService.GetCurrentlyBorrowedBooksAsync();
+            QuaHan = await _loanService.GetOverdueBooksAsyncCount();
             DaTraThangNay = await _loanService.GetDaTraTheoThang(DateTime.Now);
             LoanList = new ObservableCollection<Loans>(await _loanService.GetAllLoansAsync());
         }

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using QuanLyThuVien.Models;
 
 namespace QuanLyThuVien.Helper.SeedModule

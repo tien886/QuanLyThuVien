@@ -3,12 +3,6 @@ using QuanLyThuVien.Data;
 using QuanLyThuVien.DTOs;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace QuanLyThuVien.Repositories
 {
@@ -18,14 +12,6 @@ namespace QuanLyThuVien.Repositories
         public LoanRepository(DataContext dataContext)
         {
             _dataContext = dataContext;
-        }
-        public async Task<int> GetDangMuon()
-        {
-            return await _dataContext.Loans.CountAsync(l => l.LoanStatus == "0");
-        }
-        public async Task<int> GetQuaHan()
-        {
-            return await _dataContext.Loans.CountAsync(l => l.LoanStatus == "-1");
         }
         public async Task<int> GetDaTraTheoThang(DateTime present)
         {
@@ -38,6 +24,28 @@ namespace QuanLyThuVien.Repositories
                     l.ReturnDate.Month == month &&
                     l.ReturnDate.Year == year
                 );
+        }
+        public async Task<int> GetCurrentlyBorrowedBooksAsync()
+        {
+            return await _dataContext.Loans
+                .Where(l => l.LoanStatus == "0")
+                .Select(l => l.BookCopy)
+                .Distinct()
+                .CountAsync();
+        }
+        public async Task<int> GetCurrentBorrowingStudentsAsync()
+        {
+            return await _dataContext.Loans
+                .Where(l => l.LoanStatus == "0")
+                .Select(l => l.StudentID)
+                .Distinct()
+                .CountAsync();
+        }
+        public async Task<int> GetOverdueBooksAsyncCount()
+        {
+            return await _dataContext.Loans
+                .Where(l => l.LoanStatus == "0" && l.DueDate < DateTime.Now.Date)
+                .CountAsync();
         }
         public async Task<IEnumerable<Loans>> GetAllLoansAsync()
         {
@@ -158,6 +166,29 @@ namespace QuanLyThuVien.Repositories
         {
             _dataContext.Loans.Update(loan);
             await _dataContext.SaveChangesAsync();
+        }
+        public async Task<IEnumerable<OverdueBookStats>> GetOverdueBooksAsync(int count)
+        {
+            var today = DateTime.Now.Date;
+
+            // Logic: Lấy phiếu mượn chưa trả (Status="0") VÀ Hạn trả < Hôm nay
+            return await _dataContext.Loans
+                .Include(l => l.Student)
+                .Include(l => l.BookCopy.Book)
+                .Where(l => l.LoanStatus == "0" && l.DueDate < today)
+                .OrderBy(l => l.DueDate) // Sắp xếp: Ai quá hạn lâu nhất (DueDate nhỏ nhất) lên đầu
+                .Take(count)
+                .Select(l => new OverdueBookStats
+                {
+                    BookTitle = l.BookCopy.Book.Title,
+                    ReaderName = l.Student.StudentName,
+                    DueDate = l.DueDate,
+                    //EF Core không hỗ trợ trừ DateTime trực tiếp sang int trong SQL dễ dàng, 
+                    //nên ta tính DaysOverdue sau khi lấy về (client-side) hoặc dùng hàm SQL DateDiff nếu cần.
+                    //Ở đây ta tạm lấy DueDate về rồi tính ở ViewModel cho đơn giản và an toàn với mọi DB.
+                })
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }
