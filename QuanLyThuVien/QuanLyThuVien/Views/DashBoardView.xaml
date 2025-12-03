@@ -80,7 +80,7 @@
                         <StackPanel>
                             <TextBlock Text="Đang mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                            <TextBlock Text="{Binding CurrentlyBorrowed}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                            <TextBlock Text="{Binding BorrowedBooks}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
                         </StackPanel>
                         <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource InUse_light}" CornerRadius="12"
                                 HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -100,7 +100,7 @@
                         <StackPanel>
                             <TextBlock Text="Quá hạn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                            <TextBlock Text="{Binding OverdueCount}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                            <TextBlock Text="{Binding OverdueBooks}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
                         </StackPanel>
                         <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Danger/Overdue_light}" CornerRadius="12"
                                 HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -120,7 +120,7 @@
                         <StackPanel>
                             <TextBlock Text="Số lượng bạn đọc" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
 
-                            <TextBlock Text="{Binding ActiveReaders}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                            <TextBlock Text="{Binding BorrowStudents}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
                         </StackPanel>
                         <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Success/1_light}" CornerRadius="12"
                                 HorizontalAlignment="Right" VerticalAlignment="Center">
@@ -142,54 +142,78 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,20,0">
 
                     <!-- Hoạt động gần đây -->
-                    <Border Style="{StaticResource DashboardCardStyle}" MinHeight="430">
-                        <StackPanel>
-                            <TextBlock Style="{StaticResource CardHeader}" Text="Hoạt động gần đây"/>
-                            <TextBlock Text="5 hoạt động mới nhất" 
-                               Style="{StaticResource CardCaption}" 
-                               Margin="0,-10,0,20"/>
-                            <ItemsControl ItemsSource="{Binding RecentActivitiesList}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0,0,0,15">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                                            <Border Grid.Column="0" 
-                                                Width="40" Height="40" 
-                                                CornerRadius="20"
-                                                Margin="0,0,15,0"
-                                                Background="{Binding BackgroundColor}">
-                                                <fa:IconImage Icon="{Binding Icon}" 
-                                                    Width="16" Height="16" 
-                                                    Foreground="{Binding IconColor}" 
-                                                    HorizontalAlignment="Center" 
-                                                    VerticalAlignment="Center"/>
+                        <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}" MinHeight="400">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource CardHeader}" Text="Hoạt động gần đây"/>
+                                <TextBlock Style="{StaticResource CardCaption}" Text="5 hoạt động mới nhất" Margin="0,-10,0,20"/>
+
+                                <ItemsControl ItemsSource="{Binding RecentActivitiesList}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,15">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Margin="0,0,15,0" Background="{Binding BackgroundColor}">
+                                                    <fa:IconImage Icon="{Binding Icon}" Width="16" Height="16" Foreground="{Binding IconColor}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding Description}" FontSize="14" FontWeight="Medium" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding TimeAgo}" FontSize="12" Foreground="{StaticResource TitleOfWindow}" Margin="0,2,0,0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" Style="{StaticResource DashboardCardStyle}" MinHeight="400">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource CardHeader}" Text="Sách quá hạn cần xử lý"/>
+                                <TextBlock Style="{StaticResource CardCaption}" Text="Danh sách sách đã quá hạn" Margin="0,-10,0,20"/>
+
+                                <ItemsControl ItemsSource="{Binding OverdueBooksList}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource Danger/Overdue_light}" 
+                                BorderBrush="{StaticResource Danger/Overdue}" 
+                                BorderThickness="1"
+                                CornerRadius="10" Padding="15,10" Margin="0,0,0,10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border Grid.Column="0" Width="32" Height="32" CornerRadius="16" Background="#FEE2E2" Margin="0,0,15,0" VerticalAlignment="Top">
+                                                        <fa:IconImage Icon="TriangleExclamation" Width="14" Height="14" Foreground="{StaticResource Danger/Overdue}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <StackPanel Grid.Column="1">
+                                                        <TextBlock Text="{Binding BookTitle}" FontSize="14" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                                        <TextBlock Text="{Binding ReaderName}" FontSize="13" Foreground="{StaticResource TitleOfWindow}" Margin="0,2,0,4"/>
+                                                        <TextBlock Foreground="{StaticResource Danger/Overdue}" FontSize="13" FontWeight="Medium">
+                                        <Run Text="Quá hạn: "/>
+                                        <Run Text="{Binding DueDate, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </Grid>
                                             </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
 
-                                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Description}" 
-                                                   FontSize="14" 
-                                                   FontWeight="Medium"
-                                                   Foreground="{StaticResource Black}"
-                                                   TextWrapping="Wrap"/>
+                    </Grid>
 
-                                            <TextBlock Text="{Binding TimeAgo}" 
-                                               FontSize="12" 
-                                               Foreground="{StaticResource TitleOfWindow}" 
-                                               Margin="0,2,0,0"/>
-                                            </StackPanel>
-
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-
-                        </StackPanel>
-                    </Border>
-                    
                     <!-- Xu hướng mượn/trả sách -->
                     <Border Style="{StaticResource DashboardCardStyle}" MinHeight="400">
                         <StackPanel>
@@ -312,32 +336,6 @@
 
                         </StackPanel>
                     </Border>
-
-                    <!-- Sách quá hạn cần xử lý -->
-                    <Border Style="{StaticResource DashboardCardStyle}">
-                        <StackPanel>
-                            <TextBlock Style="{StaticResource CardHeader}" Text="Sách quá hạn cần xử lý"/>
-
-                            <ItemsControl ItemsSource="{Binding OverdueBooksList}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border BorderBrush="{StaticResource Danger/Overdue}" BorderThickness="1" 
-                                                Background="{StaticResource Danger/Overdue_light}" 
-                                                CornerRadius="5" Padding="10" Margin="0,0,0,10">
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding BookTitle}" FontWeight="SemiBold"/>
-                                                <TextBlock Text="{Binding ReaderName}"/>
-                                                <TextBlock Text="{Binding OverdueDate, StringFormat='Quá hạn: {0:dd/MM/yyyy}'}" 
-                                                           Foreground="{StaticResource Danger/Overdue}"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-
-                        </StackPanel>
-                    </Border>
-
                 </StackPanel>
             </Grid>
         </StackPanel>
