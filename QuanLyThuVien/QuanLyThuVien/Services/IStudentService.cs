@@ -8,6 +8,7 @@ namespace QuanLyThuVien.Services
         Task<IEnumerable<Students>> GetAllStudentsAsync(string? keyword = null);
         Task AddStudentAsync(Students s);
         Task UpdateStudentAsync(Students s);
+        Task<Students> GetStudentByIDAsync(int id);
         Task DeleteStudentAsync(int id);
         Task BlockStudentAsync(int id);  
         Task UnblockStudentAsync(int id);

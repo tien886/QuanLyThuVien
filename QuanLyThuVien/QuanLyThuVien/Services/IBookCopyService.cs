@@ -8,6 +8,7 @@ namespace QuanLyThuVien.Services
         Task<int> GetTotalBookCopiesAsync();
         Task<int> AddBookCopiesAsync(BookCopies bookCopies);
         Task<string> GetNextAvailableBookCopyID();
+        Task<BookCopies> GetBookCopiesByIDAsync(int id);
         //Task<ISeries[]> GetBookStatusData();
         Task<BookStatusStats> GetBookStatusStatsAsync();
     }

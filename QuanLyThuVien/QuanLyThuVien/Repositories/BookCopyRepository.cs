@@ -109,5 +109,9 @@ namespace QuanLyThuVien.Repositories
                 Hong = hong
             };
         }
+        public async Task<BookCopies> GetBookCopiesByIDAsync(int id)
+        {
+            return await _dataContext.BookCopies.FindAsync(id);
+        }
     }
 }
