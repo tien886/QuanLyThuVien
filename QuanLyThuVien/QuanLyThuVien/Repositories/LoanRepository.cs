@@ -175,24 +175,26 @@ namespace QuanLyThuVien.Repositories
         {
             var today = DateTime.Now.Date;
 
-            // Logic: Lấy phiếu mượn chưa trả (Status="0") VÀ Hạn trả < Hôm nay
             return await _dataContext.Loans
                 .Include(l => l.Student)
                 .Include(l => l.BookCopy.Book)
                 .Where(l => l.LoanStatus == "0" && l.DueDate < today)
-                .OrderBy(l => l.DueDate) // Sắp xếp: Ai quá hạn lâu nhất (DueDate nhỏ nhất) lên đầu
+                .OrderBy(l => l.DueDate) 
                 .Take(count)
                 .Select(l => new OverdueBookStats
                 {
                     BookTitle = l.BookCopy.Book.Title,
                     ReaderName = l.Student.StudentName,
                     DueDate = l.DueDate,
-                    //EF Core không hỗ trợ trừ DateTime trực tiếp sang int trong SQL dễ dàng, 
-                    //nên ta tính DaysOverdue sau khi lấy về (client-side) hoặc dùng hàm SQL DateDiff nếu cần.
-                    //Ở đây ta tạm lấy DueDate về rồi tính ở ViewModel cho đơn giản và an toàn với mọi DB.
+                   
                 })
                 .AsNoTracking()
                 .ToListAsync();
+        }
+        public async Task<int> GetNextAvailableLoanID()
+        {
+            int currentID = await _dataContext.Loans.MaxAsync(l => l.LoanID);
+            return currentID + 1;
         }
     }
 }

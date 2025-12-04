@@ -24,5 +24,6 @@ namespace QuanLyThuVien.Services
         Task<int> GetCurrentlyBorrowedBooksAsync();
         Task<int> GetCurrentBorrowingStudentsAsync();
         Task<int> GetOverdueBooksAsyncCount();
+        Task<int> GetNextAvailableLoanID();
     }
 }
