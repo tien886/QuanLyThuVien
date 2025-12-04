@@ -20,9 +20,9 @@ namespace QuanLyThuVien.Repositories
 
             return await _dataContext.Loans
                 .CountAsync(l =>
-                    l.LoanStatus == "1" &&
-                    l.ReturnDate.Month == month &&
-                    l.ReturnDate.Year == year
+                    l.LoanStatus == "1" && l.ReturnDate != null
+                     && l.ReturnDate.Value.Month == month
+                     && l.ReturnDate.Value.Year == year
                 );
         }
         public async Task<int> GetCurrentlyBorrowedBooksAsync()
@@ -52,7 +52,9 @@ namespace QuanLyThuVien.Repositories
             return await _dataContext.Loans
                 .Include(s => s.Student)
                 .Include(b => b.BookCopy.Book)
-                .Where(l => l.LoanStatus == "0" || l.LoanStatus == "-1")
+                .Where(l => l.LoanStatus == "0")
+                .OrderByDescending(l => l.ReturnDate == null && l.DueDate < DateTime.Now)  // overdue first
+                .ThenBy(l => l.DueDate)  // optional, sort overdue by oldest due-date
                 .ToListAsync();
         }
         public async Task<StudentLoanStats> GetLoanStatsByStudentIdAsync(int studentId)
@@ -99,7 +101,9 @@ namespace QuanLyThuVien.Repositories
                 // Ở đây tôi giả định LoanStatus="1" hoặc kiểm tra ReturnDate có giá trị hợp lệ.
                 int returned = await _dataContext.Loans
                     .AsNoTracking()
-                    .CountAsync(l => l.LoanStatus == "1" && l.ReturnDate.Month == month && l.ReturnDate.Year == year);
+                    .CountAsync(l => l.LoanStatus == "1" && l.ReturnDate != null
+                                                        && l.ReturnDate.Value.Month == month
+                                                        && l.ReturnDate.Value.Year == year);
 
                 result.Add(new LoanTrendStats
                 {
