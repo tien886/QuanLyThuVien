@@ -93,7 +93,9 @@ namespace QuanLyThuVien.Repositories
                 // Logic: Dựa vào LoanDate
                 int borrowed = await _dataContext.Loans
                     .AsNoTracking()
-                    .CountAsync(l => l.LoanDate.Month == month && l.LoanDate.Year == year);
+                    .CountAsync(l => l.LoanDate != null && 
+                                     l.LoanDate.Value.Month == month && 
+                                     l.LoanDate.Value.Year == year);
 
                 // 2. Đếm số lượng TRẢ trong tháng này
                 // Logic: Dựa vào ReturnDate VÀ Trạng thái đã trả (giả sử Status="1" là đã trả/hoàn thành)
@@ -166,6 +168,11 @@ namespace QuanLyThuVien.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+        public async Task AddLoan(Loans loan)
+        {
+            _dataContext.Loans.Add(loan);
+            await _dataContext.SaveChangesAsync();
+        }
         public async Task UpdateLoan(Loans loan)
         {
             _dataContext.Loans.Update(loan);
@@ -185,7 +192,7 @@ namespace QuanLyThuVien.Repositories
                 {
                     BookTitle = l.BookCopy.Book.Title,
                     ReaderName = l.Student.StudentName,
-                    DueDate = l.DueDate,
+                    DueDate = l.DueDate.Value,
                    
                 })
                 .AsNoTracking()
