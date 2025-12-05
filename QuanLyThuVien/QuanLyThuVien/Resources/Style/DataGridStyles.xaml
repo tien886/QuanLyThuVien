@@ -33,7 +33,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Background" Value="{StaticResource Danger/Overdue_light}"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding LoanStatusDescription}" Value="borrowed">
+            <DataTrigger Binding="{Binding LoanStatusDescription}" Value="Đang mượn">
                 <Setter Property="Background" Value="{StaticResource InUse_light}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding LoanStatusDescription}" Value="returned">
@@ -63,7 +63,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{StaticResource Danger/Overdue}"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding LoanStatusDescription}" Value="borrowed">
+            <DataTrigger Binding="{Binding LoanStatusDescription}" Value="Đang mượn">
                 <Setter Property="Foreground" Value="{StaticResource InUse}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding LoanStatusDescription}" Value="returned">

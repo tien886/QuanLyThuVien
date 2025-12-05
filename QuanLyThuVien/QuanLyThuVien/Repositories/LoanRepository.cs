@@ -20,9 +20,9 @@ namespace QuanLyThuVien.Repositories
 
             return await _dataContext.Loans
                 .CountAsync(l =>
-                    l.LoanStatus == "1" &&
-                    l.ReturnDate.Month == month &&
-                    l.ReturnDate.Year == year
+                    l.LoanStatus == "1" && l.ReturnDate != null
+                     && l.ReturnDate.Value.Month == month
+                     && l.ReturnDate.Value.Year == year
                 );
         }
         public async Task<int> GetCurrentlyBorrowedBooksAsync()
@@ -52,7 +52,9 @@ namespace QuanLyThuVien.Repositories
             return await _dataContext.Loans
                 .Include(s => s.Student)
                 .Include(b => b.BookCopy.Book)
-                .Where(l => l.LoanStatus == "0" || l.LoanStatus == "-1")
+                .Where(l => l.LoanStatus == "0")
+                .OrderByDescending(l => l.ReturnDate == null && l.DueDate < DateTime.Now)  // overdue first
+                .ThenBy(l => l.DueDate)  // optional, sort overdue by oldest due-date
                 .ToListAsync();
         }
         public async Task<StudentLoanStats> GetLoanStatsByStudentIdAsync(int studentId)
@@ -91,7 +93,9 @@ namespace QuanLyThuVien.Repositories
                 // Logic: Dựa vào LoanDate
                 int borrowed = await _dataContext.Loans
                     .AsNoTracking()
-                    .CountAsync(l => l.LoanDate.Month == month && l.LoanDate.Year == year);
+                    .CountAsync(l => l.LoanDate != null && 
+                                     l.LoanDate.Value.Month == month && 
+                                     l.LoanDate.Value.Year == year);
 
                 // 2. Đếm số lượng TRẢ trong tháng này
                 // Logic: Dựa vào ReturnDate VÀ Trạng thái đã trả (giả sử Status="1" là đã trả/hoàn thành)
@@ -99,7 +103,9 @@ namespace QuanLyThuVien.Repositories
                 // Ở đây tôi giả định LoanStatus="1" hoặc kiểm tra ReturnDate có giá trị hợp lệ.
                 int returned = await _dataContext.Loans
                     .AsNoTracking()
-                    .CountAsync(l => l.LoanStatus == "1" && l.ReturnDate.Month == month && l.ReturnDate.Year == year);
+                    .CountAsync(l => l.LoanStatus == "1" && l.ReturnDate != null
+                                                        && l.ReturnDate.Value.Month == month
+                                                        && l.ReturnDate.Value.Year == year);
 
                 result.Add(new LoanTrendStats
                 {
@@ -162,6 +168,11 @@ namespace QuanLyThuVien.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+        public async Task AddLoan(Loans loan)
+        {
+            _dataContext.Loans.Add(loan);
+            await _dataContext.SaveChangesAsync();
+        }
         public async Task UpdateLoan(Loans loan)
         {
             _dataContext.Loans.Update(loan);
@@ -171,24 +182,26 @@ namespace QuanLyThuVien.Repositories
         {
             var today = DateTime.Now.Date;
 
-            // Logic: Lấy phiếu mượn chưa trả (Status="0") VÀ Hạn trả < Hôm nay
             return await _dataContext.Loans
                 .Include(l => l.Student)
                 .Include(l => l.BookCopy.Book)
                 .Where(l => l.LoanStatus == "0" && l.DueDate < today)
-                .OrderBy(l => l.DueDate) // Sắp xếp: Ai quá hạn lâu nhất (DueDate nhỏ nhất) lên đầu
+                .OrderBy(l => l.DueDate) 
                 .Take(count)
                 .Select(l => new OverdueBookStats
                 {
                     BookTitle = l.BookCopy.Book.Title,
                     ReaderName = l.Student.StudentName,
-                    DueDate = l.DueDate,
-                    //EF Core không hỗ trợ trừ DateTime trực tiếp sang int trong SQL dễ dàng, 
-                    //nên ta tính DaysOverdue sau khi lấy về (client-side) hoặc dùng hàm SQL DateDiff nếu cần.
-                    //Ở đây ta tạm lấy DueDate về rồi tính ở ViewModel cho đơn giản và an toàn với mọi DB.
+                    DueDate = l.DueDate.Value,
+                   
                 })
                 .AsNoTracking()
                 .ToListAsync();
+        }
+        public async Task<int> GetNextAvailableLoanID()
+        {
+            int currentID = await _dataContext.Loans.MaxAsync(l => l.LoanID);
+            return currentID + 1;
         }
     }
 }

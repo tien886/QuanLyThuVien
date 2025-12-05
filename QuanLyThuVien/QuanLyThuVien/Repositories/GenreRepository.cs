@@ -16,6 +16,6 @@ namespace QuanLyThuVien.Repositories
         {
             return await _dataContext.Genres.ToListAsync();
         }
-
+        
     }
 }

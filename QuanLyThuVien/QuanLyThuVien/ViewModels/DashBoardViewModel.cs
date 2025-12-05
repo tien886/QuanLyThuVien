@@ -284,12 +284,12 @@ namespace QuanLyThuVien.ViewModels
             {
                 // Nếu LoanStatus là "0" (đang mượn) -> Mượn. Nếu "1" (đã trả) -> Trả
                 // Ở đây tôi giả định logic đơn giản dựa vào ngày tạo phiếu
-                rawList.Add((loan.LoanDate, "Borrow", loan.Student.StudentName, "mượn sách"));
+                rawList.Add((loan.LoanDate ?? DateTime.MinValue, "Borrow", loan.Student.StudentName, "mượn sách"));
 
                 // Nếu muốn hiện cả hoạt động TRẢ sách, bạn cần check ReturnDate
-                if (loan.ReturnDate != DateTime.MinValue && loan.LoanStatus == "1") // Giả sử 1 là đã trả
+                if (loan.LoanStatus == "1" && loan.ReturnDate is DateTime rd)
                 {
-                    rawList.Add((loan.ReturnDate, "Return", loan.Student.StudentName, "trả sách"));
+                    rawList.Add((rd, "Return", loan.Student.StudentName, "trả sách"));
                 }
             }
 

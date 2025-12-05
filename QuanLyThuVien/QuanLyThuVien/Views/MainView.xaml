@@ -119,14 +119,7 @@
                         </RadioButton>
                     </StackPanel>
                     <!-- Nút đăng xuất -->
-                    <Button Grid.Row="1"
-                            Style="{StaticResource LogoutButtonStyle}"
-                            Margin="12,0,12,20">
-                        <StackPanel Orientation="Horizontal" >
-                            <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="SignOutAlt" Foreground="Red"/>
-                            <TextBlock Style="{StaticResource menuButtonText}" Text="Đăng xuất" Foreground="Red"/>
-                        </StackPanel>
-                    </Button>
+                   
                 </Grid>
             </Grid>
 

@@ -6,13 +6,13 @@ namespace QuanLyThuVien.Models
     {
         [Key]
         public int LoanID { get; set; }
-        public DateTime LoanDate { get; set; }
-        public DateTime DueDate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? LoanDate { get; set; }
+        public DateTime? DueDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public string LoanStatus { get; set; }
         // FK
         public string CopyID { get; set; }
-        public int StudentID { get; set; }
+        public int? StudentID { get; set; }
         // Navigation property
         public BookCopies BookCopy { get; set; }
         public Students Student { get; set; }
@@ -21,11 +21,12 @@ namespace QuanLyThuVien.Models
         {
             get
             {
-                return LoanStatus switch
-                {
-                    "0" => "borrowed",
-                    "-1" => "overdue"
-                };
+                if (LoanStatus == "0" && ReturnDate == null && DueDate > DateTime.Now)
+                    return "Đang mượn";
+
+                if (LoanStatus == "0" && ReturnDate == null && DueDate < DateTime.Now)
+                    return "Quá hạn";
+                return "Không xác định";
             }
         }
     }

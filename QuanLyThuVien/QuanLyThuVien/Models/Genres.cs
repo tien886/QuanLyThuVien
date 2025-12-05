@@ -8,6 +8,8 @@ namespace QuanLyThuVien.Models
         [Key]
         public int GenreID { get; set; }
         public string GenreName { get; set; }
+        public int LoanDurationDays { get; set; }
+
         // Navigation property
         public ICollection<Books> Books { get; set; }
     }

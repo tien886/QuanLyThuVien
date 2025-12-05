@@ -24,6 +24,8 @@
                 <ResourceDictionary Source="/Resources/Style/RadioButtonStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/IconStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/TextBlockStyles.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/TextBoxStyles.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/DatePicker.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <!-- ✅ Đặt converter vào đây -->

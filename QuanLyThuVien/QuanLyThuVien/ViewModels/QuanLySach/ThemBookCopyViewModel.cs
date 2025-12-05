@@ -5,6 +5,7 @@ using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
 
 namespace QuanLyThuVien.ViewModels.QuanLySach
 {
@@ -57,6 +58,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 DateAdded = DateTime.Now
             };
             await _bookCopyService.AddBookCopiesAsync(bookCopies);
+            MessageBox.Show("Thêm sinh viên thành công!", "Thông báo");
             await ClosePopup();
         }
         [RelayCommand]

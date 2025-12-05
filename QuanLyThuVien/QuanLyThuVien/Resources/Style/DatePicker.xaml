@@ -1,0 +1,122 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+                    >
+    <Color x:Key="PrimaryBlueColor">#007ACC</Color>
+    <SolidColorBrush x:Key="PrimaryBlueBrush" Color="{StaticResource PrimaryBlueColor}"/>
+    <SolidColorBrush x:Key="LightGrayBackground" Color="#FFF5F6FA"/>
+    <SolidColorBrush x:Key="MediumGrayBorder" Color="#E1E1E1"/>
+    <SolidColorBrush x:Key="DarkGrayIcon" Color="#666666"/>
+
+    <!-- Your textbox style (for "Tên sách") -->
+    <Style x:Key="RoundedTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Background" Value="#F5F7FB"/>
+        <Setter Property="BorderBrush" Value="#D0D7E2"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10,4"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10">
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Remove watermark / extra chrome from DatePickerTextBox -->
+    <Style TargetType="{x:Type DatePickerTextBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
+                    <ScrollViewer x:Name="PART_ContentHost"
+                              Margin="0"
+                              VerticalContentAlignment="Center"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Text">
+            <Setter.Value>
+                <Binding Path="SelectedDate"
+                     RelativeSource="{RelativeSource AncestorType=DatePicker}"
+                     StringFormat="dd/MM/yyyy" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="FontSize" Value="16"/>
+        <!-- không cho gõ -->
+    </Style>
+
+    <!-- DatePicker with ONE rounded box, icon inside -->
+    <Style x:Key="CleanRoundedDatePicker" TargetType="{x:Type DatePicker}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DatePicker}">
+                    <Grid>
+                        <!-- Đây là cái KHUNG DUY NHẤT -->
+                        <Border x:Name="Border"
+                            Background="#F5F7FB"
+                            BorderBrush="#D0D7E2"
+                            BorderThickness="1"
+                            CornerRadius="11">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Text hiển thị ngày -->
+                                <DatePickerTextBox x:Name="PART_TextBox"
+                                               Grid.Column="0"
+                                               Background="Transparent"
+                                               BorderThickness="0"
+                                               Padding="10,4"
+                                               VerticalContentAlignment="Center"
+                                               Foreground="Black"/>
+
+                                <!-- Nút lịch nằm TRONG khung -->
+                                <Button x:Name="PART_Button"
+                                        Grid.Column="1"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Width="30" Height="30"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Cursor="Hand">
+
+                                    <fa:IconImage Icon="Calendar"
+                                        Width="18"
+                                        Height="18"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Foreground="#7A7A7A"/>
+                                </Button>
+                            </Grid>
+                        </Border>
+
+                        <!-- Popup lịch -->
+                        <Popup x:Name="PART_Popup"
+                           Placement="Bottom"
+                           StaysOpen="False">
+                            <Border Background="White"
+                                BorderBrush="#C2C2C2"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <Calendar Width="280" Height="280"/>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

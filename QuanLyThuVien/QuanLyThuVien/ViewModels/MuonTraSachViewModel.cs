@@ -32,6 +32,7 @@ namespace QuanLyThuVien.ViewModels
                     _searhBarText = value;
                     OnPropertyChanged();
                     _ = SearchPhieuMuonAsync(SearchBarText);
+                    Task.Delay(1000);
                 }
             }
         }
@@ -54,7 +55,24 @@ namespace QuanLyThuVien.ViewModels
         {
             try
             {
-
+                if(hint == "")
+                {
+                    return;
+                }
+                var loans = await _loanService.GetAllLoansAsync();
+                ObservableCollection<Loans> filteredLoans = [];
+                foreach(Loans loan in loans)
+                {
+                    string pseudoHint = hint.ToLower();
+                    string pseudoMaPhieu = loan.LoanID.ToString();
+                    string pseudoStudentName = loan.Student.StudentName.ToLower();
+                    string pseudoBook = loan.BookCopy.Book.Title.ToLower();
+                    string pseudoBorrowDate = loan.LoanDate.ToString();
+                    string pseudoDueDate= loan.DueDate.ToString();
+                    if (pseudoMaPhieu.Contains(pseudoHint) || pseudoStudentName.Contains(pseudoHint) || pseudoBook.Contains(pseudoHint) || pseudoBorrowDate.Contains(pseudoHint) || pseudoDueDate.Contains(pseudoHint))
+                        filteredLoans.Add(loan);
+                }
+                LoanList = filteredLoans;
             }
             catch (Exception ex)
             {

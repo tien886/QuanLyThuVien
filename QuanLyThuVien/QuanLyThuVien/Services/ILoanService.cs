@@ -20,9 +20,11 @@ namespace QuanLyThuVien.Services
         Task<IEnumerable<BookLoanStats>> GetTopBorrowedBooksAsync();
         Task<IEnumerable<Loans>> GetRecentLoansAsync(int count);
         Task UpdateLoan(Loans loan);
+        Task AddLoan(Loans loan);
         Task<IEnumerable<OverdueBookStats>> GetOverdueBooksAsync(int count);
         Task<int> GetCurrentlyBorrowedBooksAsync();
         Task<int> GetCurrentBorrowingStudentsAsync();
         Task<int> GetOverdueBooksAsyncCount();
+        Task<int> GetNextAvailableLoanID();
     }
 }

@@ -109,5 +109,35 @@ namespace QuanLyThuVien.Repositories
                 Hong = hong
             };
         }
+        public async Task<BookCopies> GetBookCopiesByIDAsync(string id)
+        {
+            return await _dataContext.BookCopies.FindAsync(id);
+        }
+        public async Task<Books> GetBookByCopyIdAsync(string copyId)
+        {
+            return await _dataContext.BookCopies
+                .Include(bc => bc.Book)
+                .Where(bc => bc.CopyID == copyId)
+                .Select(bc => bc.Book)
+                .FirstOrDefaultAsync();
+        }
+        public async Task<Genres> GetGenreByCopyIdAsync(string copyId)
+        {
+            return await _dataContext.BookCopies
+                .Include(bc => bc.Book)
+                .ThenInclude(b => b.Genre)
+                .Where(bc => bc.CopyID == copyId)
+                .Select(bc => bc.Book.Genre)
+                .FirstOrDefaultAsync();
+        }
+        public async Task<BookCategories> GetBookCategoryByCopyIDAsync(string Id)
+        {
+            return await _dataContext.BookCopies
+                .Include(bc => bc.Book)
+                .ThenInclude(b => b.BookCategory)
+                .Where(bc => bc.CopyID == Id)
+                .Select(bc => bc.Book.BookCategory)
+                .FirstOrDefaultAsync();
+        }
     }
 }

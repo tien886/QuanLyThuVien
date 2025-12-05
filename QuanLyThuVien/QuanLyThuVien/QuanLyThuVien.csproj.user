@@ -8,5 +8,8 @@
     <Compile Update="Views\QuanLySachPopup\ThemBookCopyPopup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\QuanLySinhVienPopup\ThemSinhVienPopup.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

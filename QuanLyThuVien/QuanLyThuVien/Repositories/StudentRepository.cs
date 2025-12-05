@@ -173,6 +173,9 @@ namespace QuanLyThuVien.Repositories
             }
             return totalPages;
         }
-
+        public async Task<Students> GetStudentByIDAsync(int id)
+        {
+            return await _dataContext.Students.FindAsync(id);
+        }
     }
 }
