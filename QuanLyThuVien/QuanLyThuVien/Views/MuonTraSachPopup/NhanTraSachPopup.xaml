@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="QuanLyThuVien.Views.MuonTraSachPopup.NhanTraSachPopup"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:QuanLyThuVien.ViewModels.MuonTraSach">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Text="Tình trạng sách khi trả"
+                   FontSize="16"
+                   Margin="0,0,0,8"/>
+
+        <!-- ComboBox -->
+        <ComboBox Grid.Row="1"
+                    Style="{StaticResource RoundedComboBoxStyle}"
+                    ItemsSource="{Binding StatusOptions}"
+                    SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"
+                    Width="200"
+                    FontSize="16"
+                    Margin="0,0,0,16"/>
+
+        <!-- Save Button -->
+        <Button Grid.Row="2"
+                Content="Lưu trạng thái"
+                Command="{Binding SaveStatusCommand}"
+                Width="150"
+                Height="40"
+                HorizontalAlignment="Left"
+                FontSize="12"
+                Style="{StaticResource RoundedButton}"
+                />
+    </Grid>
+</UserControl>
+
