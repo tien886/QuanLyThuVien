@@ -16,5 +16,9 @@ namespace QuanLyThuVien.Repositories
         {
             return await _dataContext.BookCategories.ToListAsync();
         }
+        public async Task<BookCategories> GetBookCategoryByID(int Id)
+        {
+            return await _dataContext.BookCategories.FindAsync(Id);
+        }
     }
 }
