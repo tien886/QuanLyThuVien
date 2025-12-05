@@ -191,7 +191,7 @@
                         BorderBrush="#DADCE0"
                         BorderThickness="1"
                         Foreground="#3C4043"
-                        Command="{Binding CancelCommand}">
+                        Command="{Binding ClosePopupCommand}">
                     <TextBlock Text="Hủy" HorizontalAlignment="Center"/>
 
                 </Button>
