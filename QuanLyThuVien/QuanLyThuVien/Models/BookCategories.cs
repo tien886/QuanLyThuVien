@@ -7,7 +7,6 @@ namespace QuanLyThuVien.Models
         [Key]
         public int CategoryID { get; set; }
         public string CategoryName { get; set; }
-        public int LoanDurationDays { get; set; }
         // Navigation property
         public ICollection<Books> Books { get; set; }
     }
