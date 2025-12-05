@@ -2,17 +2,19 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using QuanLyThuVien.Data;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using QuanLyThuVien.Views.QuanLySachPopup;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
 namespace QuanLyThuVien.ViewModels.QuanLySach
 {
     public partial class BookDetailAndCopyViewModel : ObservableObject
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IBookCopyService _bookService;
+        private readonly IBookCopyService _bookCopyService;
         private Books currentBook;
         public BookDetailAndCopyViewModel(
             IServiceProvider serviceProvider,
@@ -20,7 +22,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
             )
         {
             _serviceProvider = serviceProvider;
-            _bookService = bookService;
+            _bookCopyService = bookService;
 
         }
 
@@ -72,7 +74,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 DangMuon = currentBook.BookCopies.Count(c => c.Status == "0");
                 HongMat = TongSoBan - CoSan - DangMuon;
                 // copies list 
-                BookCopiesList = new ObservableCollection<BookCopies>(await _bookService.GetAllBookCopiesAsync(book));
+                BookCopiesList = new ObservableCollection<BookCopies>(await _bookCopyService.GetAllBookCopiesAsync(book));
             }
             catch (Exception ex)
             {
@@ -95,6 +97,38 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 await vm.SetCurrentBook(currentBook);
             }
             await LoadPage(currentBook);
+        }
+        [RelayCommand]
+        public async Task OpenSuaBookCopyPopup(BookCopies bookCopy)
+        {
+            var suaBookCopyPopup = _serviceProvider.GetRequiredService<SuaBookCopyPopup>();
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaBookCopyPopup));
+            if (suaBookCopyPopup.DataContext is SuaBookCopyViewModel vm)
+            {
+                await vm.SetCurrentBookCopy(bookCopy);
+            }
+        }
+        [RelayCommand]
+        public async Task DeleteBookCopy(BookCopies bookCopy)
+        {
+            var result = MessageBox.Show(
+                $"Bạn có chắc muốn xóa bản sao {bookCopy.CopyID} không?",
+                "Cảnh báo",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                if(bookCopy != null)
+                    await _bookCopyService.DeleteCopiesAsync(bookCopy);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xóa bản sao: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

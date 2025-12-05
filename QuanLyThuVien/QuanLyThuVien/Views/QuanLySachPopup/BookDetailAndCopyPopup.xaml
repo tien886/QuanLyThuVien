@@ -292,14 +292,14 @@
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center">
                                         <Button Style="{StaticResource CircularIconButton}"
-                                    Command="{Binding DataContext.EditCopyCommand,
+                                    Command="{Binding DataContext.OpenSuaBookCopyPopupCommand,
                                                       RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}">
                                             <fa:IconBlock Icon="PenToSquare" Width="14" Height="14"/>
                                         </Button>
 
                                         <Button Style="{StaticResource CircularIconButton}"
-                                    Command="{Binding DataContext.DeleteCopyCommand,
+                                    Command="{Binding DataContext.DeleteBookCopyCommand,
                                                       RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}">
                                             <fa:IconBlock Icon="TrashAlt" Width="14" Height="14" Foreground="Red"/>
