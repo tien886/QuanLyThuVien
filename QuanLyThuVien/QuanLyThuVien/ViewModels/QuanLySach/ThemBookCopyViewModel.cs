@@ -11,7 +11,6 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
 {
     public partial class ThemBookCopyViewModel : ObservableObject
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly IBookCopyService _bookCopyService;
         private readonly ILocationService _locationService;
         private Books currentBook;
@@ -22,12 +21,10 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
         [ObservableProperty]
         private string copyID;
         public ThemBookCopyViewModel(
-            IServiceProvider serviceProvider,
             IBookCopyService bookCopyService,
             ILocationService locationService
             )
         {
-            _serviceProvider = serviceProvider;
             _bookCopyService = bookCopyService;
             _locationService = locationService;
         }
@@ -58,7 +55,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 DateAdded = DateTime.Now
             };
             await _bookCopyService.AddBookCopiesAsync(bookCopies);
-            MessageBox.Show("Thêm sinh viên thành công!", "Thông báo");
+            MessageBox.Show("Sửa bản sao thành công!", "Thông báo");
             await ClosePopup();
         }
         [RelayCommand]

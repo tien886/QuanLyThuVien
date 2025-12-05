@@ -29,12 +29,12 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
             _bookCopyService = bookCopyService;
             _locationService = locationService;
         }
-        public async Task SetCurrentBook(BookCopies bookCopy)
+        public async Task SetCurrentBookCopy(BookCopies bookCopy)
         {
             var locs = await _locationService.GetAllLocationsAsync();
             Locations = new ObservableCollection<Locations>(locs);
             currentBookCopy = bookCopy;
-            LocationSelected = await _bookCopyService.GetLocationByBookCopyID(CopyID);
+            LocationSelected = await _bookCopyService.GetLocationByBookCopyID(bookCopy.CopyID);
             Debug.WriteLine(LocationSelected.LocName);
             if (currentBookCopy == null)
             {
