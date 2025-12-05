@@ -1,9 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace QuanLyThuVien.ViewModels.MuonTraSach
 {
@@ -50,7 +52,7 @@ namespace QuanLyThuVien.ViewModels.MuonTraSach
         [RelayCommand]
         public async Task CreateLoan()
         {
-            Loans loans = new Loans
+            Loans loan = new Loans
             {
                 LoanID = await _loanService.GetNextAvailableLoanID(),
                 StudentID = StudentId,
@@ -60,7 +62,16 @@ namespace QuanLyThuVien.ViewModels.MuonTraSach
                 DueDate = Duedate,
                 ReturnDate = null,
             };
-            await _loanService.AddLoan(loans);
+            var copy = await _bookCopyService.GetBookCopiesByIDAsync(BookCopyID);
+            copy.Status = "0";
+            if (!ValidateLoan(loan))
+            {
+                MessageBox.Show("Phiếu mượn bị lỗi!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            await _loanService.AddLoan(loan);
+            MessageBox.Show("Thêm phiếu mượn thành công!", "Thông báo");
+            await ClosePopup();
         }
         private void LoadPage()
         {
@@ -69,7 +80,7 @@ namespace QuanLyThuVien.ViewModels.MuonTraSach
         }
         partial void OnStudentIdChanged(int? value)
         {
-            if (value.HasValue)
+            if (value != null)
                 _ = LoadStudentAsync(value.Value);
             else
                 StudentName = string.Empty;
@@ -82,14 +93,16 @@ namespace QuanLyThuVien.ViewModels.MuonTraSach
         {
             if (!string.IsNullOrWhiteSpace(value) && value.Length == 8)
             {
-                await LoadBookCopyAsync(value);
                 var copy = await _bookCopyService.GetBookCopiesByIDAsync(value);
-                if (copy == null)
+                if (copy == null || !ValidateStatusBeforeLoan(copy) )
                     return;
-                var genre = await _genreService.GetGenreByID(copy.Book.GenreID);
+                var book = await _bookCopyService.GetBookByCopyIdAsync(value);
+                BookTitle = book.Title ?? "Không tìm thấy";
+                Debug.WriteLine(BookTitle);
+                var genre = await _bookCopyService.GetGenreByCopyIdAsync(value);
                 int loanDays = genre.LoanDurationDays;
                 GenreName = genre.GenreName;
-                var category = await _bookCategoryService.GetBookCategoryByID(copy.Book.CategoryID);
+                var category = await _bookCopyService.GetBookCategoryByCopyIDAsync(value);
                 CategoryName = category.CategoryName;
                 if (loanDays != 0) 
                     Duedate = DateTime.Now.AddDays(loanDays);
@@ -100,13 +113,38 @@ namespace QuanLyThuVien.ViewModels.MuonTraSach
             var student = await _studentService.GetStudentByIDAsync(id);
             StudentName = student?.StudentName ?? "Không tìm thấy";
         }
-
-        private async Task LoadBookCopyAsync(string copyID)
+        private bool ValidateStatusBeforeLoan(BookCopies bc)
         {
-            var copy = await _bookCopyService.GetBookCopiesByIDAsync(copyID);
-            BookTitle = copy?.Book?.Title ?? "Không tìm thấy";
-            Debug.WriteLine(BookTitle);
+            if (bc.Status == "-1")
+            {
+                BookTitle = "Bản sao này đang bị hỏng";
+                return false;
+            }
+            if (bc.Status == "-2")
+            {
+                BookTitle = "Bản sao này đang bị hỏng";
+                return false;
+            }
+            if (bc.Status == "0")
+            {
+                BookTitle = "Bản sao này đang được mượn";
+                return false;
+            }
+            return true;
         }
-        
+        [RelayCommand]
+        public async Task ClosePopup()
+        {
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
+        }
+        private bool ValidateLoan(Loans loan)
+        {
+            if (loan.DueDate <= loan.LoanDate || loan.DueDate == null|| loan.LoanDate == null || StudentId == null || BookCopyID == null)
+            {
+
+                return false;
+            }
+            return true;
+        }
     }
 }
