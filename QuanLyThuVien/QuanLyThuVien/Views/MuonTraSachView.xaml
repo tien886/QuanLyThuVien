@@ -82,7 +82,7 @@
                         <StackPanel Grid.Column="0" Orientation="Horizontal" 
                                     VerticalAlignment="Center" Margin="0,0,-20,0">
                             <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text="Danh sách đang mượn ("/>
-                            <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text="{Binding PhieuMuonCount}"/>
+                            <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text="{Binding DangMuon}"/>
                             <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text=" cuốn)"/>
                         </StackPanel>
 
