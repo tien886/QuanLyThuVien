@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QuanLyThuVien.Views.MuonTraSachPopup"
              Width="620"
-             Height="440">
+             Height="540">
     <Border Padding="24"
             Background="White"
             CornerRadius="12"
@@ -52,10 +52,11 @@
             <!-- FORM -->
             <Grid Grid.Row="1" Margin="0,16,0,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -71,6 +72,8 @@
                             Style="{StaticResource InputBox}"
                             Text="{Binding StudentId, UpdateSourceTrigger=PropertyChanged}"
                              Height="38"
+                             Width="150"
+                            HorizontalAlignment="Left"
                              Padding="8,4"
                              BorderBrush="#DADCE0"
                              BorderThickness="1"
@@ -101,13 +104,14 @@
                     <TextBox Style="{StaticResource InputBox}" 
                             Text="{Binding BookCopyID, UpdateSourceTrigger=PropertyChanged}"
                              Height="38"
+                             Width="150"
+                             HorizontalAlignment="Left"
                              Padding="8,4"
                              BorderBrush="#DADCE0"
                              BorderThickness="1"
                              Background="#F8F9FA"/>
                 </StackPanel>
-
-                <!-- Tên sách (readonly) -->
+                
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="12,0,0,12">
                     <TextBlock FontSize="16" Margin="0,0,0,4"
                                Text="Tên sách"/>
@@ -121,30 +125,57 @@
                              Background="#F1F3F4"
                              Foreground="#5F6368"/>
                 </StackPanel>
-
-                <!-- Ngày mượn -->
                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,12,0">
                     <TextBlock FontSize="16" Margin="0,0,0,4"
-                               Text="Ngày mượn"/>
-                    <DatePicker 
-                                Style="{StaticResource RoundedDatePickerStyle}"
-                                SelectedDate="{Binding LoanDate}"
-                                Height="38"
-                                BorderBrush="#DADCE0"
-                                BorderThickness="1"
-                                Background="#FFFFFF"/>
+                               Text="Thể loại"/>
+                    <TextBox Style="{StaticResource InputBox}" 
+                             Text="{Binding CategoryName}"
+                             Width="272"
+                              Height="38"
+                              Padding="8,4"
+                              IsReadOnly="True"
+                              BorderBrush="#E0E0E0"
+                              BorderThickness="1"
+                              Background="#F1F3F4"
+                              Foreground="#5F6368"/>
                 </StackPanel>
-                
+
                 <StackPanel Grid.Row="2" Grid.Column="1" Margin="12,0,0,0">
                     <TextBlock FontSize="16" Margin="0,0,0,4"
-                               Text="Hạn trả"/>
+                               Text="Loại sách"/>
+                    <TextBox Style="{StaticResource InputBox}" 
+                             Text="{Binding GenreName}"
+                              Height="38"
+                              Padding="8,4"
+                              IsReadOnly="True"
+                              BorderBrush="#E0E0E0"
+                              BorderThickness="1"
+                              Background="#F1F3F4"
+                              Foreground="#5F6368"/>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,0,12,0">
+                    <TextBlock FontSize="16" Margin="0,0,0,4"
+               Text="Ngày mượn"/>
                     <DatePicker 
-                                Style="{StaticResource RoundedDatePickerStyle}"
-                                Height="38"
-                                SelectedDate="{Binding DueDate}"
-                                BorderBrush="#DADCE0"
-                                BorderThickness="1"
-                                Background="#FFFFFF"/>
+                Style="{StaticResource CleanRoundedDatePicker}"
+                SelectedDate="{Binding Loandate}"
+                Height="38"
+                Width="272"
+                BorderBrush="#DADCE0"
+                BorderThickness="1"
+                Background="#FFFFFF"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="4" Grid.Column="1" Margin="12,0,0,0">
+                    <TextBlock FontSize="16" Margin="0,0,0,4"
+               Text="Hạn trả"/>
+                    <DatePicker 
+                Style="{StaticResource CleanRoundedDatePicker}"
+                Height="38"
+                SelectedDate="{Binding Duedate}"
+                BorderBrush="#DADCE0"
+                BorderThickness="1"
+                Background="#FFFFFF"/>
                 </StackPanel>
             </Grid>
 
