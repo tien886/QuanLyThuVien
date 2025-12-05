@@ -16,9 +16,6 @@ namespace QuanLyThuVien.Repositories
         {
             return await _dataContext.Genres.ToListAsync();
         }
-        public async Task<Genres>GetGenreByID(int Id)
-        {
-            return await _dataContext.Genres.FindAsync(Id);
-        }
+        
     }
 }
