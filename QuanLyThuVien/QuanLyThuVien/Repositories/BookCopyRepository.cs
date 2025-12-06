@@ -139,5 +139,22 @@ namespace QuanLyThuVien.Repositories
                 .Select(bc => bc.Book.BookCategory)
                 .FirstOrDefaultAsync();
         }
+        public async Task<Locations> GetLocationByBookCopyID(string Id)
+        {
+            return await _dataContext.BookCopies
+                    .Where(bc => bc.CopyID == Id)
+                    .Select(bc => bc.Location)
+                    .FirstOrDefaultAsync();
+        }
+        public async Task UpdateCopiesAsync(BookCopies copies)
+        {
+            _dataContext.BookCopies.Update(copies);
+            await _dataContext.SaveChangesAsync();
+        }
+        public async Task DeleteCopiesAsync(BookCopies copies)
+        {
+            _dataContext.BookCopies.Remove(copies);
+            await _dataContext.SaveChangesAsync();
+        }
     }
 }

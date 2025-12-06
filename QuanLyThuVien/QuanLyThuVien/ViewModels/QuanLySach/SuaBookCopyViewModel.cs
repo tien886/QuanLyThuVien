@@ -7,20 +7,21 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 
+
 namespace QuanLyThuVien.ViewModels.QuanLySach
 {
-    public partial class ThemBookCopyViewModel : ObservableObject
+    public partial class SuaBookCopyViewModel : ObservableObject
     {
         private readonly IBookCopyService _bookCopyService;
         private readonly ILocationService _locationService;
-        private Books currentBook;
+        private BookCopies currentBookCopy;
         [ObservableProperty]
         private Locations locationSelected;
         [ObservableProperty]
         private ObservableCollection<Locations> locations;
         [ObservableProperty]
         private string copyID;
-        public ThemBookCopyViewModel(
+        public SuaBookCopyViewModel(
             IBookCopyService bookCopyService,
             ILocationService locationService
             )
@@ -28,33 +29,34 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
             _bookCopyService = bookCopyService;
             _locationService = locationService;
         }
-        public async Task SetCurrentBook(Books book)
+        public async Task SetCurrentBookCopy(BookCopies bookCopy)
         {
             var locs = await _locationService.GetAllLocationsAsync();
             Locations = new ObservableCollection<Locations>(locs);
-            currentBook = book;
-            if(currentBook == null)
+            currentBookCopy = bookCopy;
+            LocationSelected = await _bookCopyService.GetLocationByBookCopyID(bookCopy.CopyID);
+            Debug.WriteLine(LocationSelected.LocName);
+            if (currentBookCopy == null)
             {
                 Debug.WriteLine("Book transmission failed");
             }
             else
             {
                 CopyID = await _bookCopyService.GetNextAvailableBookCopyID();
-                Debug.WriteLine($"add a {currentBook.Title} copies");
             }
         }
         [RelayCommand]
-        public async Task AddBookCopies()
+        public async Task SaveBookCopies()
         {
             BookCopies bookCopies = new BookCopies
             {
                 CopyID = await _bookCopyService.GetNextAvailableBookCopyID(),
-                BookID = currentBook.BookID,
+                BookID = currentBookCopy.BookID,
                 Status = "1",
                 LocationID = LocationSelected.LocationID,
                 DateAdded = DateTime.Now
             };
-            await _bookCopyService.AddBookCopiesAsync(bookCopies);
+            await _bookCopyService.UpdateCopiesAsync(bookCopies);
             MessageBox.Show("Sửa bản sao thành công!", "Thông báo");
             await ClosePopup();
         }
