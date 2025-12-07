@@ -146,15 +146,15 @@ namespace QuanLyThuVien.Repositories
                     .Select(bc => bc.Location)
                     .FirstOrDefaultAsync();
         }
-        public async Task UpdateCopiesAsync(BookCopies copies)
+        public async Task<int> UpdateCopiesAsync(BookCopies copies)
         {
             _dataContext.BookCopies.Update(copies);
-            await _dataContext.SaveChangesAsync();
+            return await _dataContext.SaveChangesAsync();
         }
-        public async Task DeleteCopiesAsync(BookCopies copies)
+        public async Task<int> DeleteCopiesAsync(BookCopies copies)
         {
             _dataContext.BookCopies.Remove(copies);
-            await _dataContext.SaveChangesAsync();
+            return await _dataContext.SaveChangesAsync();
         }
     }
 }

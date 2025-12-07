@@ -15,8 +15,8 @@ namespace QuanLyThuVien.Services
         Task<BookCategories> GetBookCategoryByCopyIDAsync(string Id);
         Task<Books> GetBookByCopyIdAsync(string copyId);
         Task<Locations> GetLocationByBookCopyID(string Id);
-        Task UpdateCopiesAsync(BookCopies copies);
-        Task DeleteCopiesAsync(BookCopies copies);
+        Task<int> UpdateCopiesAsync(BookCopies copies);
+        Task<int> DeleteCopiesAsync(BookCopies copies);
     }
 }
 
