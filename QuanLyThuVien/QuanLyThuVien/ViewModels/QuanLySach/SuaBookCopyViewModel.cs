@@ -35,7 +35,8 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
             Locations = new ObservableCollection<Locations>(locs);
             currentBookCopy = bookCopy;
             LocationSelected = await _bookCopyService.GetLocationByBookCopyID(bookCopy.CopyID);
-            Debug.WriteLine(LocationSelected.LocName);
+            Debug.WriteLine(currentBookCopy.Book.Title);
+            
             if (currentBookCopy == null)
             {
                 Debug.WriteLine("Book transmission failed");
@@ -45,18 +46,14 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 CopyID = await _bookCopyService.GetNextAvailableBookCopyID();
             }
         }
+        partial void OnLocationSelectedChanged(Locations value)
+        {
+            currentBookCopy.LocationID = value.LocationID;
+        }
         [RelayCommand]
         public async Task SaveBookCopies()
         {
-            BookCopies bookCopies = new BookCopies
-            {
-                CopyID = await _bookCopyService.GetNextAvailableBookCopyID(),
-                BookID = currentBookCopy.BookID,
-                Status = "1",
-                LocationID = LocationSelected.LocationID,
-                DateAdded = DateTime.Now
-            };
-            await _bookCopyService.UpdateCopiesAsync(bookCopies);
+            await _bookCopyService.UpdateCopiesAsync(currentBookCopy);
             MessageBox.Show("Sửa bản sao thành công!", "Thông báo");
             await ClosePopup();
         }

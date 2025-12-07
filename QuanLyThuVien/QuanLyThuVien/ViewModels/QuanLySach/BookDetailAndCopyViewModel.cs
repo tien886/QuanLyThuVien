@@ -102,11 +102,11 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
         public async Task OpenSuaBookCopyPopup(BookCopies bookCopy)
         {
             var suaBookCopyPopup = _serviceProvider.GetRequiredService<SuaBookCopyPopup>();
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaBookCopyPopup));
             if (suaBookCopyPopup.DataContext is SuaBookCopyViewModel vm)
             {
                 await vm.SetCurrentBookCopy(bookCopy);
             }
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaBookCopyPopup));
         }
         [RelayCommand]
         public async Task DeleteBookCopy(BookCopies bookCopy)
