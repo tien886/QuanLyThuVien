@@ -11,19 +11,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace QuanLyThuVien.Views.QuanLySachPopup
 {
     /// <summary>
-    /// Interaction logic for SuaBookHeadPopup.xaml
+    /// Interaction logic for SuaBookCopyPopup.xaml
     /// </summary>
-    public partial class SuaBookHeadPopup : UserControl
+    public partial class SuaBookCopyPopupView : UserControl
     {
-        public SuaBookHeadPopup(SuaBookHeadViewModel vm)
+        public SuaBookCopyPopupView()
         {
             InitializeComponent();
-            DataContext = vm;
         }
     }
 }

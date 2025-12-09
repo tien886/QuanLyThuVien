@@ -9,105 +9,91 @@ using QuanLyThuVien.Views.QuanLySachPopup;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 namespace QuanLyThuVien.ViewModels.QuanLySach
 {
     public partial class BookDetailAndCopyViewModel : ObservableObject
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly IBookCopyService _bookCopyService;
-        private Books currentBook;
+        private readonly ILocationService _locationService;
+        private readonly Books _book;
+
+        [ObservableProperty]
+        private int _maDauSach;
+        [ObservableProperty]
+        private string _tenSach;
+        [ObservableProperty]
+        private string _tacGia;
+        [ObservableProperty]
+        private string _iSBN;
+        [ObservableProperty]
+        private string _theLoai;
+        [ObservableProperty]
+        private string _nXB;
+        [ObservableProperty]
+        private string _namXB;
+        [ObservableProperty]
+        private string _moTa;
+        [ObservableProperty]
+        private int _tongSoBan;
+        [ObservableProperty]
+        private int _coSan;
+        [ObservableProperty]
+        private int _dangMuon;
+        [ObservableProperty]
+        private int _hongMat;
+        [ObservableProperty]
+        private ObservableCollection<BookCopies> _bookCopiesList = new();
+
         public BookDetailAndCopyViewModel(
-            IServiceProvider serviceProvider,
-            IBookCopyService bookService
+            Books book,
+            IBookCopyService bookService,
+            ILocationService locationService
             )
         {
-            _serviceProvider = serviceProvider;
+            _book = book;
             _bookCopyService = bookService;
+            _locationService = locationService;
 
+            MaDauSach = book.BookID;
+            TenSach = book.Title;
+            TacGia = book.Author;
+            ISBN = book.ISBN;
+            TheLoai = book.BookCategory.CategoryName;
+            NXB = book.Publisher;
+            NamXB = book.PublicationYear.ToString();
+            MoTa = book.Description;
+            TongSoBan = book.TotalCopies;
+            CoSan = book.AvailableCount;
+            DangMuon = book.BookCopies.Count(c => c.Status == "0");
+            HongMat = _tongSoBan - _coSan - _dangMuon;
+            LoadBookCopies();
         }
 
-        [ObservableProperty]
-        private int maDauSach;
-        [ObservableProperty]
-        private string tenSach;
-        [ObservableProperty]
-        private string tacGia;
-        [ObservableProperty]
-        private string iSBN;
-        [ObservableProperty]
-        private string theLoai;
-        [ObservableProperty]
-        private string nXB;
-        [ObservableProperty]
-        private string namXB;
-        [ObservableProperty]
-        private string moTa;
-        [ObservableProperty]
-        private int tongSoBan;
-        [ObservableProperty]
-        private int coSan;
-        [ObservableProperty]
-        private int dangMuon;
-        [ObservableProperty]
-        private int hongMat;
-        [ObservableProperty]
-        private ObservableCollection<BookCopies> bookCopiesList = new();
-
-        public async Task LoadPage(Books book)
+        private async void LoadBookCopies()
         {
-            currentBook = book;
-            Debug.WriteLine($"Go to loadpage");
-            try
+            var list = _bookCopyService.GetAllBookCopiesAsync(_book);
+            BookCopiesList.Clear();
+            foreach (var bookCopy in await list)
             {
-                Debug.WriteLine($"book is ok");
-                MaDauSach = currentBook.BookID;
-                TenSach = currentBook.Title;
-                TacGia = currentBook.Author;
-                ISBN = currentBook.ISBN;
-                TheLoai = currentBook.BookCategory.CategoryName;
-                NXB = currentBook.Publisher;
-                NamXB = currentBook.PublicationYear.ToString();
-                MoTa = currentBook.Description;
-                // badget show up
-                TongSoBan = currentBook.TotalCopies;
-                CoSan = currentBook.AvailableCount;
-                DangMuon = currentBook.BookCopies.Count(c => c.Status == "0");
-                HongMat = TongSoBan - CoSan - DangMuon;
-                // copies list 
-                BookCopiesList = new ObservableCollection<BookCopies>(await _bookCopyService.GetAllBookCopiesAsync(book));
+                BookCopiesList.Add(bookCopy);
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Lỗi khi tải trang: {ex.Message}");
-            }
-            ;
         }
+
         [RelayCommand]
-        public async Task ClosePopup()
+        private void OpenThemBookCopyPopup()
         {
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
+            var addBookCopyVM = new ThemBookCopyViewModel(_book, _bookCopyService, _locationService);
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(addBookCopyVM));
         }
-        [RelayCommand]
-        public async Task AddCopies()
-        {
-            var themBookCopyPopup = _serviceProvider.GetRequiredService<ThemBookCopyPopup>();
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(themBookCopyPopup));
-            if(themBookCopyPopup.DataContext is ThemBookCopyViewModel vm)
-            {
-                await vm.SetCurrentBook(currentBook);
-            }
-            await LoadPage(currentBook);
-        }
+
         [RelayCommand]
         public async Task OpenSuaBookCopyPopup(BookCopies bookCopy)
         {
-            var suaBookCopyPopup = _serviceProvider.GetRequiredService<SuaBookCopyPopup>();
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaBookCopyPopup));
-            if (suaBookCopyPopup.DataContext is SuaBookCopyViewModel vm)
-            {
-                await vm.SetCurrentBookCopy(bookCopy);
-            }
+            var suaBookCopyVM = new SuaBookCopyViewModel(bookCopy, _bookCopyService, _locationService);
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaBookCopyVM));
         }
+
         [RelayCommand]
         public async Task DeleteBookCopy(BookCopies bookCopy)
         {
@@ -129,6 +115,12 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
             {
                 MessageBox.Show($"Lỗi khi xóa bản sao: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        [RelayCommand]
+        private void ClosePopup()
+        {
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
         }
     }
 }

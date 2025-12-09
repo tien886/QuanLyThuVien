@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:QuanLyThuVien.Views"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1660">
-
+    <!--
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
         <StackPanel Orientation="Vertical" Margin="0,0,10,0">
@@ -168,5 +168,162 @@
 
         </StackPanel>
     </ScrollViewer>
+    -->
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <UniformGrid Grid.Row="0" Columns="3" Margin="0,0,-20,20">
+            <Border Style="{StaticResource StatCardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Đang mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
+                        <TextBlock Text="{Binding DangMuon}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource InUse_light}" CornerRadius="12"
+                            HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <fa:IconImage Icon="BookOpen" Foreground="{StaticResource InUse}" Width="24" Height="24" 
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource StatCardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Quá hạn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
+                        <TextBlock Text="{Binding QuaHan}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Danger/Overdue_light}" CornerRadius="12"
+                            HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <fa:IconImage Icon="TriangleExclamation" Foreground="{StaticResource Danger/Overdue}" Width="24" Height="24" 
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource StatCardStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Đã trả (tháng này)" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
+                        <TextBlock Text="{Binding DaTraThangNay}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
+                    </StackPanel>
+                    <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Success/1_light}" CornerRadius="12"
+                            HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <fa:IconImage Icon="Check" Foreground="{StaticResource Success/1}" Width="24" Height="24" 
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </Grid>
+            </Border>
+        </UniformGrid>
+
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text="Danh sách phiếu mượn"/>
+                <TextBlock Style="{StaticResource CardHeader}" Margin="5,0,0,0" Foreground="{StaticResource TitleOfWindow}" FontWeight="Normal" 
+                           Text="(Chỉ hiển thị phiếu đang mượn)"/>
+            </StackPanel>
+
+            <TextBox Grid.Column="1" Style="{StaticResource SearchTextBox}"
+                     Tag="Tìm kiếm theo Mã phiếu, Sinh viên, Sách...">
+                <TextBox.Text>
+                    <Binding Path="SearchText" UpdateSourceTrigger="PropertyChanged"/>
+                </TextBox.Text>
+            </TextBox>
+        </Grid>
+
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding LoanList}"
+                  Style="{StaticResource RoundedDataGrid}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
+                  VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã phiếu" Binding="{Binding LoanID}" Width="80" ElementStyle="{StaticResource CellTextCenter}"/>
+
+                <DataGridTextColumn Header="Sinh viên" Binding="{Binding StudentName}" Width="1.5*" ElementStyle="{StaticResource CellTextLeft}"/>
+
+                <DataGridTextColumn Header="Sách" Binding="{Binding BookTitle}" Width="2*" ElementStyle="{StaticResource CellTextLeft}"/>
+
+                <DataGridTextColumn Header="Ngày mượn" Binding="{Binding LoanDate, StringFormat=dd/MM/yyyy}" Width="120" ElementStyle="{StaticResource CellTextCenter}"/>
+
+                <DataGridTextColumn Header="Hạn trả" Binding="{Binding DueDate, StringFormat=dd/MM/yyyy}" Width="120" ElementStyle="{StaticResource CellTextCenter}"/>
+
+                <DataGridTemplateColumn Header="Trạng thái" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border x:Name="StatusBorder"
+                                Style="{StaticResource LoanStatusPillBorder}">
+                                <TextBlock x:Name="StatusText"
+                                    Style="{StaticResource LoanStatusPillText}" Text="{Binding StatusDescription}"/>
+                            </Border>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding StatusDescription}" Value="Đang mượn">
+                                    <Setter TargetName="StatusBorder" Property="Background" Value="#E8F0FE"/>
+                                    <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#1A73E8"/>
+                                    <Setter TargetName="StatusText" Property="Foreground" Value="#1A73E8"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding StatusDescription}" Value="Quá hạn">
+                                    <Setter TargetName="StatusBorder" Property="Background" Value="#F7E8E9"/>
+                                    <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#EF4444"/>
+                                    <Setter TargetName="StatusText" Property="Foreground" Value="#EF4444"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Thao tác" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Style="{StaticResource ReturnButton}" 
+                                    Content="Nhận trả"
+                                    Command="{Binding DataContext.OpenNhanTraSachPopupCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Border Grid.Row="3" Style="{StaticResource PaginationBorder}" Margin="0,20,0,0">
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Stretch" Orientation="Horizontal">
+                <Button Command="{Binding GoToPreviousPageCommand}" Content="← Trang trước" Style="{StaticResource BackForwardButtonStyle}" />
+
+                <Border Width="1" Margin="4,0" Background="#E0E0E0" />
+
+                <RadioButton Command="{Binding PageSelectionCommand}" CommandParameter="{Binding FirstPage}" Content="{Binding FirstPage}" Style="{StaticResource PageButtonUnSelectedStyle}" GroupName="PagingGroup" />
+                <RadioButton Command="{Binding PageSelectionCommand}" CommandParameter="{Binding SecondPage}" Content="{Binding SecondPage}" Style="{StaticResource PageButtonUnSelectedStyle}" GroupName="PagingGroup" />
+                <RadioButton Command="{Binding PageSelectionCommand}" CommandParameter="{Binding ThirdPage}" Content="{Binding ThirdPage}" Style="{StaticResource PageButtonUnSelectedStyle}" GroupName="PagingGroup" />
+                <RadioButton Command="{Binding PageSelectionCommand}" CommandParameter="{Binding FourthPage}" Content="{Binding FourthPage}" Style="{StaticResource PageButtonUnSelectedStyle}" GroupName="PagingGroup" />
+                <RadioButton Command="{Binding PageSelectionCommand}" CommandParameter="{Binding FifthPage}" Content="{Binding FifthPage}" Style="{StaticResource PageButtonUnSelectedStyle}" GroupName="PagingGroup" />
+
+                <Border Width="1" Margin="4,0" Background="#E0E0E0" />
+
+                <Button Command="{Binding GoToNextPageCommand}" Content="Trang sau →" Style="{StaticResource BackForwardButtonStyle}" />
+            </StackPanel>
+        </Border>
+
+    </Grid>
 </UserControl>

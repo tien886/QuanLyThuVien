@@ -4,79 +4,72 @@ using CommunityToolkit.Mvvm.Messaging;
 using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Input;
 
 namespace QuanLyThuVien.ViewModels
 {
-    public partial class QuanLySinhVienViewModel : ObservableObject
+    public partial class QuanLySinhVienViewModel : ObservableObject, IHeaderActionViewModel
     {
-
+        // Các service
         private readonly IStudentService _studentService;
         private readonly ILoanService _loanService;
         private readonly IFacultyService _facultyService;
-        public QuanLySinhVienViewModel(IStudentService service, ILoanService loanService, IFacultyService facultyService)
-        {
-            _studentService = service;
-            _loanService = loanService;
-            _facultyService = facultyService;
 
-            WeakReferenceMessenger.Default.Register<StudentUpdatedMessage>(this, (r, m) =>
-            {
-                var itemVM = StudentList.FirstOrDefault(s => s.StudentId == m.UpdatedStudent.StudentId);
+        // Các thuộc tính cho IHeaderActionViewModel
+        public ICommand HeaderButtonCommand => OpenThemStudentPopupCommand;
+        public string HeaderButtonLabel => "Thêm sinh viên";
+        public bool IsHeaderButtonVisible => true;
 
-                if (itemVM != null)
-                {
-                    itemVM.RefreshFromModel(m.UpdatedStudent);
-                }
-            });
-
-            WeakReferenceMessenger.Default.Register<StudentAddedMessage>(this, (r, m) =>
-            {
-                var newItemVM = new StudentItemViewModel(m.NewStudent);
-                StudentList.Add(newItemVM);
-            });
-        }
-
+        // Thuộc tính phân trang
         private int PageSize = 15;
         private const int WindowSize = 5;
-
         [ObservableProperty]
         private int currentPage;
-
         [ObservableProperty]
         private int totalPages;
-
         [ObservableProperty] private int firstPage;
         [ObservableProperty] private int secondPage;
         [ObservableProperty] private int thirdPage;
         [ObservableProperty] private int fourthPage;
         [ObservableProperty] private int fifthPage;
 
+        // Property cho tìm kiếm 
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+        private CancellationTokenSource? _searchCts;
+
         [ObservableProperty]
         private StudentItemViewModel? _selectedStudent;
 
+        // Danh sách sinh viên hiển thị
         public ObservableCollection<StudentItemViewModel> StudentList { get; set; } = new();
 
-        [ObservableProperty]
-        private string _searchText = string.Empty;
-
-        private CancellationTokenSource? _searchCts;
-
-        public async Task InitializeAsync()
+        public QuanLySinhVienViewModel(IStudentService service, ILoanService loanService, IFacultyService facultyService)
         {
-            await LoadAsync();
+            _studentService = service;
+            _loanService = loanService;
+            _facultyService = facultyService;
+
+            WeakReferenceMessenger.Default.Register<StudentUpdatedMessage>(this, (r, message) =>
+            {
+                var studentItemVM = StudentList.FirstOrDefault(student => student.StudentId == message.UpdatedStudent.StudentId);
+
+                if (studentItemVM != null)
+                {
+                    studentItemVM.RefreshFromModel(message.UpdatedStudent);
+                }
+            });
+
+            WeakReferenceMessenger.Default.Register<StudentAddedMessage>(this, (r, message) =>
+            {
+                var newStudentItemVM = new StudentItemViewModel(message.NewStudent);
+                StudentList.Add(newStudentItemVM);
+            });
+
+            _ = LoadAsync();
         }
 
-        //[RelayCommand]
-        //private async Task LoadAsync()
-        //{
-        //    var list = await _studentService.GetAllStudentsAsync(_searchText);
-        //    StudentList.Clear();
-        //    foreach (var s in list)
-        //    {
-        //        StudentList.Add(new StudentItemViewModel(s));
-        //    }
-        //}
-
+        // Thao tác tìm kiếm 
         [RelayCommand]
         private async Task LoadAsync()
         {
@@ -110,6 +103,21 @@ namespace QuanLyThuVien.ViewModels
             }
         }
 
+        private async Task LoadCurrentPageAsync()
+        {
+            if (CurrentPage < 1 || CurrentPage > TotalPages)
+                return;
+            Debug.WriteLine($"{SearchText}");
+            var students = await _studentService.GetStudentsPage(CurrentPage - 1, PageSize, SearchText);
+            StudentList.Clear();
+            foreach (var student in students)
+            {
+                StudentList.Add(new StudentItemViewModel(student));
+            }
+        }
+
+
+        // Các thao tác thêm, xóa sửa, ban/unban 
         [RelayCommand]
         private async Task ToggleStatus(StudentItemViewModel studentVM)
         {
@@ -137,8 +145,6 @@ namespace QuanLyThuVien.ViewModels
         [RelayCommand]
         private async Task OpenStudentDetailPopup(StudentItemViewModel? sVM)
         {
-            if (sVM is null)
-                return;
             WeakReferenceMessenger.Default.Send(new OpenDialogMessage(sVM));
             try
             {
@@ -156,56 +162,19 @@ namespace QuanLyThuVien.ViewModels
         [RelayCommand]
         private void OpenThemStudentPopup()
         {
-            var addStudentVM = new ThemSinhVienViewModel(_studentService, _facultyService);
+            var addStudentVM = new ThemStudentViewModel(_studentService, _facultyService);
             WeakReferenceMessenger.Default.Send(new OpenDialogMessage(addStudentVM));
         }
-
 
         [RelayCommand]
         private void OpenSuaStudentPopup(StudentItemViewModel? sVM)
         {
-            if (sVM is null)
-                return;
-            var suaStudentPopup = new SuaStudentViewModel(sVM.Student, _studentService, _facultyService);
-            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaStudentPopup));
+            var suaStudentVM = new SuaStudentViewModel(sVM.Student, _studentService, _facultyService);
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(suaStudentVM));
         }
 
-        private async Task LoadCurrentPageAsync()
-        {
-            if (CurrentPage < 1 || CurrentPage > TotalPages)
-                return;
-            Debug.WriteLine($"{SearchText}");
-            var students = await _studentService.GetStudentsPage(CurrentPage - 1, PageSize, SearchText);
-            StudentList.Clear();
-            foreach (var student in students)
-            {
-                StudentList.Add(new StudentItemViewModel(student));
-            }
-        }
 
-        private void UpdateWindow()
-        {
-            if (TotalPages <= 1)
-                return;
-
-            int start = CurrentPage - WindowSize / 2;
-            if (start < 1)
-                start = 1;
-
-            int end = start + WindowSize - 1;
-            if (end > TotalPages)
-            {
-                end = TotalPages;
-                start = Math.Max(1, end - WindowSize + 1);
-            }
-
-            FirstPage = start;
-            SecondPage = start + 1 <= end ? start + 1 : 0;
-            ThirdPage = start + 2 <= end ? start + 2 : 0;
-            FourthPage = start + 3 <= end ? start + 3 : 0;
-            FifthPage = start + 4 <= end ? start + 4 : 0;
-        }
-
+        // Thao tác phân trang
         [RelayCommand]
         private void PageSelection(int pageNumber)
         {
@@ -237,6 +206,29 @@ namespace QuanLyThuVien.ViewModels
             CurrentPage++;
             UpdateWindow();
             await LoadCurrentPageAsync();
+        }
+
+        private void UpdateWindow()
+        {
+            if (TotalPages <= 1)
+                return;
+
+            int start = CurrentPage - WindowSize / 2;
+            if (start < 1)
+                start = 1;
+
+            int end = start + WindowSize - 1;
+            if (end > TotalPages)
+            {
+                end = TotalPages;
+                start = Math.Max(1, end - WindowSize + 1);
+            }
+
+            FirstPage = start;
+            SecondPage = start + 1 <= end ? start + 1 : 0;
+            ThirdPage = start + 2 <= end ? start + 2 : 0;
+            FourthPage = start + 3 <= end ? start + 3 : 0;
+            FifthPage = start + 4 <= end ? start + 4 : 0;
         }
     }
 }

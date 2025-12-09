@@ -1,17 +1,15 @@
 ﻿using QuanLyThuVien.ViewModels.QuanLySach;
-using System.Windows;
 using System.Windows.Controls;
-namespace QuanLyThuVien.ViewModels.QuanLySachPopup
+namespace QuanLyThuVien.Views.QuanLySachPopup
 {
     /// <summary>
     /// Interaction logic for BookDetailAndCopyPopup.xaml
     /// </summary>
-    public partial class BookDetailAndCopyPopup : UserControl
+    public partial class BookDetailAndCopyPopupView : UserControl
     {
-        public BookDetailAndCopyPopup(BookDetailAndCopyViewModel vm)
+        public BookDetailAndCopyPopupView()
         {
             InitializeComponent();
-            DataContext = vm;
         }
     }
 }

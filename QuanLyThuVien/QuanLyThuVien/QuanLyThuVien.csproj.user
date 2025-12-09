@@ -5,13 +5,13 @@
     <Compile Update="Views\MuonTraSachPopup\NhanTraSachPopup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\QuanLySachPopup\BookDetailAndCopyPopup.xaml.cs">
+    <Compile Update="Views\QuanLySachPopup\BookDetailAndCopyPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\QuanLySachPopup\SuaBookCopyPopup.xaml.cs">
+    <Compile Update="Views\QuanLySachPopup\SuaBookCopyPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\QuanLySachPopup\ThemBookCopyPopup.xaml.cs">
+    <Compile Update="Views\QuanLySachPopup\ThemBookCopyPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\QuanLySinhVienPopup\ThemSinhVienPopup.xaml.cs">

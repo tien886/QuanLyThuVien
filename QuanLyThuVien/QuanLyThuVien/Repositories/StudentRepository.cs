@@ -12,41 +12,17 @@ namespace QuanLyThuVien.Repositories
     {
         private readonly DataContext _dataContext;
 
-        private bool MatchSearchKeyword(Students s, string keyword)
-        {
-            return EF.Functions.Like(s.StudentName!, $"%{keyword}%") ||
-                EF.Functions.Like(s.Email!, $"%{keyword}%") ||
-                EF.Functions.Like(s.StudentId.ToString(), $"%{keyword}%") ||
-                EF.Functions.Like(s.PhoneNumber!, $"%{keyword}%") ||
-                EF.Functions.Like(s.Faculty.FacultyName!, $"%{keyword}%");
-        }
-
         public StudentRepository(DataContext dataContext)
         {
             _dataContext = dataContext;
         }
 
-        public async Task<IEnumerable<Students>> GetAllStudentsAsync(string? keyword = null)
-        {
-            var q = _dataContext.Students
-                .Include(s => s.Faculty) //  Để lấy thông tin khoa luôn
-                .AsNoTracking(); // Đọc thôi nên là không cần track 
-
-            if (!string.IsNullOrWhiteSpace(keyword))
-            {
-                keyword = keyword.Trim();
-                q = q.Where(s => MatchSearchKeyword(s, keyword));
-            }
-
-            return await q.OrderBy(s => s.StudentName).ToListAsync();
-        }
-
+        // Thêm, xóa, sửa, ban/unban
         public async Task AddStudentAsync(Students s)
         {
             _dataContext.Students.Add(s);
             await _dataContext.SaveChangesAsync();
         }
-
         public async Task UpdateStudentAsync(Students s)
         {
             var existing = await _dataContext.Students.FindAsync(s.StudentId);
@@ -56,7 +32,6 @@ namespace QuanLyThuVien.Repositories
                 await _dataContext.SaveChangesAsync();
             }
         }
-
         public async Task DeleteStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
@@ -65,7 +40,6 @@ namespace QuanLyThuVien.Repositories
             _dataContext.Students.Remove(s);
             await _dataContext.SaveChangesAsync();
         }
-
         public async Task BlockStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
@@ -74,7 +48,6 @@ namespace QuanLyThuVien.Repositories
             s.AccountStatus = "Vô hiệu hóa";
             await _dataContext.SaveChangesAsync();
         }
-
         public async Task UnblockStudentAsync(int id)
         {
             var s = await _dataContext.Students.FindAsync(id);
@@ -84,15 +57,18 @@ namespace QuanLyThuVien.Repositories
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<MonthlyReaderStats>> GetNewReadersStatsAsync()
-        {
-            var numOfMonths = 10; // Lấy 10 tháng
-            var startDate = DateTime.Now.AddMonths(-numOfMonths + 1);
-            startDate = new DateTime(startDate.Year, startDate.Month, 1);
 
-            // Query Database (Giữ nguyên logic Group By của bạn)
+        // Lấy data cho sinh viên đăng kí trong các tháng (Dashboard)
+        public async Task<IEnumerable<MonthlyReaderStats>> GetNewReadersStatsAsync(DateTime startDate, DateTime endDate)
+        {
+            // Đảm bảo startDate là ngày đầu tháng
+            startDate = new DateTime(startDate.Year, startDate.Month, 1);
+            // Đảm bảo endDate là ngày đầu tháng kế tiếp (để dễ so sánh < endDate)
+            endDate = new DateTime(endDate.Year, endDate.Month, 1).AddMonths(1);
+
+            // Lấy dữ liệu từ DB trong khoảng thời gian
             var dbData = await _dataContext.Students
-                .Where(s => s.RegistrationDate >= startDate)
+                .Where(s => s.RegistrationDate >= startDate && s.RegistrationDate < endDate)
                 .GroupBy(s => new { s.RegistrationDate.Year, s.RegistrationDate.Month })
                 .Select(g => new
                 {
@@ -102,14 +78,14 @@ namespace QuanLyThuVien.Repositories
                 })
                 .ToListAsync();
 
-            // Logic lấp đầy các tháng trống (vẫn cần thiết)
+            // Logic lấp đầy các tháng trống
             var result = new List<MonthlyReaderStats>();
 
-            for (int i = numOfMonths - 1; i >= 0; i--)
+            var current = startDate;
+            while (current < endDate)
             {
-                var date = DateTime.Now.AddMonths(-i);
-                var year = date.Year;
-                var month = date.Month;
+                var year = current.Year;
+                var month = current.Month;
 
                 var existing = dbData.FirstOrDefault(x => x.Year == year && x.Month == month);
 
@@ -119,10 +95,15 @@ namespace QuanLyThuVien.Repositories
                     Year = year,
                     Count = existing?.Count ?? 0
                 });
+
+                current = current.AddMonths(1);
             }
 
             return result;
         }
+
+
+        // Lấy data cho hoạt động gần đây (Dashboard)
         public async Task<IEnumerable<Students>> GetRecentStudentsAsync(int count)
         {
             return await _dataContext.Students
@@ -131,6 +112,9 @@ namespace QuanLyThuVien.Repositories
                 .AsNoTracking()
                 .ToListAsync();
         }
+
+
+        // Phân trang 
         public async Task<IEnumerable<Students>> GetStudentsPage(int offset, int size, string? keyword = null)
         {
             if (keyword is null)
@@ -173,6 +157,9 @@ namespace QuanLyThuVien.Repositories
             }
             return totalPages;
         }
+
+
+        // Lấy sinh viên (Thêm phiếu mượn)
         public async Task<Students> GetStudentByIDAsync(int id)
         {
             return await _dataContext.Students.FindAsync(id);

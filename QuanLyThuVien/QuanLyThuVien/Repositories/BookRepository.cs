@@ -12,6 +12,9 @@ namespace QuanLyThuVien.Repositories
         {
             _dataContext = dataContext;
         }
+
+
+        // Thêm, xóa sửa 
         public async Task<IEnumerable<Books>> GetAllBooksAsync()
         {
             return await _dataContext.Books
@@ -34,28 +37,49 @@ namespace QuanLyThuVien.Repositories
             _dataContext.Books.Remove(book);
             await _dataContext.SaveChangesAsync();
         }
+
+
+        // Lấy data cho badge (DashBoard)
         public async Task<int> GetTotalBooksAsync()
         {
             return await _dataContext.Books.CountAsync();
         }
-        public async Task<IEnumerable<Books>> GetBooksPage(int offset, int size)
+
+
+        // Phân trang 
+        public async Task<int> GetTotalPages(int pageSize, string keyword = "")
         {
-            return await _dataContext.Books
-                .Include(b => b.BookCategory)
-                .Include(b => b.BookCopies)
-                .Skip(offset * size)
-                .Take(size)
-                .ToListAsync();
-        }
-        public async Task<int> GetTotalPages(int size)
-        {
-            int remaining = await _dataContext.Books.CountAsync() % size;
-            int totalPages = await _dataContext.Books.CountAsync() / size;
-            if (remaining > 0)
+            var query = _dataContext.Books.AsQueryable();
+
+            if (!string.IsNullOrEmpty(keyword))
             {
-                totalPages++;
+                query = query.Where(b => b.Title.Contains(keyword) ||
+                                         b.Author.Contains(keyword) ||
+                                         b.ISBN.Contains(keyword));
             }
-            return totalPages;
+
+            int totalCount = await query.CountAsync();
+            return (int)Math.Ceiling((double)totalCount / pageSize);
+        }
+        public async Task<IEnumerable<Books>> GetBooksPage(int pageIndex, int pageSize, string keyword = "")
+        {
+            var query = _dataContext.Books
+                .Include(b => b.BookCategory)
+                .Include(b => b.Genre)
+                .Include(b => b.BookCopies) // Quan trọng để đếm số lượng
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(b => b.Title.Contains(keyword) ||
+                                         b.Author.Contains(keyword) ||
+                                         b.ISBN.Contains(keyword));
+            }
+
+            return await query
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 }

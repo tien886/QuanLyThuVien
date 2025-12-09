@@ -19,7 +19,7 @@
                 Tag="Tìm kiếm theo Mã sách, Tên sách, Họ và tên tác giả, Thể loại "
                 Grid.Row="0">
             <TextBox.Text>
-                <Binding Path="SearchBarText" UpdateSourceTrigger="PropertyChanged"/>
+                <Binding Path="SearchText" UpdateSourceTrigger="PropertyChanged"/>
             </TextBox.Text>
         </TextBox>
         
@@ -34,17 +34,17 @@
             <DataGrid.Columns>
                 <!-- Mã sách -->
                 <DataGridTextColumn Header="Mã sách"
-                                    Binding="{Binding BookID}"
+                                    Binding="{Binding MaDauSach}"
                                     Width="70"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tên sách"
-                                    Binding="{Binding Title}"
+                                    Binding="{Binding TenSach}"
                                     Width="3*"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tác giả"
-                                    Binding="{Binding Author}"
+                                    Binding="{Binding TacGia}"
                                     Width="140"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
@@ -54,26 +54,26 @@
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Thể loại"
-                                    Binding="{Binding BookCategory.CategoryName}"
+                                    Binding="{Binding TheLoai}"
                                     Width="110"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tổng bản sao"
-                                    Binding="{Binding TotalCopies}"
+                                    Binding="{Binding TongBanSao}"
                                     Width="110"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTemplateColumn Header="Có sẵn" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding AvailableCount}"
+                            <TextBlock Text="{Binding CoSan}"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="{StaticResource Black}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource Success/1}"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding AvailableCount}" Value="0">
+                                            <DataTrigger Binding="{Binding CoSan}" Value="0">
                                                 <Setter Property="Foreground"
                                                         Value="{StaticResource Danger/Overdue}"/>
                                             </DataTrigger>

@@ -152,7 +152,9 @@
                         <Border Grid.Column="0" Style="{StaticResource DashboardCardStyle}" MinHeight="400">
                             <StackPanel>
                                 <TextBlock Style="{StaticResource CardHeader}" Text="Hoạt động gần đây"/>
-                                <TextBlock Style="{StaticResource CardCaption}" Text="5 hoạt động mới nhất" Margin="0,-10,0,20"/>
+                                <TextBlock Style="{StaticResource CardCaption}" 
+                                           Text="{Binding NumberOfRecentActivities, StringFormat={}{0} hoạt động mới nhất}" 
+                                           Margin="0,-10,0,20"/>
 
                                 <ItemsControl ItemsSource="{Binding RecentActivitiesList}">
                                     <ItemsControl.ItemTemplate>
