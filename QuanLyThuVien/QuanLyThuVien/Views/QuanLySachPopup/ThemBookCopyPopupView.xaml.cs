@@ -8,12 +8,11 @@ namespace QuanLyThuVien.Views.QuanLySachPopup
     /// <summary>
     /// Interaction logic for ThemBookCopyPopup.xaml
     /// </summary>
-    public partial class ThemBookCopyPopup : UserControl 
+    public partial class ThemBookCopyPopupView : UserControl 
     {
-        public ThemBookCopyPopup(ThemBookCopyViewModel vm)
+        public ThemBookCopyPopupView()
         {
             InitializeComponent();
-            DataContext = vm;
         }
 
 
