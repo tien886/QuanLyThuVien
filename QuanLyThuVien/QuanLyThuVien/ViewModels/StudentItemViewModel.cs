@@ -14,11 +14,11 @@ namespace QuanLyThuVien.ViewModels
             _studentModel = model;
 
             // Khởi tạo giá trị ban đầu từ Model lên View
-            _studentName = model.StudentName;
-            _email = model.Email;
-            _phoneNumber = model.PhoneNumber;
-            _facultyName = model.Faculty?.FacultyName ?? "Chưa cập nhật";
-            _accountStatus = model.AccountStatus;
+            StudentName = model.StudentName;
+            Email = model.Email;
+            PhoneNumber = model.PhoneNumber;
+            FacultyName = model.Faculty?.FacultyName ?? "Chưa cập nhật";
+            AccountStatus = model.AccountStatus;
         }
 
         // --- Các thuộc tính binding 2 chiều ---
