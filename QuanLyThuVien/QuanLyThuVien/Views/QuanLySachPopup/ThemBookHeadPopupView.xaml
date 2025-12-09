@@ -1,0 +1,168 @@
+﻿<UserControl x:Class="QuanLyThuVien.Views.QuanLySachPopup.ThemBooKHeadPopupView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:QuanLyThuVien.Views.QuanLySachPopup"
+             mc:Ignorable="d"
+             d:DesignHeight="550" d:DesignWidth="900">
+
+    <Border Background="{StaticResource White}" CornerRadius="12" Width="900" Height="Auto">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2" Color="Gray"/>
+        </Border.Effect>
+
+        <Grid Margin="30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Thêm đầu sách mới" 
+                               FontSize="22" FontWeight="Bold" Foreground="{StaticResource Black}"/>
+                    <TextBlock Text="Nhập thông tin để tạo đầu sách mới" 
+                               FontSize="14" Foreground="{StaticResource TitleOfWindow}" Margin="0,5,0,0"/>
+                </StackPanel>
+
+                <Button Grid.Column="1" Style="{StaticResource CircularIconButton}"
+                        VerticalAlignment="Top"
+                        Command="{Binding ClosePopupCommand}">
+                    <fa:IconImage Icon="Xmark" Width="16" Height="16" Foreground="{StaticResource TitleOfWindow}"/>
+                </Button>
+            </Grid>
+
+            <Border Grid.Row="1" Background="{StaticResource Stroke}" Height="1" Margin="-30,0,-30,25"/>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+
+                    <StackPanel Margin="0,0,0,15">
+                        <TextBlock Style="{StaticResource InputLabel}">
+                            <Run Text="Tên sách"/> <Run Text="*" Foreground="Red"/>
+                        </TextBlock>
+                        <TextBox Text="{Binding TenSach}" Style="{StaticResource StandardTextBox}"/>
+                    </StackPanel>
+
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Style="{StaticResource InputLabel}">
+                                <Run Text="Tác giả"/> <Run Text="*" Foreground="Red"/>
+                            </TextBlock>
+                            <TextBox Text="{Binding TacGia}" Style="{StaticResource StandardTextBox}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Style="{StaticResource InputLabel}">
+                                <Run Text="ISBN"/> <Run Text="*" Foreground="Red"/>
+                            </TextBlock>
+                            <TextBox Text="{Binding ISBN}" Style="{StaticResource StandardTextBox}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Thể loại" Style="{StaticResource InputLabel}"/>
+                            <ComboBox Style="{StaticResource RoundedComboBoxStyle}"
+                                      Height="45" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding Genres}"
+                                      DisplayMemberPath="GenreName"
+                                      SelectedItem="{Binding SelectedGenre, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Loại sách" Style="{StaticResource InputLabel}"/>
+                            <ComboBox Style="{StaticResource RoundedComboBoxStyle}"
+                                      Height="45" HorizontalAlignment="Stretch"
+                                      ItemsSource="{Binding Categories}"
+                                      DisplayMemberPath="CategoryName"
+                                      SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Nhà xuất bản" Style="{StaticResource InputLabel}"/>
+                            <TextBox Text="{Binding NXB}" Style="{StaticResource StandardTextBox}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Năm xuất bản" Style="{StaticResource InputLabel}"/>
+                            <TextBox Text="{Binding NamXB}" Style="{StaticResource StandardTextBox}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Mô tả" Style="{StaticResource InputLabel}"/>
+
+                    <TextBox Grid.Row="1"
+                             Text="{Binding MoTa}"
+                             Style="{StaticResource StandardTextBox}"
+                             Height="Auto" 
+                             VerticalContentAlignment="Top"
+                             Padding="10"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"/>
+                </Grid>
+
+            </Grid>
+
+            <Border Grid.Row="3" Background="{StaticResource Stroke}" Height="1" Margin="-30,25,-30,20"/>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Hủy" 
+                        Command="{Binding ClosePopupCommand}"
+                        Style="{StaticResource RoundedButton}"
+                        Background="White" Foreground="{StaticResource Black}" BorderBrush="{StaticResource Stroke}"
+                        Width="100" Height="40" Margin="0,0,15,0"/>
+
+                <Button Content="Thêm mới" 
+                        Command="{Binding AddBookHeadCommand}"
+                        Style="{StaticResource RoundedButton}"
+                        Width="140" Height="40"/>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</UserControl>
