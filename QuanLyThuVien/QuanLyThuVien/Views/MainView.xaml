@@ -119,7 +119,7 @@
                         </RadioButton>
                     </StackPanel>
                     <!-- Nút đăng xuất -->
-                   
+
                 </Grid>
             </Grid>
 
@@ -142,88 +142,34 @@
                                      FontFamily="Montserrat" Foreground="{StaticResource TitleOfWindow}"/>
                             </StackPanel>
 
-                            <Button 
-                            Style="{StaticResource RoundedButton}"
-                            Width="200"
-                            Height="40"
-                            HorizontalAlignment="Right"
-                            Visibility="{Binding IsAddBookHeadViewVisible, Converter={StaticResource BoolToVis}}"
-                            Command="{Binding ShowAddBookHeadView}">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
-                                    <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
-                                </StackPanel>
-                            </Button>
+                            <!-- Một nút thêm chung cho cả ba trang quản lí sinh viên, sách và mượn trả -->
+                            <Button Style="{StaticResource RoundedButton}"
+                                Width="200" Height="40"
+                                HorizontalAlignment="Right"
+                                Visibility="{Binding IsHeaderButtonVisible, Converter={StaticResource BoolToVis}}"
+                                Command="{Binding HeaderButtonCommand}">
 
-
-                            <Button 
-                            Style="{StaticResource RoundedButton}"
-                            Width="200"
-                            Height="40"
-                            HorizontalAlignment="Right"
-                            Visibility="{Binding IsAddStudentViewVisible, Converter={StaticResource BoolToVis}}"
-                            Command="{Binding ShowAddStudentView}"
-                                >
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
-                                    <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
-                                </StackPanel>
-                            </Button>
+                                    <fa:IconImage Icon="Plus" Style="{StaticResource RoundedButtonIcon}"/>
 
-                            <!-- Thêm mới -->
-                            <Button 
-                            Style="{StaticResource RoundedButton}"
-                            Width="200"
-                            Height="40"
-                            HorizontalAlignment="Right"
-                            Visibility="{Binding IsAddPhieuMuonViewVisible, Converter={StaticResource BoolToVis}}"
-                            Command="{Binding ShowAddPhieuMuonView}"
-                                >
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <fa:IconImage Style="{StaticResource RoundedButtonIcon}" Icon="Plus"/>
-                                    <TextBlock Style="{StaticResource RoundedButtonText}" Text="{Binding ButtonName}"/>
+                                    <TextBlock Text="{Binding HeaderButtonLabel}" 
+                                        Style="{StaticResource RoundedButtonText}"/>
                                 </StackPanel>
                             </Button>
                         </Grid>
 
                         <ContentControl x:Name="ChildViewHost"
-                            Grid.Row="1" 
-                            Content="{Binding CurrentChildView}"
-                            Margin="0,20,0,0"/>
+                        Grid.Row="1" 
+                        Content="{Binding CurrentChildView}"
+                        Margin="0,20,0,0"/>
+                        
                     </Grid>
-
-
                 </Grid>
             </Grid>
-            
+
         </Grid>
 
-        <!-- 
-        <Border Background="#80000000" 
-                 Visibility="{Binding ElementName=ChildViewHost, 
-                            Path=Content.DataContext.IsDetailPopupVisible, 
-                            Converter={StaticResource BooleanToVisibilityConverter},
-                            FallbackValue=Collapsed}"/>
-        <Border 
-            Background="{StaticResource White}"
-            CornerRadius="10" VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            Width="400"
-            Height="550"
-            Visibility="{Binding ElementName=ChildViewHost, 
-                    Path=Content.DataContext.IsDetailPopupVisible, 
-                    Converter={StaticResource BooleanToVisibilityConverter},
-                    FallbackValue=Collapsed}">
-
-            <Border.Effect>
-                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.2"/>
-            </Border.Effect>
-
-            <local:StudentDetailPopupView DataContext="{Binding ElementName=ChildViewHost, Path=Content.DataContext}"/>
-
-        </Border>
-        -->
-
+        <!-- Nợi hiện popup -->
         <Border Background="#80000000" 
         Visibility="{Binding IsDialogOpen, Converter={StaticResource BoolToVis}}">
             <Border.InputBindings>  
