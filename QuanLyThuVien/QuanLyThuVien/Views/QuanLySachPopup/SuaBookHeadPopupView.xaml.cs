@@ -18,12 +18,11 @@ namespace QuanLyThuVien.Views.QuanLySachPopup
     /// <summary>
     /// Interaction logic for SuaBookHeadPopup.xaml
     /// </summary>
-    public partial class SuaBookHeadPopup : UserControl
+    public partial class SuaBookHeadPopupView : UserControl
     {
-        public SuaBookHeadPopup(SuaBookHeadViewModel vm)
+        public SuaBookHeadPopupView()
         {
             InitializeComponent();
-            DataContext = vm;
         }
     }
 }
