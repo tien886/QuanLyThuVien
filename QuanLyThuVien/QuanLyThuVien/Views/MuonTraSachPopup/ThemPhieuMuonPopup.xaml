@@ -4,208 +4,143 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QuanLyThuVien.Views.MuonTraSachPopup"
-             Width="620"
-             Height="540">
-    <Border Padding="24"
-            Background="White"
-            CornerRadius="12"
-            BorderBrush="#E0E0E0"
-            BorderThickness="1">
-        <Grid>
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             mc:Ignorable="d" 
+             d:DesignHeight="550" d:DesignWidth="700">
+
+    <Border Background="{StaticResource White}" CornerRadius="12" Width="700" Height="Auto">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2" Color="Gray"/>
+        </Border.Effect>
+
+        <Grid Margin="30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- header -->
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- HEADER -->
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="0" Margin="0,0,0,15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Tạo phiếu mượn sách"
-                               FontSize="24"
-                               FontWeight="SemiBold"
-                               Foreground="#222222"/>
-                    <TextBlock Text="Nhập mã sinh viên và mã bản sao để tạo phiếu mượn"
-                               Margin="0,4,0,0"
-                               FontSize="16"
-                               Foreground="#70757A"/>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Tạo phiếu mượn sách" 
+                               FontSize="22" FontWeight="Bold" Foreground="{StaticResource Black}"/>
+                    <TextBlock Text="Nhập mã sinh viên và mã bản sao để tạo phiếu" 
+                               FontSize="14" Foreground="{StaticResource TitleOfWindow}" Margin="0,5,0,0"/>
                 </StackPanel>
 
-                <Button Grid.Column="1"
-                        Width="28" Height="28"
-                        Content="✕"
-                        Margin="8,0,0,0"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="#70757A"
-                        FontSize="18"
-                        Cursor="Hand"
-                        Command="{Binding CancelCommand}"/>
+                <Button Grid.Column="1" Style="{StaticResource CircularIconButton}" 
+                        VerticalAlignment="Top"
+                        Command="{Binding ClosePopupCommand}">
+                    <fa:IconImage Icon="Xmark" Width="16" Height="16" Foreground="{StaticResource TitleOfWindow}"/>
+                </Button>
             </Grid>
 
-            <!-- FORM -->
-            <Grid Grid.Row="1" Margin="0,16,0,16">
+            <Border Grid.Row="1" Background="{StaticResource Stroke}" Height="1" Margin="-30,0,-30,25"/>
+
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="30"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- Mã sinh viên -->
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,12,12">
-                    <TextBlock FontSize="16" Margin="0,0,0,4">
-                        <Run Text="Mã sinh viên"/>
-                        <Run Text=" *" Foreground="#E53935"/>
+                <StackPanel Grid.Row="0" Grid.Column="0">
+                    <TextBlock Style="{StaticResource InputLabel}">
+                        <Run Text="Mã sinh viên"/> <Run Text="*" Foreground="Red"/>
                     </TextBlock>
-                    <TextBox 
-                            Style="{StaticResource InputBox}"
-                            Text="{Binding StudentId, UpdateSourceTrigger=PropertyChanged}"
-                             Height="38"
-                             Width="150"
-                            HorizontalAlignment="Left"
-                             Padding="8,4"
-                             BorderBrush="#DADCE0"
-                             BorderThickness="1"
-                             Background="#F8F9FA"/>
+                    <TextBox Text="{Binding StudentId, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource StandardTextBox}"
+                             Tag="Nhập ID (VD: 1, 2...)"/>
                 </StackPanel>
 
-                <!-- Tên sinh viên (readonly) -->
-                <StackPanel Grid.Row="0" Grid.Column="1" Margin="12,0,0,12">
-                    <TextBlock FontSize="16" Margin="0,0,0,4"
-                               Text="Tên sinh viên"/>
-                    <TextBox Style="{StaticResource InputBox}"
-                            Text="{Binding StudentName}"
-                             Height="38"
-                             Padding="8,4"
-                             IsReadOnly="True"
-                             BorderBrush="#E0E0E0"
-                             BorderThickness="1"
-                             Background="#F1F3F4"
-                             Foreground="#5F6368"/>
+                <StackPanel Grid.Row="0" Grid.Column="2">
+                    <TextBlock Text="Tên sinh viên" Style="{StaticResource InputLabel}"/>
+                    <TextBox Text="{Binding StudentName, Mode=OneWay}" 
+                             Style="{StaticResource StandardTextBox}" 
+                             IsReadOnly="True" Background="#F3F4F6" BorderBrush="Transparent"/>
                 </StackPanel>
 
-                <!-- Mã bản sao -->
-                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,12,12">
-                    <TextBlock FontSize="16" Margin="0,0,0,4">
-                        <Run Text="Mã bản sao"/>
-                        <Run Text=" *" Foreground="#E53935"/>
+                <StackPanel Grid.Row="2" Grid.Column="0">
+                    <TextBlock Style="{StaticResource InputLabel}">
+                        <Run Text="Mã bản sao"/> <Run Text="*" Foreground="Red"/>
                     </TextBlock>
-                    <TextBox Style="{StaticResource InputBox}" 
-                            Text="{Binding BookCopyID, UpdateSourceTrigger=PropertyChanged}"
-                             Height="38"
-                             Width="150"
-                             HorizontalAlignment="Left"
-                             Padding="8,4"
-                             BorderBrush="#DADCE0"
-                             BorderThickness="1"
-                             Background="#F8F9FA"/>
-                </StackPanel>
-                
-                <StackPanel Grid.Row="1" Grid.Column="1" Margin="12,0,0,12">
-                    <TextBlock FontSize="16" Margin="0,0,0,4"
-                               Text="Tên sách"/>
-                    <TextBox Style="{StaticResource InputBox}" 
-                            Text="{Binding BookTitle}"
-                             Height="38"
-                             Padding="8,4"
-                             IsReadOnly="True"
-                             BorderBrush="#E0E0E0"
-                             BorderThickness="1"
-                             Background="#F1F3F4"
-                             Foreground="#5F6368"/>
-                </StackPanel>
-                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,12,0">
-                    <TextBlock FontSize="16" Margin="0,0,0,4"
-                               Text="Thể loại"/>
-                    <TextBox Style="{StaticResource InputBox}" 
-                             Text="{Binding CategoryName}"
-                             Width="272"
-                              Height="38"
-                              Padding="8,4"
-                              IsReadOnly="True"
-                              BorderBrush="#E0E0E0"
-                              BorderThickness="1"
-                              Background="#F1F3F4"
-                              Foreground="#5F6368"/>
+                    <TextBox Text="{Binding BookCopyID, UpdateSourceTrigger=PropertyChanged}" 
+                             Style="{StaticResource StandardTextBox}"
+                             Tag="Nhập mã (VD: CP00001)"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="2" Grid.Column="1" Margin="12,0,0,0">
-                    <TextBlock FontSize="16" Margin="0,0,0,4"
-                               Text="Loại sách"/>
-                    <TextBox Style="{StaticResource InputBox}" 
-                             Text="{Binding GenreName}"
-                              Height="38"
-                              Padding="8,4"
-                              IsReadOnly="True"
-                              BorderBrush="#E0E0E0"
-                              BorderThickness="1"
-                              Background="#F1F3F4"
-                              Foreground="#5F6368"/>
-                </StackPanel>
-                <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,0,12,0">
-                    <TextBlock FontSize="16" Margin="0,0,0,4"
-               Text="Ngày mượn"/>
-                    <DatePicker 
-                Style="{StaticResource CleanRoundedDatePicker}"
-                SelectedDate="{Binding Loandate}"
-                Height="38"
-                Width="272"
-                BorderBrush="#DADCE0"
-                BorderThickness="1"
-                Background="#FFFFFF"/>
+                <StackPanel Grid.Row="2" Grid.Column="2">
+                    <TextBlock Text="Tên sách" Style="{StaticResource InputLabel}"/>
+                    <TextBox Text="{Binding BookTitle, Mode=OneWay}" 
+                             Style="{StaticResource StandardTextBox}" 
+                             IsReadOnly="True" Background="#F3F4F6" BorderBrush="Transparent"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="4" Grid.Column="1" Margin="12,0,0,0">
-                    <TextBlock FontSize="16" Margin="0,0,0,4"
-               Text="Hạn trả"/>
-                    <DatePicker 
-                Style="{StaticResource CleanRoundedDatePicker}"
-                Height="38"
-                SelectedDate="{Binding Duedate}"
-                BorderBrush="#DADCE0"
-                BorderThickness="1"
-                Background="#FFFFFF"/>
+                <StackPanel Grid.Row="4" Grid.Column="0">
+                    <TextBlock Text="Thể loại" Style="{StaticResource InputLabel}"/>
+                    <TextBox Text="{Binding GenreName, Mode=OneWay}" 
+                             Style="{StaticResource StandardTextBox}" 
+                             IsReadOnly="True" Background="#F3F4F6" BorderBrush="Transparent"/>
                 </StackPanel>
+
+                <StackPanel Grid.Row="4" Grid.Column="2">
+                    <TextBlock Text="Loại sách" Style="{StaticResource InputLabel}"/>
+                    <TextBox Text="{Binding CategoryName, Mode=OneWay}" 
+                             Style="{StaticResource StandardTextBox}" 
+                             IsReadOnly="True" Background="#F3F4F6" BorderBrush="Transparent"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="6" Grid.Column="0">
+                    <TextBlock Style="{StaticResource InputLabel}">
+                        <Run Text="Ngày mượn"/> <Run Text="*" Foreground="Red"/>
+                    </TextBlock>
+                    <DatePicker SelectedDate="{Binding LoanDate}"
+                                Style="{StaticResource CleanRoundedDatePicker}"
+                                Height="45"
+                                VerticalContentAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="6" Grid.Column="2">
+                    <TextBlock Style="{StaticResource InputLabel}">
+                        <Run Text="Hạn trả"/> <Run Text="*" Foreground="Red"/>
+                    </TextBlock>
+                    <DatePicker SelectedDate="{Binding DueDate}"
+                                Style="{StaticResource CleanRoundedDatePicker}"
+                                Height="45"
+                                VerticalContentAlignment="Center"/>
+                </StackPanel>
+
             </Grid>
 
-            <StackPanel Grid.Row="2"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right"
-                        Margin="0,8,0,0">
-                <Button 
-                        Style="{StaticResource CancelButton}"
-                        Width="90" Height="32"
-                        Margin="0,0,8,0"
-                        Background="Transparent"
-                        BorderBrush="#DADCE0"
-                        BorderThickness="1"
-                        Foreground="#3C4043"
-                        Command="{Binding ClosePopupCommand}">
-                    <TextBlock Text="Hủy" HorizontalAlignment="Center"/>
+            <Border Grid.Row="3" Background="{StaticResource Stroke}" Height="1" Margin="-30,25,-30,20"/>
 
-                </Button>
-
-                <Button 
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Hủy" 
+                        Command="{Binding ClosePopupCommand}"
                         Style="{StaticResource RoundedButton}"
-                        Content="Tạo phiếu mượn"
-                        Width="130" Height="32"
-                        Background="#1A73E8"
-                        BorderBrush="#1A73E8"
-                        BorderThickness="1"
-                        Foreground="White"
-                        FontWeight="SemiBold"
-                        Command="{Binding CreateLoanCommand}"/>
+                        Background="White" Foreground="{StaticResource Black}" BorderBrush="{StaticResource Stroke}"
+                        Width="100" Height="40" Margin="0,0,15,0"/>
+
+                <Button Content="Tạo phiếu mượn" 
+                        Command="{Binding CreateLoanCommand}"
+                        Style="{StaticResource RoundedButton}"
+                        Width="150" Height="40"/>
             </StackPanel>
 
         </Grid>
