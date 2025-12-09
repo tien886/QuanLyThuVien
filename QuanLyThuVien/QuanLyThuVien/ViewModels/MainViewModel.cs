@@ -2,29 +2,34 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using QuanLyThuVien.ViewModels.MuonTraSach;
-using QuanLyThuVien.ViewModels.QuanLySach;
 using QuanLyThuVien.Views;
-using QuanLyThuVien.Views.MuonTraSachPopup;
-using QuanLyThuVien.Views.QuanLySachPopup;
-using QuanLyThuVien.Views.QuanLySinhVienPopup;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-
 namespace QuanLyThuVien.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
         private readonly IServiceProvider _serviceProvider;
 
-        // Thuộc tính giữ nội dung của Popup (Ví dụ: StudentItemViewModel)
-        [ObservableProperty]
-        private object? _currentDialogViewModel;
+        // Tiêu đề của trang 
+        [ObservableProperty] private string _title;
+        [ObservableProperty] private string _caption;
 
-        // Thuộc tính bật/tắt Popup
-        [ObservableProperty]
-        private bool _isDialogOpen;
+        // Chỉ cần 1 bộ thuộc tính cho nút duy nhất
+        [ObservableProperty] private string _headerButtonLabel;
+        [ObservableProperty] private ICommand _headerButtonCommand;
+        [ObservableProperty] private bool _isHeaderButtonVisible;
+
+        [ObservableProperty] private FrameworkElement _currentChildView;
+
+        // Popup logic
+        [ObservableProperty] private object? _currentDialogViewModel;
+        [ObservableProperty] private bool _isDialogOpen;
+
+        public ICommand ShowDashBoardView { get; }
+        public ICommand ShowQuanLySinhVienView { get; }
+        public ICommand ShowQuanLySachView { get; }
+        public ICommand ShowMuonTraSachView { get; }
 
         [RelayCommand]
         private void CloseDialog()
@@ -36,156 +41,79 @@ namespace QuanLyThuVien.ViewModels
         public MainViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            ShowDashBoardView = new ViewModelCommand(ExecuteShowDashBoardView);
-            ShowQuanLySinhVienView = new ViewModelCommand(ExecuteShowQuanLySinhVienView);
-            ShowQuanLySachView = new ViewModelCommand(ExecuteShowQuanLySachView);
-            ShowMuonTraSachView = new ViewModelCommand(ExecuteShowMuonTraSachView);
-            ShowAddBookHeadView = new ViewModelCommand(ExecuteShowAddBookHeadView);
-            ShowAddPhieuMuonView = new ViewModelCommand(ExecuteShowAddPhieuMuonView);
-            ShowAddStudentView = new ViewModelCommand(ExecuteShowAddStudentView);
-            ExecuteShowDashBoardView(null);
 
-            // Đăng ký lắng nghe tin nhắn mở Popup từ bất kỳ đâu
-            WeakReferenceMessenger.Default.Register<OpenDialogMessage>(this, (r, m) =>
+            // Khởi tạo các command điều hướng
+            ShowDashBoardView = new RelayCommand(ExecuteShowDashBoardView);
+            ShowQuanLySinhVienView = new RelayCommand(ExecuteShowQuanLySinhVienView);
+            ShowQuanLySachView = new RelayCommand(ExecuteShowQuanLySachView);
+            ShowMuonTraSachView = new RelayCommand(ExecuteShowMuonTraSachView);
+
+            // Mặc định vào Dashboard
+            ExecuteShowDashBoardView();
+
+            // Đăng ký nhận tin nhắn mở Popup 
+            WeakReferenceMessenger.Default.Register<OpenDialogMessage>(this, (r, message) =>
             {
-                if (m.ViewModel == null)
+                if (message.ViewModel == null)
                 {
-                    IsDialogOpen = false;
-                    CurrentDialogViewModel = null;
+                    CloseDialog();
                 }
                 else
                 {
-                    CurrentDialogViewModel = m.ViewModel;
+                    CurrentDialogViewModel = message.ViewModel;
                     IsDialogOpen = true;
                 }
             });
         }
 
-        private FrameworkElement _currentChildView;
-        private string _Title;
-        private string _caption;
-        private string _buttonName = "";
-        private bool _isAddBookHeadViewVisible = true;
-        public bool IsAddBookHeadViewVisible
+        // Hàm để thay đổi nút thêm (sinh viên, sách, phiếu mượn) - Hàm này sẽ được gọi mỗi khi chuyển trang
+        private void UpdateHeaderState(string title, string caption, FrameworkElement view)
         {
-            get => _isAddBookHeadViewVisible;
-            set
+            Title = title;
+            Caption = caption;
+            CurrentChildView = view;
+
+            // Cập nhật trạng thái nút header dựa trên ViewModel của View con hiện tại
+            if (view.DataContext is IHeaderActionViewModel actionVM && actionVM.IsHeaderButtonVisible)
             {
-                if (_isAddBookHeadViewVisible != value)
-                {
-                    _isAddBookHeadViewVisible = value;
-                    OnPropertyChanged(); // notifies XAML bindings
-                }
+                // Trường hợp có nút, lấy thông tin từ ViewModel con hiện lên cha 
+                HeaderButtonLabel = actionVM.HeaderButtonLabel;
+                HeaderButtonCommand = actionVM.HeaderButtonCommand;
+                IsHeaderButtonVisible = true;
             }
-        }
-        private bool _isAddStudentViewVisible = true;
-        public bool IsAddStudentViewVisible
-        {
-            get => _isAddStudentViewVisible;
-            set
+            else
             {
-                if (_isAddStudentViewVisible != value)
-                {
-                    _isAddStudentViewVisible = value;
-                    OnPropertyChanged(); // notifies XAML bindings
-                }
-            }
-        }
-        private bool _isAddPhieuMuonViewVisible = true;
-        public bool IsAddPhieuMuonViewVisible
-        {
-            get => _isAddPhieuMuonViewVisible;
-            set
-            {
-                if (_isAddPhieuMuonViewVisible != value)
-                {
-                    _isAddPhieuMuonViewVisible = value;
-                    OnPropertyChanged(); // notifies XAML bindings
-                }
+                // Trường hợp không có nút thì reset null/rỗng
+                HeaderButtonLabel = string.Empty; // Xóa chữ
+                HeaderButtonCommand = null;       // Gỡ lệnh (tránh bấm nhầm)
+                IsHeaderButtonVisible = false;    // Ẩn nút đi
             }
         }
 
-
-        public FrameworkElement CurrentChildView { get => _currentChildView; set { _currentChildView = value; OnPropertyChanged(nameof(CurrentChildView)); } }
-        public string Title { get => _Title; set { _Title = value; OnPropertyChanged(nameof(Title)); } }
-        public string Caption { get => _caption; set { _caption = value; OnPropertyChanged(nameof(Caption)); } }
-        public string ButtonName { get => _buttonName; set { _buttonName = value; OnPropertyChanged(nameof(ButtonName)); } }
-        // ICommand
-        public ICommand ShowDashBoardView { get; }
-        public ICommand ShowQuanLySinhVienView { get; }
-        public ICommand ShowQuanLySachView { get; }
-        public ICommand ShowMuonTraSachView { get; }
-        public ICommand ShowAddStudentView { get; }
-        public ICommand ShowAddBookHeadView { get; }
-        public ICommand ShowAddPhieuMuonView { get; }
-        private void ExecuteShowMuonTraSachView(object obj)
+        // --- Hàm điều hướng ---
+        private void ExecuteShowDashBoardView()
         {
-            IsAddStudentViewVisible = false;
-            IsAddPhieuMuonViewVisible = true;
-            IsAddBookHeadViewVisible = false;
-            CurrentChildView = _serviceProvider.GetRequiredService<MuonTraSachView>();
-            Title = "Mượn trả sách";
-            Caption = "Quản lý các giao dịch mượn và trả sách";
-            ButtonName = "Thêm phiếu mượn";
+            var view = _serviceProvider.GetRequiredService<DashBoardView>();
+            UpdateHeaderState("Dashboard", "Tổng quan hệ thống quản lý thư viện", view);
         }
 
-        private void ExecuteShowQuanLySachView(object obj)
+        private void ExecuteShowQuanLySinhVienView()
         {
-            IsAddStudentViewVisible = false;
-            IsAddPhieuMuonViewVisible = false;
-            IsAddBookHeadViewVisible = true;
-            CurrentChildView = _serviceProvider.GetRequiredService<QuanLySachView>();
-            Title = "Quản Lý Sách";
-            Caption = "Quản lý thông tin đầu sách và bản sao trong thư viện";
-            ButtonName = "Thêm đầu sách mới";
+            var view = _serviceProvider.GetRequiredService<QuanLySinhVienView>();
+            UpdateHeaderState("Quản Lý Sinh Viên", "Quản lý thông tin và tài khoản sinh viên", view);
         }
 
-        private void ExecuteShowQuanLySinhVienView(object obj)
+        private void ExecuteShowQuanLySachView()
         {
-            IsAddStudentViewVisible = true;
-            IsAddPhieuMuonViewVisible = false;
-            IsAddBookHeadViewVisible = false;
-            CurrentChildView = _serviceProvider.GetRequiredService<QuanLySinhVienView>();
-            Title = "Quản Lý Sinh Viên";
-            Caption = "Quản lý thông tin và tài khoản sinh viên";
-            ButtonName = "Tạo tài khoản mới";
+            var view = _serviceProvider.GetRequiredService<QuanLySachView>();
+            UpdateHeaderState("Quản Lý Sách", "Quản lý thông tin đầu sách và bản sao", view);
         }
 
-        private void ExecuteShowDashBoardView(object obj)
+        private void ExecuteShowMuonTraSachView()
         {
-            IsAddStudentViewVisible = false;
-            IsAddPhieuMuonViewVisible = false;
-            IsAddBookHeadViewVisible = false;
-            CurrentChildView = _serviceProvider.GetRequiredService<DashBoardView>();
-            Title = "Dashboard";
-            Caption = "Tổng quan hệ thống quản lý thư viện";
+            var view = _serviceProvider.GetRequiredService<MuonTraSachView>();
+            UpdateHeaderState("Mượn trả sách", "Quản lý các giao dịch mượn và trả sách", view);
         }
-        private void ExecuteShowAddBookHeadView(object obj)
-        {
-            Debug.WriteLine("Show add bookhead");
-            var themBooKHeadPopup = _serviceProvider.GetRequiredService<ThemBooKHeadPopup>();
-            var vm = _serviceProvider.GetRequiredService<ThemBookHeadViewModel>();
-            IsDialogOpen = true;
-            CurrentDialogViewModel = vm;
-        }
-        private void ExecuteShowAddStudentView(object obj)
-        {
-            Debug.WriteLine("Show add student");
-            var themPhieuMuonPopup = _serviceProvider.GetRequiredService<ThemSinhVienPopup>();
-            var vm = _serviceProvider.GetRequiredService<ThemSinhVienViewModel>();
-            IsDialogOpen = true;
-            CurrentDialogViewModel = vm;
-        }
-
-        private void ExecuteShowAddPhieuMuonView(object obj)
-        {
-            Debug.WriteLine("Show add phieu muon");
-            var themPhieuMuonPopup = _serviceProvider.GetRequiredService<ThemPhieuMuonPopup>();
-            var vm = _serviceProvider.GetRequiredService<ThemPhieuMuonViewModel>();
-            IsDialogOpen = true;
-            CurrentDialogViewModel = vm;
-        }
-
     }
 
     public class OpenDialogMessage
@@ -194,3 +122,4 @@ namespace QuanLyThuVien.ViewModels
         public OpenDialogMessage(object vm) => ViewModel = vm;
     }
 }
+
