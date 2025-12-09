@@ -17,19 +17,6 @@ namespace QuanLyThuVien.ViewModels
         private readonly IBookService _bookService;
         private readonly IStudentService _studentService;
         private readonly ILoanService _loanService; 
-        public DashBoardViewModel(
-            IBookCopyService bookCopyService,
-            IBookService bookService,
-            IStudentService studentService,
-            ILoanService loanService
-            )
-        {
-            _bookCopyService = bookCopyService;
-            _bookService = bookService;
-            _studentService = studentService;
-            _loanService = loanService;
-            _ = LoadPage();
-        }
 
         [ObservableProperty]
         private int _totalCopies;
@@ -47,77 +34,96 @@ namespace QuanLyThuVien.ViewModels
         private ISeries[] _pieChartSeries;
 
         // Ba thuộc tính cho AreaChart Bạn đọc mới đăng ký
+        private const int NumberOfMonthsForAreaChart = 10; // Số tháng để hiển thị dữ liệu
         [ObservableProperty]
         private ISeries[] _areaChartSeries;
-
         [ObservableProperty]
         private Axis[] _areaChartXAxes;
-
         [ObservableProperty]
         private Axis[] _areaChartYAxes;
 
-        // Hai thuộc tính cho LineChart xu hướng mượn sách 
+        // Các thuộc tính cho LineChart xu hướng mượn sách 
+        private const int NumberOfMonthsForLineChart = 6; // Số tháng để hiển thị xu hướng
         [ObservableProperty]
         private ISeries[] _lineChartSeries;
-
         [ObservableProperty]
         private Axis[] _lineChartXAxes;
 
-        // Ba thuộc tính cho LineChart xu hướng mượn sách   
+        // Ba thuộc tính cho BarChart xu hướng mượn sách
+        private const int TopBookCategories = 7; // Số thể loại sách phổ biến nhất để hiển thị
         [ObservableProperty]
         private ISeries[] _barChartSeries;
-
         [ObservableProperty]
         private Axis[] _barChartXAxes;
-
         [ObservableProperty]
         private Axis[] _barChartYAxes;
 
-        // Thuộc tính chứa danh sách Top 5 Sách được mượn nhiều nhất
+        // Thuộc tính chứa danh sách Sách được mượn nhiều nhất
+        private const int TopBooksCount = 5; // Số sách phổ biến nhất để hiển thị
         [ObservableProperty]
         private IEnumerable<BookLoanStats> _topBooksList;
 
         // Thuộc tính chứa các hoạt động gần đây
+        public int NumberOfRecentActivities { get; } = 8;
         [ObservableProperty]
         private ObservableCollection<ActivityDisplayItem> _recentActivitiesList;
 
         // Thuộc tính chứa các sách quá hạn 
+        private const int OverdueBooksCount = 5;
         [ObservableProperty]
         private IEnumerable<OverdueBookStats> _overdueBooksList;
 
+        public DashBoardViewModel(
+            IBookCopyService bookCopyService,
+            IBookService bookService,
+            IStudentService studentService,
+            ILoanService loanService
+            )
+        {
+            _bookCopyService = bookCopyService;
+            _bookService = bookService;
+            _studentService = studentService;
+            _loanService = loanService;
+            _ = LoadPage();
+        }
+
         public async Task LoadPage()
         {
-            // Load các số liệu đơn
+            // 1.Load các số liệu đơn cho badges - Tổng số sách, Sách đang mượn, Bạn đọc đang mượn, Sách quá hạn
             TotalCopies = await _bookCopyService.GetTotalBookCopiesAsync();
             TotalBooks = await _bookService.GetTotalBooksAsync();
             BorrowedBooks = await _loanService.GetCurrentlyBorrowedBooksAsync();
             BorrowStudents = await _loanService.GetCurrentBorrowingStudentsAsync();
             OverdueBooks = await _loanService.GetOverdueBooksAsyncCount();
 
-            // 1. Load và tạo biểu đồ Tròn
+            // 2. Load và tạo biểu đồ Tròn - Phân bổ trạng thái sách
             var statusStats = await _bookCopyService.GetBookStatusStatsAsync();
             PieChartSeries = CreatePieChartData(statusStats);
 
-            // 2. Load và tạo biểu đồ Vùng
-            var readerStats = await _studentService.GetNewReadersStatsAsync();
-            CreateAreaChartData(readerStats); // Hàm này sẽ gán vào AreaChartSeries và AreaChartXAxes
+            // 3. Load và tạo biểu đồ Vùng - Bạn đọc mới
+            var startDateAreaChart = DateTime.Now.AddMonths(-NumberOfMonthsForAreaChart);
+            var endDateAreaChart = DateTime.Now;
+            var readerStats = await _studentService.GetNewReadersStatsAsync(startDateAreaChart, endDateAreaChart);
+            CreateAreaChartData(readerStats);
 
-            // 3. Load và tạo biểu đồ Đường
-            var trendsData = await _loanService.GetLoanTrendsAsync();
+            // 4. Load và tạo biểu đồ Đường - Xu hướng mượn trả sách
+            var startDateLineChart = DateTime.Now.AddMonths(-NumberOfMonthsForLineChart);
+            var endDateLineChart = DateTime.Now;
+            var trendsData = await _loanService.GetLoanTrendsAsync(startDateLineChart, endDateLineChart);
             CreateLineChartData(trendsData);
 
-            // 4. Load và tạo biểu đồ Cột
-            var categoryStats = await _loanService.GetLoanStatsByCategoryAsync();
+            // 5. Load và tạo biểu đồ Cột - Thể loại sách phổ biến
+            var categoryStats = await _loanService.GetLoanStatsByCategoryAsync(TopBookCategories);
             CreateBarChartData(categoryStats);
 
-            // 5. Load Top sách mượn nhiều nhất
-            TopBooksList = await _loanService.GetTopBorrowedBooksAsync();
+            // 6. Load Top sách mượn nhiều nhất
+            TopBooksList = await _loanService.GetTopBorrowedBooksAsync(TopBooksCount);
 
-            // 6. Load Hoạt động gần đây
+            // 7. Load Hoạt động gần đây 
             await LoadRecentActivities();
 
-            // 7. Load Sách quá hạn
-            OverdueBooksList = await _loanService.GetOverdueBooksAsync(5);
+            // 8. Load Sách quá hạn
+            OverdueBooksList = await _loanService.GetOverdueBooksAsync(OverdueBooksCount);
         }
 
         private ISeries[] CreatePieChartData(BookStatusStats stats)
@@ -271,6 +277,17 @@ namespace QuanLyThuVien.ViewModels
                 }
             };
         }
+        private string CalculateTimeAgo(DateTime date)
+        {
+            var timeSpan = DateTime.Now - date;
+
+            if (timeSpan.TotalMinutes < 1) return "Vừa xong";
+            if (timeSpan.TotalMinutes < 60) return $"{(int)timeSpan.TotalMinutes} phút trước";
+            if (timeSpan.TotalHours < 24) return $"{(int)timeSpan.TotalHours} giờ trước";
+            if (timeSpan.TotalDays < 7) return $"{(int)timeSpan.TotalDays} ngày trước";
+
+            return date.ToString("dd/MM/yyyy");
+        }
         private async Task LoadRecentActivities()
         {
             // 1. Lấy dữ liệu thô
@@ -282,25 +299,22 @@ namespace QuanLyThuVien.ViewModels
             // 2. Chuyển đổi Loans thành dạng chung
             foreach (var loan in recentLoans)
             {
-                // Nếu LoanStatus là "0" (đang mượn) -> Mượn. Nếu "1" (đã trả) -> Trả
-                // Ở đây tôi giả định logic đơn giản dựa vào ngày tạo phiếu
-                rawList.Add((loan.LoanDate ?? DateTime.MinValue, "Borrow", loan.Student.StudentName, "mượn sách"));
+                rawList.Add((loan.LoanDate, "Borrow", loan.Student.StudentName, "mượn sách"));
 
-                // Nếu muốn hiện cả hoạt động TRẢ sách, bạn cần check ReturnDate
-                if (loan.LoanStatus == "1" && loan.ReturnDate is DateTime rd)
+                if (loan.LoanStatus == "1" && loan.ReturnDate is DateTime returnDate)
                 {
-                    rawList.Add((rd, "Return", loan.Student.StudentName, "trả sách"));
+                    rawList.Add((returnDate, "Return", loan.Student.StudentName, "trả sách"));
                 }
             }
 
             // 3. Chuyển đổi Students thành dạng chung
-            foreach (var std in recentStudents)
+            foreach (var student in recentStudents)
             {
-                rawList.Add((std.RegistrationDate, "Register", std.StudentName, "đăng ký tài khoản"));
+                rawList.Add((student.RegistrationDate, "Register", student.StudentName, "đăng ký tài khoản"));
             }
 
             // 4. Sắp xếp lại tổng hợp và lấy 5 cái mới nhất
-            var sortedActivities = rawList.OrderByDescending(x => x.Date).Take(5);
+            var sortedActivities = rawList.OrderByDescending(x => x.Date).Take(NumberOfRecentActivities);
 
             // 5. Tạo ActivityDisplayItem cho View
             var displayList = new ObservableCollection<ActivityDisplayItem>();
@@ -313,22 +327,21 @@ namespace QuanLyThuVien.ViewModels
                     TimeAgo = CalculateTimeAgo(item.Date),
                 };
 
-                // Gán Icon và Màu sắc dựa trên loại hoạt động
                 switch (item.Type)
                 {
-                    case "Borrow": // Mượn (Màu Xanh Dương)
+                    case "Borrow": 
                         displayItem.Icon = "Book";
                         displayItem.IconColor = new SolidColorBrush(Color.FromRgb(14, 165, 233)); // #0EA5E9 (InUse)
                         displayItem.BackgroundColor = new SolidColorBrush(Color.FromRgb(224, 242, 249)); // #E0F2F9 (InUse_light)
                         break;
 
-                    case "Return": // Trả (Màu Xanh Lá)
+                    case "Return": 
                         displayItem.Icon = "BookOpen";
                         displayItem.IconColor = new SolidColorBrush(Color.FromRgb(16, 185, 129)); // #10B981 (Success)
                         displayItem.BackgroundColor = new SolidColorBrush(Color.FromRgb(225, 244, 239)); // #E1F4EF (Success_light)
                         break;
 
-                    case "Register": // Đăng ký (Màu Tím/Xanh đậm - Chanel)
+                    case "Register": 
                         displayItem.Icon = "UserPlus";
                         displayItem.IconColor = new SolidColorBrush(Color.FromRgb(37, 99, 235)); // #2563EB (Chanel)
                         displayItem.BackgroundColor = new SolidColorBrush(Color.FromRgb(238, 243, 255)); // #EEF3FF
@@ -339,17 +352,6 @@ namespace QuanLyThuVien.ViewModels
             }
 
             RecentActivitiesList = displayList;
-        }
-        private string CalculateTimeAgo(DateTime date)
-        {
-            var timeSpan = DateTime.Now - date;
-
-            if (timeSpan.TotalMinutes < 1) return "Vừa xong";
-            if (timeSpan.TotalMinutes < 60) return $"{(int)timeSpan.TotalMinutes} phút trước";
-            if (timeSpan.TotalHours < 24) return $"{(int)timeSpan.TotalHours} giờ trước";
-            if (timeSpan.TotalDays < 7) return $"{(int)timeSpan.TotalDays} ngày trước";
-
-            return date.ToString("dd/MM/yyyy");
         }
     }
 }
