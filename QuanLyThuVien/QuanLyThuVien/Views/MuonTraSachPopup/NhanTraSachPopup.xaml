@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:QuanLyThuVien.ViewModels.MuonTraSach">
-
+    <!-- 
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -10,12 +10,10 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Title -->
         <TextBlock Text="Tình trạng sách khi trả"
                    FontSize="16"
                    Margin="0,0,0,8"/>
 
-        <!-- ComboBox -->
         <ComboBox Grid.Row="1"
                     Style="{StaticResource RoundedComboBoxStyle}"
                     ItemsSource="{Binding StatusOptions}"
@@ -24,7 +22,6 @@
                     FontSize="16"
                     Margin="0,0,0,16"/>
 
-        <!-- Save Button -->
         <Button Grid.Row="2"
                 Content="Lưu trạng thái"
                 Command="{Binding SaveStatusCommand}"
@@ -35,5 +32,79 @@
                 Style="{StaticResource RoundedButton}"
                 />
     </Grid>
+    -->
+    <Border Background="White" CornerRadius="12" Padding="25">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="5" Opacity="0.2" Color="Gray"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Xác nhận trả sách" FontSize="20" FontWeight="Bold" Foreground="{StaticResource Black}"/>
+                    <TextBlock Text="Kiểm tra tình trạng sách và tính phí phạt" FontSize="13" Foreground="{StaticResource TitleOfWindow}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Margin="0,0,0,15">
+                <TextBlock Text="{Binding BookTitle}" FontWeight="SemiBold" FontSize="16" TextWrapping="Wrap" Margin="0,0,0,5"/>
+                <TextBlock>
+                    <Run Text="Sinh viên:" Foreground="{StaticResource TitleOfWindow}"/>
+                    <Run Text="{Binding StudentName}" FontWeight="Medium"/>
+                </TextBlock>
+                <TextBlock Margin="0,5,0,0">
+                    <Run Text="Hạn trả:" Foreground="{StaticResource TitleOfWindow}"/>
+                    <Run Text="{Binding DueDate, StringFormat=dd/MM/yyyy}" FontWeight="Medium"/>
+                    <Run Text=" - "/>
+                    <Run Text="{Binding OverdueDays, StringFormat='Trễ {0} ngày'}" Foreground="{StaticResource Danger/Overdue}"/>
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Margin="0,0,0,20">
+                <TextBlock Text="Tình trạng sách" Style="{StaticResource InputLabel}"/>
+                <ComboBox ItemsSource="{Binding StatusOptions}"
+                          SelectedItem="{Binding SelectedStatus}"
+                          Style="{StaticResource RoundedComboBoxStyle}"
+                          HorizontalAlignment="Stretch"/>
+            </StackPanel>
+
+            <Border Grid.Row="3" Background="#FFF5F5" BorderBrush="{StaticResource Danger/Overdue}" BorderThickness="1" 
+                    CornerRadius="8" Padding="15" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Tổng tiền phạt" FontSize="12" Foreground="{StaticResource Danger/Overdue}"/>
+                        <TextBlock Text="{Binding FineReason}" FontSize="11" Foreground="#7F1D1D" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="{Binding FineAmount, StringFormat={}{0:N0} đ}" 
+                               FontSize="18" FontWeight="Bold" Foreground="{StaticResource Danger/Overdue}" 
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Hủy" Command="{Binding ClosePopupCommand}"
+                        Style="{StaticResource RoundedButton}"
+                        Background="White" Foreground="{StaticResource Black}" BorderBrush="{StaticResource Stroke}"
+                        Width="80" Height="36" Margin="0,0,10,0"/>
+
+                <Button Content="Xác nhận trả" Command="{Binding SaveStatusCommand}"
+                        CommandParameter="{Binding}"
+                        Style="{StaticResource RoundedButton}"
+                        Width="120" Height="36"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>
 
