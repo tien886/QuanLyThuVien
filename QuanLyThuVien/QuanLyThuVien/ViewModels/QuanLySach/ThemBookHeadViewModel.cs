@@ -4,156 +4,177 @@ using CommunityToolkit.Mvvm.Messaging;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Windows;
 
 namespace QuanLyThuVien.ViewModels.QuanLySach
 {
     public partial class ThemBookHeadViewModel : ObservableObject
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly IBookService _bookService;
         private readonly IBookCategoryService _bookCategoryService;
         private readonly IGenreService _genreService;
 
         public ThemBookHeadViewModel(
-            IServiceProvider serviceProvider,
             IBookService bookService,
-            IBookCategoryService bookCategoryService, 
-            IGenreService genreService
-            )
+            IBookCategoryService bookCategoryService,
+            IGenreService genreService)
         {
-            _serviceProvider = serviceProvider;
             _bookService = bookService;
             _bookCategoryService = bookCategoryService;
             _genreService = genreService;
-            Debug.WriteLine("HII in ThemBookHeadViewModel");
-            _ = LoadData();
+
+            // Tải dữ liệu cho ComboBox
+            LoadGenres();
+            LoadCategories();
         }
-        [ObservableProperty]
+
+        // --- CÁC TRƯỜNG NHẬP LIỆU ---
+        [ObservableProperty] 
         private string tenSach;
-        [ObservableProperty]
+        [ObservableProperty] 
         private string tacGia;
-        [ObservableProperty]
+        [ObservableProperty] 
         private string iSBN;
-        [ObservableProperty]
-        private Genres loaiSachSelected;
-        [ObservableProperty]
-        private ObservableCollection<Genres> loaiSachs;
-        [ObservableProperty]
-        private BookCategories theLoaiSelected;
-        [ObservableProperty]
-        private ObservableCollection<BookCategories> theLoais;
-        [ObservableProperty]
-        private int namXB = 2025;
-        [ObservableProperty]
+        [ObservableProperty] 
+        private int namXB = DateTime.Now.Year; 
+        [ObservableProperty] 
         private string nXB;
-        [ObservableProperty]
+        [ObservableProperty] 
         private string moTa;
-        public async Task LoadData()
+
+        // ComboBox
+        [ObservableProperty]
+        private Genres _selectedGenre;
+        [ObservableProperty]
+        private ObservableCollection<Genres> genres = new();
+        [ObservableProperty]
+        private BookCategories _selectedCategory;
+        [ObservableProperty]
+        private ObservableCollection<BookCategories> categories = new();
+
+
+        private async void LoadGenres()
         {
-            var genres = await _genreService.GetAllGenresAsync();
-            LoaiSachs = new ObservableCollection<Genres>(genres);
-            var bookCategories = await _bookCategoryService.GetAllBookCategoriesAsync();
-            TheLoais = new ObservableCollection<BookCategories>(bookCategories);
+            var list = await _genreService.GetAllGenresAsync();
+            genres.Clear();
+            foreach (var genre in list)
+            {
+                genres.Add(genre);
+            }
+            if (genres.Count > 0) 
+                SelectedGenre = Genres[0];
         }
-        [RelayCommand]
-        public async Task AddBookHead()
-        {
-            try
-            {
-                Books newBook = new Books
-                {
-                    Title = TenSach,
-                    Author = TacGia,
-                    ISBN = ISBN,
-                    GenreID = LoaiSachSelected.GenreID,
-                    CategoryID = TheLoaiSelected.CategoryID,
-                    Publisher = NXB,
-                    PublicationYear = NamXB,
-                    Description = MoTa
-                };
-                Debug.WriteLine(newBook.Title);
-                Debug.WriteLine(newBook.Author);
-                Debug.WriteLine(newBook.ISBN);
-                Debug.WriteLine(newBook.GenreID);
-                Debug.WriteLine(newBook.Publisher);
-                Debug.WriteLine(newBook.PublicationYear);
-                Debug.WriteLine(newBook.CategoryID);
-                Debug.WriteLine(newBook.Description);
 
-                if (CheckValidBookHead(newBook))
-                {
-                    System.Windows.MessageBox.Show("Thêm đầu sách thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                    await _bookService.AddBookAsync(newBook);
-                    await ClosePopup();
-                    Debug.WriteLine($"Added book head: {newBook.Title}");
-                }
-                else
-                    System.Windows.MessageBox.Show("Thông tin đầu sách không hợp lệ! Vui lòng kiểm tra lại", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch(Exception ex)
+        private async void LoadCategories()
+        {
+            var list = await _bookCategoryService.GetAllBookCategoriesAsync();
+            categories.Clear();
+            foreach (var category in list)
             {
-                System.Windows.MessageBox.Show($"Error 500: {ex}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                categories.Add(category);
             }
+            if (Categories.Count > 0) 
+                SelectedCategory = categories[0];
         }
-        public bool CheckValidBookHead(Books book)
+
+        private bool ValidateInput()
         {
-            if (book == null)
+            if (string.IsNullOrWhiteSpace(TenSach))
             {
-                Debug.WriteLine("[ERROR] Book is NULL");
+                MessageBox.Show("Vui lòng nhập tên sách!", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(TacGia))
+            {
+                MessageBox.Show("Vui lòng nhập tác giả!", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(ISBN))
+            {
+                MessageBox.Show("Vui lòng nhập ISBN!", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+            // Kiểm tra độ dài ISBN (ví dụ 10 hoặc 13 số)
+            if (ISBN.Length < 10 || ISBN.Length > 13)
+            {
+                MessageBox.Show("ISBN phải có độ dài 10 hoặc 13 ký tự!", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(book.Title))
+            if (SelectedGenre == null || SelectedCategory == null)
             {
-                Debug.WriteLine("[INVALID] Title is empty");
+                MessageBox.Show("Vui lòng chọn Thể loại và Loại sách!", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(book.Author))
+            if (string.IsNullOrWhiteSpace(NXB))
             {
-                Debug.WriteLine("[INVALID] Author is empty");
-                return false;
-            }
-            if(book.GenreID == 0 || book.CategoryID == 0)
-            {
-                Debug.WriteLine("[INVALID] Not choose genre or category");
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(book.ISBN))
-            {
-                Debug.WriteLine("[INVALID] ISBN is empty");
-                return false;
-            }
-            if (book.ISBN.Length != 13)
-            {
-                Debug.WriteLine($"[INVALID] ISBN length = {book.ISBN.Length}, expected >= 13");
+                MessageBox.Show("Vui lòng nhập Nhà xuất bản!", "Thiếu thông tin", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(book.Publisher))
+            // Kiểm tra năm xuất bản hợp lý
+            if (NamXB < 1900 || NamXB > DateTime.Now.Year + 1)
             {
-                Debug.WriteLine("[INVALID] Publisher is empty");
+                MessageBox.Show("Năm xuất bản không hợp lệ!", "Lỗi nhập liệu", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return false;
             }
 
-            // Your condition was incorrect. Now logging clearly:
-            if (book.PublicationYear < 1980 || book.PublicationYear > 2026)
-            {
-                Debug.WriteLine($"[INVALID] PublicationYear = {book.PublicationYear}, valid range = 1980–2026");
-                return false;
-            }
-
-            Debug.WriteLine("[PASS] BookHead is valid");
             return true;
         }
 
         [RelayCommand]
-        public async Task ClosePopup()
+        public async Task AddBookHead()
+        {
+            if (!ValidateInput()) 
+                return;
+
+            var newBook = new Books
+            {
+                Title = TenSach,
+                Author = TacGia,
+                ISBN = ISBN,
+                GenreID = SelectedGenre.GenreID,
+                CategoryID = SelectedCategory.CategoryID,
+                Publisher = NXB,
+                PublicationYear = NamXB,
+                Description = MoTa ?? string.Empty, 
+
+                // Khởi tạo list rỗng để tránh null reference khi truy cập BookCopies sau này
+                BookCopies = new List<BookCopies>()
+            };
+
+            try
+            {
+                // Lưu xuống Database (Chỉ lưu ID khóa ngoại)
+                await _bookService.AddBookAsync(newBook);
+
+                // Gán cái này mới cập nhật UI 
+                newBook.Genre = SelectedGenre;
+                newBook.BookCategory = SelectedCategory;
+
+                WeakReferenceMessenger.Default.Send(new BookAddedMessage(newBook));
+
+                MessageBox.Show("Thêm đầu sách thành công!", "Thông báo");
+                ClosePopup();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi thêm: {ex.Message} \n {ex.InnerException?.Message}", "Lỗi Database", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        [RelayCommand]
+        private void ClosePopup()
         {
             WeakReferenceMessenger.Default.Send(new OpenDialogMessage(null));
         }
     }
-}
 
+    // Class tin nhắn
+    public class BookAddedMessage
+    {
+        public Books NewBook { get; }
+        public BookAddedMessage(Books book) => NewBook = book;
+    }
+}
