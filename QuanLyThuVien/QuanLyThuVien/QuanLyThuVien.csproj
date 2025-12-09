@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\Database\" />
+    <Folder Include="ViewModels\QuanLySinhVien\" />
   </ItemGroup>
 
 </Project>
