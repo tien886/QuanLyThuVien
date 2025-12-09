@@ -25,7 +25,6 @@ namespace QuanLyThuVien.Views
         {
             InitializeComponent();
             DataContext = vm;
-            Loaded += async (_, __) => await vm.InitializeAsync();
         }
     }
 }
