@@ -15,6 +15,19 @@ namespace QuanLyThuVien.ViewModels
         private readonly IFacultyService _facultyService;
         private readonly Students _originalStudent; // Giữ tham chiếu gốc để update sau khi Save 
 
+        [ObservableProperty]
+        private string _studentName;
+        [ObservableProperty]
+        private string _email;
+        [ObservableProperty]
+        private string _phoneNumber;
+        [ObservableProperty]
+        private string _faculty;
+        [ObservableProperty]
+        private int _selectedFacultyId;
+        public ObservableCollection<Faculties> FacultyList { get; } = new();
+        public string StudentId => _originalStudent.StudentId.ToString();
+
         public SuaStudentViewModel(Students student,
             IStudentService studentService,
             IFacultyService facultyService)
@@ -27,22 +40,8 @@ namespace QuanLyThuVien.ViewModels
             Email = student.Email;
             PhoneNumber = student.PhoneNumber;
             SelectedFacultyId = student.FacultyID;
-
             LoadFaculties();
         }
-
-        [ObservableProperty] 
-        private string _studentName;
-        [ObservableProperty] 
-        private string _email;
-        [ObservableProperty] 
-        private string _phoneNumber;
-        [ObservableProperty] 
-        private string _faculty;
-        [ObservableProperty] 
-        private int _selectedFacultyId;
-        public ObservableCollection<Faculties> FacultyList { get; } = new();
-        public string StudentId => _originalStudent.StudentId.ToString();
 
         private async void LoadFaculties()
         {
@@ -101,15 +100,18 @@ namespace QuanLyThuVien.ViewModels
         [RelayCommand]
         private async Task Save()
         {
-            if(!ValidateInput())
+            if (!ValidateInput())
+            {
                 return;
+            }
 
-            //// 2. Cập nhật ngược lại vào model gốc (cái này là trong Student List - ObservableList)
+            //// Cập nhật ngược lại vào model gốc (cái này là trong Student List - ObservableList)
             _originalStudent.StudentName = StudentName;
             _originalStudent.Email = Email;
             _originalStudent.PhoneNumber = PhoneNumber;
             _originalStudent.FacultyID = SelectedFacultyId;
             var selectedFacultyObj = FacultyList.FirstOrDefault(f => f.FacultyID == SelectedFacultyId);
+
             if (selectedFacultyObj != null)
             {
                 _originalStudent.Faculty = selectedFacultyObj;
@@ -117,6 +119,7 @@ namespace QuanLyThuVien.ViewModels
 
             try
             {
+                // Lưu thay đổi vào Database và phát tín hiệu cập nhật UI 
                 await _studentService.UpdateStudentAsync(_originalStudent);
                 WeakReferenceMessenger.Default.Send(new StudentUpdatedMessage(_originalStudent));
                 MessageBox.Show("Cập nhật thành công!", "Thông báo");
@@ -138,6 +141,6 @@ namespace QuanLyThuVien.ViewModels
     public class StudentUpdatedMessage
     {
         public Students UpdatedStudent { get; }
-        public StudentUpdatedMessage(Students s) => UpdatedStudent = s;
+        public StudentUpdatedMessage(Students student) => UpdatedStudent = student;
     }
 }

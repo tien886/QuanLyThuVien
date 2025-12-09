@@ -9,12 +9,12 @@ using System.Windows;
 
 namespace QuanLyThuVien.ViewModels
 {
-    public partial class ThemSinhVienViewModel : ObservableObject
+    public partial class ThemStudentViewModel : ObservableObject
     {
         private readonly IStudentService _studentService;
         private readonly IFacultyService _facultyService;
 
-        public ThemSinhVienViewModel(IStudentService studentService, IFacultyService facultyService)
+        public ThemStudentViewModel(IStudentService studentService, IFacultyService facultyService)
         {
             _studentService = studentService;
             _facultyService = facultyService;
