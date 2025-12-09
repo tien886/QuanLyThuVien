@@ -32,15 +32,6 @@ namespace QuanLyThuVien.DI
             services.AddTransient<QuanLySachView>();
             services.AddTransient<QuanLySinhVienView>();
 
-            //services.AddTransient<BookDetailAndCopyPopupView>();
-            //services.AddTransient<ThemBookCopyPopupView>();
-            //services.AddTransient<ThemBooKHeadPopupView>();
-            //services.AddTransient<SuaBookHeadPopupView>();
-            //services.AddTransient<ThemPhieuMuonPopup>();
-            //services.AddTransient<ThemSinhVienPopup>();
-            //services.AddTransient<NhanTraSachPopup>();
-            //services.AddTransient<SuaBookCopyPopupView>();
-
             //Register ViewModels
             services.AddTransient<MainViewModel>();
             services.AddTransient<DashBoardViewModel>();
@@ -48,14 +39,6 @@ namespace QuanLyThuVien.DI
             services.AddTransient<QuanLySachViewModel>();
             services.AddTransient<QuanLySinhVienViewModel>();
 
-            //services.AddTransient<BookDetailAndCopyViewModel>();
-            //services.AddTransient<ThemBookCopyViewModel>();
-            //services.AddTransient<ThemBookHeadViewModel>();
-            //services.AddTransient<SuaBookHeadViewModel>();
-            //services.AddTransient<ThemPhieuMuonViewModel>();
-            //services.AddTransient<ThemSinhVienViewModel>();
-            //services.AddTransient<NhanTraSachViewModel>();
-            //services.AddTransient<SuaBookCopyViewModel>();
             // Register Services
             services.AddTransient<IBookService, BookRepository>();
             services.AddTransient<IBookCopyService, BookCopyRepository>();
