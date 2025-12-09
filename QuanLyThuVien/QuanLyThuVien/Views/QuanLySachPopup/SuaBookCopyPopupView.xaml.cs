@@ -19,12 +19,11 @@ namespace QuanLyThuVien.Views.QuanLySachPopup
     /// <summary>
     /// Interaction logic for SuaBookCopyPopup.xaml
     /// </summary>
-    public partial class SuaBookCopyPopup : UserControl
+    public partial class SuaBookCopyPopupView : UserControl
     {
-        public SuaBookCopyPopup(SuaBookCopyViewModel vm)
+        public SuaBookCopyPopupView()
         {
             InitializeComponent();
-            DataContext = vm;
         }
     }
 }
