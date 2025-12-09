@@ -87,7 +87,8 @@
                         <Run Text="*" Foreground="Red"/>
                     </TextBlock>
                     <TextBox Text="{Binding StudentId, Mode=OneWay}" 
-                             Style="{StaticResource StandardTextBox}"
+                             Style="{StaticResource StandardTextBox}"   
+                             IsReadOnly="True" Background="#F3F4F6" BorderBrush="Transparent"
                              Height="45"/>
                 </StackPanel>
                 <!-- Note nhỏ dưới mã SV -->
