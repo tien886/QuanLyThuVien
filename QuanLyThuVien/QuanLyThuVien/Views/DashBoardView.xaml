@@ -335,9 +335,15 @@
                                 MinHeight="200"
                                 LegendPosition="Hidden">
                             </lvc:CartesianChart>
-
+                            
                         </StackPanel>
                     </Border>
+                    <Button Style="{StaticResource RoundedButton}" Command="{Binding ExportCSVCommand}">
+                        <TextBlock Text="Xuất file CSV"/>
+                    </Button>
+                    <Button Style="{StaticResource RoundedButton}" Command="{Binding ExportExcelCommand}">
+                        <TextBlock Text="Xuất file Excel"/>
+                    </Button>
                 </StackPanel>
             </Grid>
         </StackPanel>
