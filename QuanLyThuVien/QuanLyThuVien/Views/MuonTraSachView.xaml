@@ -276,15 +276,15 @@
                             <Border x:Name="StatusBorder"
                                 Style="{StaticResource LoanStatusPillBorder}">
                                 <TextBlock x:Name="StatusText"
-                                    Style="{StaticResource LoanStatusPillText}" Text="{Binding StatusDescription}"/>
+                                    Style="{StaticResource LoanStatusPillText}" Text="{Binding LoanStatusDescription}"/>
                             </Border>
                             <DataTemplate.Triggers>
-                                <DataTrigger Binding="{Binding StatusDescription}" Value="Đang mượn">
+                                <DataTrigger Binding="{Binding LoanStatusDescription}" Value="Đang mượn">
                                     <Setter TargetName="StatusBorder" Property="Background" Value="#E8F0FE"/>
                                     <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#1A73E8"/>
                                     <Setter TargetName="StatusText" Property="Foreground" Value="#1A73E8"/>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding StatusDescription}" Value="Quá hạn">
+                                <DataTrigger Binding="{Binding LoanStatusDescription}" Value="Quá hạn">
                                     <Setter TargetName="StatusBorder" Property="Background" Value="#F7E8E9"/>
                                     <Setter TargetName="StatusBorder" Property="BorderBrush" Value="#EF4444"/>
                                     <Setter TargetName="StatusText" Property="Foreground" Value="#EF4444"/>
