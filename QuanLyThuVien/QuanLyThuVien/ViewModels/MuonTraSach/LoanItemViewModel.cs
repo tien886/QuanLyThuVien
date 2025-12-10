@@ -19,7 +19,7 @@ namespace QuanLyThuVien.ViewModels.MuonTraSach
         public DateTime LoanDate => Loan.LoanDate;
         public DateTime DueDate => Loan.DueDate;
 
-        public string StatusDescription
+        public string LoanStatusDescription
         {
             get
             {

@@ -269,6 +269,7 @@
                            Margin="{TemplateBinding Padding}"
                            VerticalAlignment="Center" IsHitTestVisible="False"
                            Visibility="Collapsed"/>
+                        
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -287,6 +288,11 @@
                         <Trigger Property="IsReadOnly" Value="True">
                             <Setter TargetName="Root" Property="Background" Value="#F3F4F6"/>
                             <Setter TargetName="Root" Property="BorderBrush" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="AcceptsReturn" Value="True">
+                            <Setter TargetName="PART_ContentHost"
+                                Property="VerticalAlignment"
+                                Value="Top"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
