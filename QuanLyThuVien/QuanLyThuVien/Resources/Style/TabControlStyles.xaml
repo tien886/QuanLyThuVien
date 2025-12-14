@@ -1,0 +1,86 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="ModernTabItemStyle" TargetType="TabItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="Border"
+                            CornerRadius="20"
+                            Padding="25,10"
+                            Margin="0,0,10,0"
+                            Background="Transparent"
+                            Cursor="Hand">
+                        <ContentPresenter x:Name="ContentSite"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          ContentSource="Header"
+                                          RecognizesAccessKey="True"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource InUse_light}"/>
+                            <Setter Property="Foreground" Value="{StaticResource ChanelBackground}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource TitleOfWindow}"/>
+                            <Setter Property="FontWeight" Value="Medium"/>
+                        </Trigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                                <Condition Property="IsSelected" Value="False"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Border" Property="Background" Value="#F1F5F9"/>
+                            <Setter Property="Foreground" Value="{StaticResource Black}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ModernTabControlStyle" TargetType="TabControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" 
+                                Background="{StaticResource White}" 
+                                CornerRadius="12" 
+                                Padding="10" 
+                                Margin="0,0,0,20">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+
+                            <TabPanel IsItemsHost="True" Background="Transparent"/>
+                        </Border>
+
+                        <Border Grid.Row="1" 
+                                TextElement.FontWeight="Normal"
+                                Background="{StaticResource White}" 
+                                CornerRadius="12" 
+                                Padding="20">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Gray" BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+                            </Border.Effect>
+
+                            <ContentPresenter ContentSource="SelectedContent"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
