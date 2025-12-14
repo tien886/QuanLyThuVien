@@ -5,11 +5,12 @@
              xmlns:VBook="clr-namespace:QuanLyThuVien.Views.QuanLySachPopup"
              xmlns:VMuonTra="clr-namespace:QuanLyThuVien.Views.MuonTraSachPopup"
              xmlns:VStudent="clr-namespace:QuanLyThuVien.Views.QuanLySinhVienPopup" 
+             xmlns:VDanhMuc="clr-namespace:QuanLyThuVien.Views.QuanLyDanhMucPopup" 
              xmlns:converters="clr-namespace:QuanLyThuVien.Resources.Converters"
              xmlns:vm="clr-namespace:QuanLyThuVien.ViewModels" 
              xmlns:VMBook="clr-namespace:QuanLyThuVien.ViewModels.QuanLySach"
              xmlns:VMMuonTra="clr-namespace:QuanLyThuVien.ViewModels.MuonTraSach"
-             > 
+             xmlns:VMDanhMuc="clr-namespace:QuanLyThuVien.ViewModels.QuanLyDanhMuc"> 
 
     <Application.Resources>
         <ResourceDictionary>
@@ -25,6 +26,7 @@
                 <ResourceDictionary Source="/Resources/Style/TextBlockStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/TextBoxStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/DatePicker.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/TabControlStyles.xaml"/> 
             </ResourceDictionary.MergedDictionaries>
 
             <!-- ✅ Đặt converter vào đây -->
@@ -75,8 +77,18 @@
             <DataTemplate DataType="{x:Type VMMuonTra:NhanTraSachViewModel}">
                 <VMuonTra:NhanTraSachPopup/>
             </DataTemplate>
-
-
+            
+            <DataTemplate DataType="{x:Type VMDanhMuc:GenrePopupViewModel}">
+                <VDanhMuc:GenrePopup/>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type VMDanhMuc:CategoryPopupViewModel}">
+                <VDanhMuc:CategoryPopup/>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type VMDanhMuc:FacultyPopupViewModel}">
+                <VDanhMuc:FacultyPopup/>
+            </DataTemplate>
 
         </ResourceDictionary>
     </Application.Resources>
