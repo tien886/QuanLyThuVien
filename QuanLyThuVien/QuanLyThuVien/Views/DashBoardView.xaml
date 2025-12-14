@@ -142,7 +142,7 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0,0,20,0">
 
                     <!-- Hoạt động gần đây -->
-                    <Grid Margin="0,0,0,20">
+                    <Grid Margin="0,0,0,20"> 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
