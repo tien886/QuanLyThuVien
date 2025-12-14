@@ -46,6 +46,8 @@ namespace QuanLyThuVien.DI
             services.AddTransient<IFacultyService, FacultyRepository>();
             services.AddTransient<IGenreService, GenreRepository>();
             services.AddTransient<ILocationService, LocationRepository>();
+            services.AddTransient<IReportExportService, ReportExportRepository>();
+
             return services;
         }
     }

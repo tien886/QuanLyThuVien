@@ -169,26 +169,35 @@ namespace QuanLyThuVien.Repositories
 
 
         // Lấy data cho thống kê thể loại sách phổ biến (Dashboard)
-        public async Task<IEnumerable<CategoryLoanStats>> GetLoanStatsByCategoryAsync(int top)
+        public async Task<IEnumerable<CategoryLoanStats>> GetLoanStatsByCategoryAsync(int top = -1)
         {
             // Logic: Group by Tên thể loại và đếm số lượng phiếu mượn
-            var stats = await _dataContext.Loans
-                .Include(l => l.BookCopy)
-                    .ThenInclude(bc => bc.Book)
-                        .ThenInclude(b => b.BookCategory)
-                .Where(l => l.BookCopy.Book.BookCategory != null) // Đảm bảo không null
-                .GroupBy(l => l.BookCopy.Book.BookCategory.CategoryName)
+            int year = DateTime.Now.Year;
+            if (top == -1)
+                top = _dataContext.BookCategories.Count();
+            var query = _dataContext.Loans
+            .Include(l => l.BookCopy)
+                .ThenInclude(bc => bc.Book)
+                    .ThenInclude(b => b.BookCategory)
+            .Where(l => l.LoanDate.Year == year);
+
+            var result = await query
+                .GroupBy(l => new
+                {
+                    Year = l.LoanDate.Year,
+                    Month = l.LoanDate.Month,
+                    CategoryName = l.BookCopy.Book.BookCategory.CategoryName
+                })
                 .Select(g => new CategoryLoanStats
                 {
-                    CategoryName = g.Key,
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    CategoryName = g.Key.CategoryName,
                     LoanCount = g.Count()
                 })
-                .OrderByDescending(x => x.LoanCount) // Sắp xếp từ cao xuống thấp cho đẹp
-                .Take(top) // Chỉ lấy top 7 thể loại phổ biến nhất
-                .AsNoTracking()
                 .ToListAsync();
 
-            return stats;
+            return result;
         }
 
 
