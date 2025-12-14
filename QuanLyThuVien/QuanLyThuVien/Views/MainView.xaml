@@ -40,8 +40,23 @@
                         <ColumnDefinition Width="70"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <fa:IconImage Icon="Book" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource ChanelBackground}" Width="32" Height="32" />
-                    <TextBlock FontFamily="Montserrat" Grid.Column="1" Text="Quản lý thư viện" FontSize="22" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                    <Image Grid.Column="0"
+                       Source="/Resources/Images/logoApp.png" 
+                       Width="40" 
+                       Height="40"
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                    <TextBlock Grid.Column="1" 
+                       FontFamily="Montserrat" 
+                       Text="Quản lý thư viện" 
+                       FontSize="22" 
+                       FontWeight="Bold" 
+                       Foreground="{StaticResource ChanelBackground}"
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Center"/>
                 </Grid>
                 <!-- Thanh ngang phân cách -->
                 <Border Grid.Row="1" Background="{StaticResource Stroke}" />
