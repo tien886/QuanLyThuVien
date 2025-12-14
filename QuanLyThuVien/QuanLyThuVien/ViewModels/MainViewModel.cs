@@ -30,6 +30,7 @@ namespace QuanLyThuVien.ViewModels
         public ICommand ShowQuanLySinhVienView { get; }
         public ICommand ShowQuanLySachView { get; }
         public ICommand ShowMuonTraSachView { get; }
+        public ICommand ShowQuanLyDanhMucView { get; }
 
         [RelayCommand]
         private void CloseDialog()
@@ -47,6 +48,7 @@ namespace QuanLyThuVien.ViewModels
             ShowQuanLySinhVienView = new RelayCommand(ExecuteShowQuanLySinhVienView);
             ShowQuanLySachView = new RelayCommand(ExecuteShowQuanLySachView);
             ShowMuonTraSachView = new RelayCommand(ExecuteShowMuonTraSachView);
+            ShowQuanLyDanhMucView = new RelayCommand(ExecuteShowQuanLyDanhMucView);
 
             // Mặc định vào Dashboard
             ExecuteShowDashBoardView();
@@ -113,6 +115,12 @@ namespace QuanLyThuVien.ViewModels
         {
             var view = _serviceProvider.GetRequiredService<MuonTraSachView>();
             UpdateHeaderState("Mượn trả sách", "Quản lý các giao dịch mượn và trả sách", view);
+        }
+
+        private void ExecuteShowQuanLyDanhMucView()
+        {
+            var view = _serviceProvider.GetRequiredService<QuanLyDanhMucView>();
+            UpdateHeaderState("Quản Lý Danh Mục", "Quản lý các danh mục hệ thống: thể loại sách, phân loại và khoa", view);
         }
     }
 

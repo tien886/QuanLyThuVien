@@ -9,8 +9,9 @@
         Height="1080" Width="1920"
         WindowStartupLocation="CenterScreen"
         WindowStyle="ThreeDBorderWindow"
+        Title="Quản lý thư viện"
         WindowState="Maximized"
-        >
+        Icon="/Resources/Images/logo.ico">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -112,7 +113,8 @@
                             </StackPanel>
                         </RadioButton>
                         <!-- QuanLyDanhMuc (Bổ sung code sau nha)  -->
-                        <RadioButton Style="{StaticResource menuButton}">
+                        <RadioButton Style="{StaticResource menuButton}"
+                                     Command="{Binding ShowQuanLyDanhMucView}">
                             <StackPanel Orientation="Horizontal" >
                                 <fa:IconImage Style="{StaticResource menuButtonIcon}" Icon="ClipboardList"/>
                                 <TextBlock Style="{StaticResource menuButtonText}" Text="Quản lý danh mục"/>
