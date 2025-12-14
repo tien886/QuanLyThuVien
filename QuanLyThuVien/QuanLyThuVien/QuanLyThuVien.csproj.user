@@ -5,6 +5,9 @@
     <Compile Update="Views\MuonTraSachPopup\NhanTraSachPopup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\QuanLyDanhMucView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\QuanLySachPopup\BookDetailAndCopyPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
