@@ -1,12 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using QuanLyThuVien.DTOs;
+using QuanLyThuVien.Helper;
 using QuanLyThuVien.Services;
 using SkiaSharp;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Media;
 
 namespace QuanLyThuVien.ViewModels
@@ -17,7 +21,7 @@ namespace QuanLyThuVien.ViewModels
         private readonly IBookService _bookService;
         private readonly IStudentService _studentService;
         private readonly ILoanService _loanService; 
-
+        private readonly IReportExportService _reportExportService;
         [ObservableProperty]
         private int _totalCopies;
         [ObservableProperty]
@@ -34,7 +38,7 @@ namespace QuanLyThuVien.ViewModels
         private ISeries[] _pieChartSeries;
 
         // Ba thuộc tính cho AreaChart Bạn đọc mới đăng ký
-        private const int NumberOfMonthsForAreaChart = 10; // Số tháng để hiển thị dữ liệu
+        private const int NumberOfMonthsForAreaChart = 11; // Số tháng để hiển thị dữ liệu
         [ObservableProperty]
         private ISeries[] _areaChartSeries;
         [ObservableProperty]
@@ -43,7 +47,7 @@ namespace QuanLyThuVien.ViewModels
         private Axis[] _areaChartYAxes;
 
         // Các thuộc tính cho LineChart xu hướng mượn sách 
-        private const int NumberOfMonthsForLineChart = 6; // Số tháng để hiển thị xu hướng
+        private const int NumberOfMonthsForLineChart = 11; // Số tháng để hiển thị xu hướng
         [ObservableProperty]
         private ISeries[] _lineChartSeries;
         [ObservableProperty]
@@ -72,18 +76,24 @@ namespace QuanLyThuVien.ViewModels
         private const int OverdueBooksCount = 5;
         [ObservableProperty]
         private IEnumerable<OverdueBookStats> _overdueBooksList;
-
+        // these properties use for exporting file
+        private IEnumerable<LoanTrendStats> loantrendstats;
+        private IEnumerable<MonthlyReaderStats> monthlyreaderstats;
+        private IEnumerable<CategoryLoanStats> categoryloanstats;
+        private BookStatusStats bookstatusstats;
         public DashBoardViewModel(
             IBookCopyService bookCopyService,
             IBookService bookService,
             IStudentService studentService,
-            ILoanService loanService
+            ILoanService loanService,
+            IReportExportService reportExportService
             )
         {
             _bookCopyService = bookCopyService;
             _bookService = bookService;
             _studentService = studentService;
             _loanService = loanService;
+            _reportExportService = reportExportService;
             _ = LoadPage();
         }
 
@@ -98,22 +108,26 @@ namespace QuanLyThuVien.ViewModels
 
             // 2. Load và tạo biểu đồ Tròn - Phân bổ trạng thái sách
             var statusStats = await _bookCopyService.GetBookStatusStatsAsync();
+            bookstatusstats = statusStats;
             PieChartSeries = CreatePieChartData(statusStats);
 
             // 3. Load và tạo biểu đồ Vùng - Bạn đọc mới
             var startDateAreaChart = DateTime.Now.AddMonths(-NumberOfMonthsForAreaChart);
             var endDateAreaChart = DateTime.Now;
             var readerStats = await _studentService.GetNewReadersStatsAsync(startDateAreaChart, endDateAreaChart);
+            monthlyreaderstats = readerStats;
             CreateAreaChartData(readerStats);
-
+            
             // 4. Load và tạo biểu đồ Đường - Xu hướng mượn trả sách
             var startDateLineChart = DateTime.Now.AddMonths(-NumberOfMonthsForLineChart);
             var endDateLineChart = DateTime.Now;
             var trendsData = await _loanService.GetLoanTrendsAsync(startDateLineChart, endDateLineChart);
+            loantrendstats = trendsData;
             CreateLineChartData(trendsData);
-
+            
             // 5. Load và tạo biểu đồ Cột - Thể loại sách phổ biến
             var categoryStats = await _loanService.GetLoanStatsByCategoryAsync(TopBookCategories);
+            categoryloanstats = categoryStats;
             CreateBarChartData(categoryStats);
 
             // 6. Load Top sách mượn nhiều nhất
@@ -121,7 +135,6 @@ namespace QuanLyThuVien.ViewModels
 
             // 7. Load Hoạt động gần đây 
             await LoadRecentActivities();
-
             // 8. Load Sách quá hạn
             OverdueBooksList = await _loanService.GetOverdueBooksAsync(OverdueBooksCount);
         }
@@ -352,6 +365,32 @@ namespace QuanLyThuVien.ViewModels
             }
 
             RecentActivitiesList = displayList;
+        }
+        [RelayCommand]
+        public async Task ExportCSV()
+        {
+            try
+            {
+                await _reportExportService.ExportCSVAsync(loantrendstats, categoryloanstats, monthlyreaderstats, bookstatusstats);
+                MessageBox.Show("Xuất file thành công","Thành công", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+        [RelayCommand]
+        public async Task ExportExcel()
+        {
+            try
+            {
+                await _reportExportService.ExportExcelAsync(loantrendstats, categoryloanstats, monthlyreaderstats, bookstatusstats);
+                MessageBox.Show("Xuất file thành công", "Thành công", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
     }
 }

@@ -5,5 +5,7 @@
     {
         public string CategoryName { get; set; }
         public int LoanCount { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
     }
 }
