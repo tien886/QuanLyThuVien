@@ -3,8 +3,11 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using QuanLyThuVien.Views;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
 namespace QuanLyThuVien.ViewModels
 {
     public partial class MainViewModel : ObservableObject
@@ -19,7 +22,7 @@ namespace QuanLyThuVien.ViewModels
         [ObservableProperty] private string _headerButtonLabel;
         [ObservableProperty] private ICommand _headerButtonCommand;
         [ObservableProperty] private bool _isHeaderButtonVisible;
-
+        [ObservableProperty] private ClockDateState clockDate = new ClockDateState();
         [ObservableProperty] private FrameworkElement _currentChildView;
 
         // Popup logic
@@ -42,7 +45,8 @@ namespace QuanLyThuVien.ViewModels
         public MainViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-
+            Debug.WriteLine(ClockDate.CurrentTime.ToString());
+            Debug.WriteLine(ClockDate.CurrentDate.ToString());
             // Khởi tạo các command điều hướng
             ShowDashBoardView = new RelayCommand(ExecuteShowDashBoardView);
             ShowQuanLySinhVienView = new RelayCommand(ExecuteShowQuanLySinhVienView);
@@ -122,6 +126,8 @@ namespace QuanLyThuVien.ViewModels
             var view = _serviceProvider.GetRequiredService<QuanLyDanhMucView>();
             UpdateHeaderState("Quản Lý Danh Mục", "Quản lý các danh mục hệ thống: thể loại sách, phân loại và khoa", view);
         }
+        // ClockDate setting here 
+
     }
 
     public class OpenDialogMessage
@@ -129,5 +135,7 @@ namespace QuanLyThuVien.ViewModels
         public object ViewModel { get; }
         public OpenDialogMessage(object vm) => ViewModel = vm;
     }
+    
+
 }
 
