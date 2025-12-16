@@ -91,7 +91,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
                 await _bookCopyService.AddBookCopiesAsync(newBookCopy);
                 // Trên DataGrid, bạn có cột "Vị trí" đang Binding vào Location.LocName. -> Nếu không có thể đéo có name của location đâu 
                 newBookCopy.Location = SelectedLocation;
-                //WeakReferenceMessenger.Default.Send(new BookCopyAddedMessage(newBookCopy));
+                WeakReferenceMessenger.Default.Send(new BookCopyAddedMessage(newBookCopy));
 
                 MessageBox.Show("Thêm bản sao thành công!", "Thông báo");
                 ClosePopup();
@@ -110,7 +110,7 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
     }
     public class BookCopyAddedMessage
     {
-        public BookCopies NewBookCopy { get; }
-        public BookCopyAddedMessage(BookCopies bookCopy) => NewBookCopy = bookCopy;
+        public BookCopies NewCopy { get; }
+        public BookCopyAddedMessage(BookCopies copy) => NewCopy = copy;
     }
 }
