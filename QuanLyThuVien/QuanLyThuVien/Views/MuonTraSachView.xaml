@@ -7,169 +7,7 @@
              xmlns:local="clr-namespace:QuanLyThuVien.Views"
              mc:Ignorable="d" 
              d:DesignHeight="1080" d:DesignWidth="1660">
-    <!--
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
-        <StackPanel Orientation="Vertical" Margin="0,0,10,0">
-
-            <UniformGrid Columns="3" Margin="0,0,-20,0">
-
-                <Border Style="{StaticResource StatCardStyle}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <TextBlock Text="Đang mượn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
-                            <TextBlock Text="{Binding DangMuon}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
-                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource InUse_light}" CornerRadius="12"
-                                HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <fa:IconImage Icon="BookOpen" Foreground="{StaticResource InUse}" Width="24" Height="24" 
-                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
-                </Border>
-
-                <Border Style="{StaticResource StatCardStyle}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <TextBlock Text="Quá hạn" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
-                            <TextBlock Text="{Binding QuaHan}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
-                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Danger/Overdue_light}" CornerRadius="12"
-                                HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <fa:IconImage Icon="TriangleExclamation" Foreground="{StaticResource Danger/Overdue}" Width="24" Height="24" 
-                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
-                </Border>
-
-                <Border Style="{StaticResource StatCardStyle}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <StackPanel>
-                            <TextBlock Text="Đã trả (tháng này)" Foreground="{StaticResource TitleOfWindow}" FontSize="16"/>
-                            <TextBlock Text="{Binding DaTraThangNay}" FontWeight="Bold" FontSize="24" Margin="0,5,0,0" Foreground="{StaticResource Black}"/>
-                        </StackPanel>
-                        <Border Grid.Column="1" Width="48" Height="48" Background="{StaticResource Success/1_light}" CornerRadius="12"
-                                HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <fa:IconImage Icon="Check" Foreground="{StaticResource Success/1}" Width="24" Height="24" 
-                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
-                </Border>
-
-            </UniformGrid>
-
-            <Border Style="{StaticResource BaseCardStyle}">
-                <StackPanel Orientation="Vertical">
-
-                    <Grid Margin="0,0,0,20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" 
-                                    VerticalAlignment="Center" Margin="0,0,-20,0">
-                            <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text="Danh sách đang mượn ("/>
-                            <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text="{Binding DangMuon}"/>
-                            <TextBlock Style="{StaticResource CardHeader}" Margin="0" Text=" cuốn)"/>
-                        </StackPanel>
-
-                        <TextBox Grid.Column="1"
-                                 Style="{StaticResource SearchTextBox}"
-                                 HorizontalAlignment="Right">
-                            <TextBox.Text>
-                                <Binding Path="SearchBarText" UpdateSourceTrigger="PropertyChanged"/>
-                            </TextBox.Text>
-                        </TextBox>
-                    </Grid>
-
-                    <DataGrid ItemsSource="{Binding LoanList}"
-                              AutoGenerateColumns="False"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              CanUserResizeRows="False"
-                              IsReadOnly="True"
-                              MinHeight="400" 
-                              Margin="0,20,0,0"
-                              Style="{StaticResource RoundedDataGrid}">
-
-                        <DataGrid.Columns>
-
-                            <DataGridTextColumn Header="Mã phiếu" Width="0.8*"
-                                                Binding="{Binding LoanID}"
-                                                ElementStyle="{StaticResource CellTextCenter}"/>
-
-                            <DataGridTemplateColumn Header="Sinh viên" Width="1.5*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            <TextBlock Text="{Binding Student.StudentName}" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTextColumn Header="Sách" Width="2*"
-                                                Binding="{Binding BookCopy.Book.Title}"
-                                                ElementStyle="{StaticResource CellTextCenter}"/>
-
-                            <DataGridTextColumn Header="Ngày mượn" Width="1*"
-                                                Binding="{Binding LoanDate, StringFormat={}{0:dd/MM/yyyy}}"
-                                                ElementStyle="{StaticResource CellTextCenter}"/>
-
-                            <DataGridTextColumn Header="Hạn trả" Width="1*"
-                                                Binding="{Binding DueDate, StringFormat={}{0:dd/MM/yyyy}}"
-                                                ElementStyle="{StaticResource CellTextCenter}"/>
-
-                            <DataGridTemplateColumn Header="Trạng thái" Width="1*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Border x:Name="StatusBorder" Style="{StaticResource LoanStatusPillBorder}">
-                                            <TextBlock Style="{StaticResource LoanStatusPillText}" x:Name="StatusText"
-                                                       Text="{Binding LoanStatusDescription}"/>
-                                        </Border>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTemplateColumn Header="Thao tác" Width="1*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Nhận trả" 
-                                                Style="{StaticResource ReturnButton}">
-                                            <Button.Command>
-                                                <Binding Path="DataContext.ReturnBookCommand" RelativeSource="{RelativeSource AncestorType=DataGrid}"/>
-                                            </Button.Command>
-                                            <Button.CommandParameter>
-                                                <Binding Path="."/>
-                                            </Button.CommandParameter>
-                                        </Button>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                        </DataGrid.Columns>
-                    </DataGrid>
-
-                </StackPanel>
-            </Border>
-
-        </StackPanel>
-    </ScrollViewer>
-    -->
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -260,15 +98,29 @@
                   AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
                   VerticalScrollBarVisibility="Auto">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Mã phiếu" Binding="{Binding LoanID}" Width="80" ElementStyle="{StaticResource CellTextCenter}"/>
+                <DataGridTextColumn Header="Mã phiếu" 
+                                    Binding="{Binding LoanID}" 
+                                    Width="80" 
+                                    ElementStyle="{StaticResource CellTextCenter}"/>
 
-                <DataGridTextColumn Header="Sinh viên" Binding="{Binding StudentName}" Width="1.5*" ElementStyle="{StaticResource CellTextLeft}"/>
+                <DataGridTextColumn Header="Sinh viên" 
+                                    Binding="{Binding StudentName}" 
+                                    Width="1.2*" 
+                                    ElementStyle="{StaticResource CellTextCenter}"/>
 
-                <DataGridTextColumn Header="Sách" Binding="{Binding BookTitle}" Width="2*" ElementStyle="{StaticResource CellTextLeft}"/>
+                <DataGridTextColumn Header="Sách" 
+                                    Binding="{Binding BookTitle}" 
+                                    Width="2*" 
+                                    ElementStyle="{StaticResource CellTextCenter}"/>
 
-                <DataGridTextColumn Header="Ngày mượn" Binding="{Binding LoanDate, StringFormat=dd/MM/yyyy}" Width="120" ElementStyle="{StaticResource CellTextCenter}"/>
+                <DataGridTextColumn Header="Ngày mượn" 
+                                    Binding="{Binding LoanDate, StringFormat=dd/MM/yyyy}" 
+                                    Width="120" 
+                                    ElementStyle="{StaticResource CellTextCenter}"/>
 
-                <DataGridTextColumn Header="Hạn trả" Binding="{Binding DueDate, StringFormat=dd/MM/yyyy}" Width="120" ElementStyle="{StaticResource CellTextCenter}"/>
+                <DataGridTextColumn Header="Hạn trả" 
+                                    Binding="{Binding DueDate, StringFormat=dd/MM/yyyy}" 
+                                    Width="120" ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTemplateColumn Header="Trạng thái" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
