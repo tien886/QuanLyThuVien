@@ -40,12 +40,12 @@
 
                 <DataGridTextColumn Header="Tên sách"
                                     Binding="{Binding TenSach}"
-                                    Width="3*"
+                                    Width="2.5*"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tác giả"
                                     Binding="{Binding TacGia}"
-                                    Width="140"
+                                    Width="120"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="ISBN"
@@ -55,7 +55,7 @@
 
                 <DataGridTextColumn Header="Thể loại"
                                     Binding="{Binding TheLoai}"
-                                    Width="110"
+                                    Width="180"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
                 <DataGridTextColumn Header="Tổng bản sao"
@@ -63,7 +63,7 @@
                                     Width="110"
                                     ElementStyle="{StaticResource CellTextCenter}"/>
 
-                <DataGridTemplateColumn Header="Có sẵn" Width="100">
+                <DataGridTemplateColumn Header="Có sẵn" Width="80">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding CoSan}"
