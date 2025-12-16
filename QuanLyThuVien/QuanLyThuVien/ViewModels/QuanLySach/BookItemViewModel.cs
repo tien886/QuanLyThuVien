@@ -52,5 +52,14 @@ namespace QuanLyThuVien.ViewModels.QuanLySach
             ISBN = updatedModel.ISBN;
             TheLoai = updatedModel.BookCategory?.CategoryName ?? "Chưa cập nhật";
         }
+
+        public void UpdateCountsWhenCopyAdded(BookCopies newCopy)
+        {
+            TongBanSao++;
+            if (newCopy.Status == "1")
+            {
+                CoSan++;
+            }
+        }
     }
 }

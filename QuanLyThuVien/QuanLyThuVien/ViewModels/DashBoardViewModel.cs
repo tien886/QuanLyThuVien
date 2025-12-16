@@ -1,27 +1,44 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.Painting.Effects;
 using QuanLyThuVien.DTOs;
-using QuanLyThuVien.Helper;
 using QuanLyThuVien.Services;
 using SkiaSharp;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace QuanLyThuVien.ViewModels
 {
-    public partial class DashBoardViewModel : ObservableObject
+    public partial class DashBoardViewModel : ObservableObject, IHeaderActionViewModel
     {
         private readonly IBookCopyService _bookCopyService;
         private readonly IBookService _bookService;
         private readonly IStudentService _studentService;
-        private readonly ILoanService _loanService; 
+        private readonly ILoanService _loanService;
         private readonly IReportExportService _reportExportService;
+
+        // Implement Interface cho nút Header
+        public bool IsHeaderButtonVisible => true;
+        public string HeaderButtonLabel => "Xuất báo cáo";
+        public ICommand HeaderButtonCommand => OpenExportPopupCommand;
+
+        [RelayCommand]
+        private void OpenExportPopup()
+        {
+            // Mở popup chọn định dạng
+            var vm = new ExportReportViewModel(_reportExportService, loantrendstats, categoryloanstats, monthlyreaderstats, bookstatusstats);
+            // Nếu logic xuất file cần dữ liệu từ Dashboard, bạn có thể truyền DashboardVM vào đây
+            // var vm = new ExportReportViewModel(this.Stats, this.ChartData...);
+
+            WeakReferenceMessenger.Default.Send(new OpenDialogMessage(vm));
+        }
+
+        // Các thuộc tính để hiển thị 
         [ObservableProperty]
         private int _totalCopies;
         [ObservableProperty]
@@ -34,7 +51,7 @@ namespace QuanLyThuVien.ViewModels
         private int _overdueBooks;
 
         // Thuộc tính cho PieChart Phân bổ trạng thái sách
-        [ObservableProperty] 
+        [ObservableProperty]
         private ISeries[] _pieChartSeries;
 
         // Ba thuộc tính cho AreaChart Bạn đọc mới đăng ký
@@ -117,14 +134,14 @@ namespace QuanLyThuVien.ViewModels
             var readerStats = await _studentService.GetNewReadersStatsAsync(startDateAreaChart, endDateAreaChart);
             monthlyreaderstats = readerStats;
             CreateAreaChartData(readerStats);
-            
+
             // 4. Load và tạo biểu đồ Đường - Xu hướng mượn trả sách
             var startDateLineChart = DateTime.Now.AddMonths(-NumberOfMonthsForLineChart);
             var endDateLineChart = DateTime.Now;
             var trendsData = await _loanService.GetLoanTrendsAsync(startDateLineChart, endDateLineChart);
             loantrendstats = trendsData;
             CreateLineChartData(trendsData);
-            
+
             // 5. Load và tạo biểu đồ Cột - Thể loại sách phổ biến
             var categoryStats = await _loanService.GetLoanStatsByCategoryAsync(TopBookCategories);
             Debug.WriteLine(categoryStats.Count());
@@ -343,19 +360,19 @@ namespace QuanLyThuVien.ViewModels
 
                 switch (item.Type)
                 {
-                    case "Borrow": 
+                    case "Borrow":
                         displayItem.Icon = "Book";
                         displayItem.IconColor = new SolidColorBrush(Color.FromRgb(14, 165, 233)); // #0EA5E9 (InUse)
                         displayItem.BackgroundColor = new SolidColorBrush(Color.FromRgb(224, 242, 249)); // #E0F2F9 (InUse_light)
                         break;
 
-                    case "Return": 
+                    case "Return":
                         displayItem.Icon = "BookOpen";
                         displayItem.IconColor = new SolidColorBrush(Color.FromRgb(16, 185, 129)); // #10B981 (Success)
                         displayItem.BackgroundColor = new SolidColorBrush(Color.FromRgb(225, 244, 239)); // #E1F4EF (Success_light)
                         break;
 
-                    case "Register": 
+                    case "Register":
                         displayItem.Icon = "UserPlus";
                         displayItem.IconColor = new SolidColorBrush(Color.FromRgb(37, 99, 235)); // #2563EB (Chanel)
                         displayItem.BackgroundColor = new SolidColorBrush(Color.FromRgb(238, 243, 255)); // #EEF3FF
@@ -367,31 +384,6 @@ namespace QuanLyThuVien.ViewModels
 
             RecentActivitiesList = displayList;
         }
-        [RelayCommand]
-        public async Task ExportCSV()
-        {
-            try
-            {
-                await _reportExportService.ExportCSVAsync(loantrendstats, categoryloanstats, monthlyreaderstats, bookstatusstats);
-                MessageBox.Show("Xuất file thành công","Thành công", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
-            }
-            catch (Exception ex) 
-            {
-                Debug.WriteLine(ex);
-            }
-        }
-        [RelayCommand]
-        public async Task ExportExcel()
-        {
-            try
-            {
-                await _reportExportService.ExportExcelAsync(loantrendstats, categoryloanstats, monthlyreaderstats, bookstatusstats);
-                MessageBox.Show("Xuất file thành công", "Thành công", MessageBoxButton.YesNo, MessageBoxImage.Exclamation);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-        }
     }
+
 }

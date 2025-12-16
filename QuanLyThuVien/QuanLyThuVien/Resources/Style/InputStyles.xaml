@@ -255,21 +255,29 @@
                 <ControlTemplate TargetType="TextBox">
                     <Grid>
                         <Border x:Name="Root" CornerRadius="8"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"/>
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"/>
 
-                        <ScrollViewer x:Name="PART_ContentHost"
-                              Margin="{TemplateBinding Padding}"
-                              VerticalAlignment="Center"/>
+                        <Grid Margin="{TemplateBinding Padding}">
 
-                        <TextBlock x:Name="Hint" Text="{TemplateBinding Tag}"
-                           Foreground="{StaticResource TitleOfWindow}" Opacity="0.5"
-                           FontSize="{TemplateBinding FontSize}"
-                           Margin="{TemplateBinding Padding}"
-                           VerticalAlignment="Center" IsHitTestVisible="False"
-                           Visibility="Collapsed"/>
-                        
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                      BorderThickness="0"
+                                      IsTabStop="False"
+                                      Padding="0"
+                                      VerticalAlignment="Center"/>
+
+                            <TextBlock x:Name="Hint" 
+                                   Text="{TemplateBinding Tag}"
+                                   Foreground="{StaticResource TitleOfWindow}" 
+                                   Opacity="0.5"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   Margin="15,0,0,0" 
+                                   VerticalAlignment="Center" 
+                                   IsHitTestVisible="False"
+                                   Visibility="Collapsed"/>
+                        </Grid>
+
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -289,15 +297,10 @@
                             <Setter TargetName="Root" Property="Background" Value="#F3F4F6"/>
                             <Setter TargetName="Root" Property="BorderBrush" Value="Transparent"/>
                         </Trigger>
-                        <Trigger Property="AcceptsReturn" Value="True">
-                            <Setter TargetName="PART_ContentHost"
-                                Property="VerticalAlignment"
-                                Value="Top"/>
-                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
+      
 </ResourceDictionary>

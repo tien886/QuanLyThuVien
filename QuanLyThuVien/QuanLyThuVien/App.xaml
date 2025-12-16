@@ -90,6 +90,10 @@
                 <VDanhMuc:FacultyPopup/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type vm:ExportReportViewModel}">
+                <local:ExportReportPopup/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

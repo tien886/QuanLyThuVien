@@ -21,7 +21,7 @@ namespace QuanLyThuVien.ViewModels
         private readonly ILocationService _locationService;
 
         // Các thuộc tính cho IHeaderActionViewModel
-        public ICommand HeaderButtonCommand => OpenThemBookHeadPopupCommand; 
+        public ICommand HeaderButtonCommand => OpenThemBookHeadPopupCommand;
         public string HeaderButtonLabel => "Thêm đầu sách";
         public bool IsHeaderButtonVisible => true;
 
@@ -44,7 +44,7 @@ namespace QuanLyThuVien.ViewModels
 
         // Thuộc tính tìm kiếm
         [ObservableProperty]
-        private string _searchText = string.Empty; 
+        private string _searchText = string.Empty;
         private CancellationTokenSource? _searchCts;
 
 
@@ -77,6 +77,8 @@ namespace QuanLyThuVien.ViewModels
                 var newBookItemVM = new BookItemViewModel(message.NewBook);
                 BookList.Add(newBookItemVM);
             });
+
+            WeakReferenceMessenger.Default.Register<BookCopyAddedMessage>(this, HandleBookCopyAdded);
 
             _ = LoadAsync();
         }
@@ -237,6 +239,17 @@ namespace QuanLyThuVien.ViewModels
             ThirdPage = start + 2 <= end ? start + 2 : 0;
             FourthPage = start + 3 <= end ? start + 3 : 0;
             FifthPage = start + 4 <= end ? start + 4 : 0;
+        }
+
+        // Xử lý khi có bản sao sách mới được thêm
+        private async void HandleBookCopyAdded(object recipient, BookCopyAddedMessage message)
+        {
+            var targetBookItem = BookList.FirstOrDefault(item => item.MaDauSach == message.NewCopy.BookID);
+
+            if (targetBookItem != null)
+            {
+                targetBookItem.UpdateCountsWhenCopyAdded(message.NewCopy);
+            }
         }
     }
 }

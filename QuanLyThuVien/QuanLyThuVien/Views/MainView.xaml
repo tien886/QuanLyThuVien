@@ -168,17 +168,17 @@
                             </StackPanel>
 
                             <!-- Một nút thêm chung cho cả ba trang quản lí sinh viên, sách và mượn trả -->
-                            <Button Style="{StaticResource RoundedButton}"
+                            <Button Style="{StaticResource ProRoundedButton}"
                                 Width="200" Height="40"
                                 HorizontalAlignment="Right"
                                 Visibility="{Binding IsHeaderButtonVisible, Converter={StaticResource BoolToVis}}"
                                 Command="{Binding HeaderButtonCommand}">
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <fa:IconImage Icon="Plus" Style="{StaticResource RoundedButtonIcon}"/>
+                                    <fa:IconImage Icon="Plus" Style="{StaticResource ProRoundedButtonIcon}"/>
 
                                     <TextBlock Text="{Binding HeaderButtonLabel}" 
-                                        Style="{StaticResource RoundedButtonText}"/>
+                                        Style="{StaticResource ProRoundedButtonText}"/>
                                 </StackPanel>
                             </Button>
                         </Grid>

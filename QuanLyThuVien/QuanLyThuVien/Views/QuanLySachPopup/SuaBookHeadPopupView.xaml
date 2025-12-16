@@ -47,9 +47,12 @@
                     
                     <StackPanel Margin="0,0,0,15">
                         <TextBlock Style="{StaticResource InputLabel}">
-                            <Run Text="Tên sách"/> <Run Text="*" Foreground="Red"/>
+                            <Run Text="Tên sách"/>
+                            <Run Text="*" Foreground="Red"/>
                         </TextBlock>
-                        <TextBox Text="{Binding TenSach}" Style="{StaticResource StandardTextBox}"/>
+                        <TextBox Text="{Binding TenSach}" 
+                                 Style="{StaticResource StandardTextBox}"
+                                 Tag="VD: Nhập môn lập trình"/>
                     </StackPanel>
 
                     <Grid Margin="0,0,0,15">
@@ -61,16 +64,22 @@
                         
                         <StackPanel Grid.Column="0">
                             <TextBlock Style="{StaticResource InputLabel}">
-                                <Run Text="Tác giả"/> <Run Text="*" Foreground="Red"/>
+                                <Run Text="Tác giả"/> 
+                                <Run Text="*" Foreground="Red"/>
                             </TextBlock>
-                            <TextBox Text="{Binding TacGia}" Style="{StaticResource StandardTextBox}"/>
+                            <TextBox Text="{Binding TacGia}" 
+                                     Style="{StaticResource StandardTextBox}"
+                                     Tag="VD: Nguyễn Văn A"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
                             <TextBlock Style="{StaticResource InputLabel}">
-                                <Run Text="ISBN"/> <Run Text="*" Foreground="Red"/>
+                                <Run Text="ISBN"/> 
+                                <Run Text="*" Foreground="Red"/>
                             </TextBlock>
-                            <TextBox Text="{Binding ISBN}" Style="{StaticResource StandardTextBox}"/>
+                            <TextBox Text="{Binding ISBN}" 
+                                     Style="{StaticResource StandardTextBox}"
+                                     Tag="VD: 9709567845631"/>
                         </StackPanel>
                     </Grid>
 
@@ -108,13 +117,19 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Nhà xuất bản" Style="{StaticResource InputLabel}"/>
-                            <TextBox Text="{Binding NXB}" Style="{StaticResource StandardTextBox}"/>
+                            <TextBlock Text="Nhà xuất bản" 
+                                       Style="{StaticResource InputLabel}"/>
+                            <TextBox Text="{Binding NXB}" 
+                                     Style="{StaticResource StandardTextBox}"
+                                     Tag="VD: ĐHQG"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2">
-                            <TextBlock Text="Năm xuất bản" Style="{StaticResource InputLabel}"/>
-                            <TextBox Text="{Binding NamXB}" Style="{StaticResource StandardTextBox}"/>
+                            <TextBlock Text="Năm xuất bản" 
+                                       Style="{StaticResource InputLabel}"/>
+                            <TextBox Text="{Binding NamXB}" 
+                                     Style="{StaticResource StandardTextBox}"
+                                     Tag="VD: 2020"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
