@@ -127,6 +127,7 @@ namespace QuanLyThuVien.ViewModels
             
             // 5. Load và tạo biểu đồ Cột - Thể loại sách phổ biến
             var categoryStats = await _loanService.GetLoanStatsByCategoryAsync(TopBookCategories);
+            Debug.WriteLine(categoryStats.Count());
             categoryloanstats = categoryStats;
             CreateBarChartData(categoryStats);
 

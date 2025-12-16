@@ -51,7 +51,7 @@
 
                     <TextBlock Grid.Column="1" 
                        FontFamily="Montserrat" 
-                       Text="Quản lý thư viện" 
+                       Text="UIT-Library" 
                        FontSize="22" 
                        FontWeight="Bold" 
                        Foreground="{StaticResource ChanelBackground}"
@@ -62,23 +62,30 @@
                 <Border Grid.Row="1" Background="{StaticResource Stroke}" />
                 <!-- Thông tin admin -->
                 <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20"
-                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                            Background="{StaticResource ChanelBackground}">
-                        <TextBlock Text="A" Foreground="{StaticResource White}" FontSize="22"
-                                   FontWeight="SemiBold" HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" FontFamily="Montserrat"/>
-                    </Border>
-
-                    <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" >
-                        <TextBlock Text="Admin" FontSize="16" FontWeight="Bold" FontFamily="Montserrat"/>
-                        <TextBlock Text="Quản trị viên" FontSize="14" FontFamily="Montserrat" Foreground="{StaticResource TitleOfWindow}"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="40,0,0,0" Grid.Row="0" Orientation="Horizontal">
+                        <fa:IconBlock Icon="CalendarCheck" FontSize="20" Margin="0,0,20,0"/>
+                        <TextBlock 
+                           Text="{Binding ClockDate.CurrentDate}"
+                           FontSize="22"
+                            FontWeight="SemiBold"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
                     </StackPanel>
+                    <StackPanel Margin="40,0,0,0" Grid.Row="1" Orientation="Horizontal">
+                        <fa:IconBlock Icon="Clock" FontSize="20" Margin="0,0,20,0"/>
+                        <TextBlock 
+                            Text="{Binding ClockDate.CurrentTime}"
+                            FontSize="22"
+                            FontWeight="SemiBold"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    <!-- Time -->
+                    
                 </Grid>
                 <!-- Thanh ngang phân cách -->
                 <Border Grid.Row="3" Background="{StaticResource Stroke}" />

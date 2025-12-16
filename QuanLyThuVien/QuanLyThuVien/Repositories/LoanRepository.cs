@@ -3,6 +3,7 @@ using QuanLyThuVien.Data;
 using QuanLyThuVien.DTOs;
 using QuanLyThuVien.Models;
 using QuanLyThuVien.Services;
+using System.Diagnostics;
 
 namespace QuanLyThuVien.Repositories
 {
@@ -175,6 +176,7 @@ namespace QuanLyThuVien.Repositories
             int year = DateTime.Now.Year;
             if (top == -1)
                 top = _dataContext.BookCategories.Count();
+            Debug.WriteLine(top);
             var query = _dataContext.Loans
             .Include(l => l.BookCopy)
                 .ThenInclude(bc => bc.Book)
@@ -195,6 +197,9 @@ namespace QuanLyThuVien.Repositories
                     CategoryName = g.Key.CategoryName,
                     LoanCount = g.Count()
                 })
+                .OrderByDescending(x => x.LoanCount)
+                .Take(top) 
+                .AsNoTracking()
                 .ToListAsync();
 
             return result;
