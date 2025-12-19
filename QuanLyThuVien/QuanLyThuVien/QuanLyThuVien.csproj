@@ -7,6 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\Images\logo.ico</ApplicationIcon>
+	  <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,7 +32,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\Database\" />
-    <Folder Include="ViewModels\QuanLySinhVien\" />
   </ItemGroup>
 
   <ItemGroup>
