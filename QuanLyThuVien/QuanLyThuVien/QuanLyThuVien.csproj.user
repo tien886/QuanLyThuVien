@@ -2,13 +2,13 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Views\ExportReportPopup.xaml.cs">
+    <Compile Update="Views\DashBoardPopup\ExportReportPopup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\MuonTraSachPopup\NhanTraSachPopup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\QuanLyDanhMucView.xaml.cs">
+    <Compile Update="Views\QuanLyDanhMucPopup\QuanLyDanhMucView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\QuanLySachPopup\BookDetailAndCopyPopupView.xaml.cs">

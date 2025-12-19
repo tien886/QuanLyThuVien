@@ -94,7 +94,7 @@ namespace QuanLyThuVien.ViewModels
             try
             {
 
-                await Task.Delay(350, token);
+                await Task.Delay(350, token);   
                 await LoadAsync();
             }
             catch (Exception ex)
@@ -107,7 +107,6 @@ namespace QuanLyThuVien.ViewModels
         {
             if (CurrentPage < 1 || CurrentPage > TotalPages)
                 return;
-            Debug.WriteLine($"{SearchText}");
             var students = await _studentService.GetStudentsPage(CurrentPage - 1, PageSize, SearchText);
             StudentList.Clear();
             foreach (var student in students)
@@ -141,7 +140,6 @@ namespace QuanLyThuVien.ViewModels
                 studentVM.AccountStatus = originalStatus;
             }
         }
-
         [RelayCommand]
         private async Task OpenStudentDetailPopup(StudentItemViewModel? sVM)
         {
